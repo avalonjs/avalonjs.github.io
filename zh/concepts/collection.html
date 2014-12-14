@@ -61,32 +61,33 @@
                     return new Date - 0;
                 }
             }
-            avalon.define('page', function(vm) {
-                vm.selected = "name"
-                vm.options = ["name", "size", "date"]
-                vm.trend = 1
-                vm.data = [
-                    {name: "aaa", size: 213, date: Date.now() + 20},
-                    {name: "bbb", size: 4576, date: new Date - 4},
-                    {name: "ccc", size: 563, date: new Date - 7},
-                    {name: "eee", size: 3713, date: 9 + Date.now()},
-                    {name: "555", size: 389, date: Date.now() - 20}
-                ];
-                vm.$watch("selected", function(v) {
-                    var t = parseFloat(vm.trend)
-                    vm.data.sort(function(a, b) {
-                        var ret = a[v] &gt; b[v] ? 1 : -1
-                        return t * ret
-                    })
-                })
-                vm.$watch("trend", function(t) {
-                    var v = vm.selected, t = parseFloat(t)
-                    vm.data.sort(function(a, b) {
-                        var ret = a[v] &gt; b[v] ? 1 : -1
-                        return t * ret
-                    })
-                })
-            });
+            var vm = avalon.define(
+                 $id: c-collection2",
+                 selected : "name",
+                 options : ["name", "size", "date"],
+                 trend : 1,
+                 data : [
+                     {name: "aaa", size: 213, date: Date.now() + 20},
+                     {name: "bbb", size: 4576, date: new Date - 4},
+                     {name: "ccc", size: 563, date: new Date - 7},
+                     {name: "eee", size: 3713, date: 9 + Date.now()},
+                     {name: "555", size: 389, date: Date.now() - 20}
+                 ]
+             })
+             vm.$watch("selected", function(v) {
+                 var t = parseFloat(vm.trend)
+                 vm.data.sort(function(a, b) {
+                     var ret = a[v] > b[v] ? 1 : -1
+                     return t * ret
+                 })
+             })
+             vm.$watch("trend", function(t) {
+                 var v = vm.selected, t = parseFloat(t)
+                 vm.data.sort(function(a, b) {
+                     var ret = a[v] > b[v] ? 1 : -1
+                     return t * ret
+                 })
+             })
 
         &lt;/script&gt;
     &lt;/head&gt;
@@ -198,30 +199,31 @@
             return new Date - 0;
         }
     }
-    avalon.define('c-collection2', function(vm) {
-        vm.selected = "name"
-        vm.options = ["name", "size", "date"]
-        vm.trend = 1
-        vm.data = [
+   var vm = avalon.define(
+        $id: c-collection2",
+        selected : "name",
+        options : ["name", "size", "date"],
+        trend : 1,
+        data : [
             {name: "aaa", size: 213, date: Date.now() + 20},
             {name: "bbb", size: 4576, date: new Date - 4},
             {name: "ccc", size: 563, date: new Date - 7},
             {name: "eee", size: 3713, date: 9 + Date.now()},
             {name: "555", size: 389, date: Date.now() - 20}
-        ];
-        vm.$watch("selected", function(v) {
-            var t = parseFloat(vm.trend)
-            vm.data.sort(function(a, b) {
-                var ret = a[v] > b[v] ? 1 : -1
-                return t * ret
-            })
+        ]
+    })
+    vm.$watch("selected", function(v) {
+        var t = parseFloat(vm.trend)
+        vm.data.sort(function(a, b) {
+            var ret = a[v] > b[v] ? 1 : -1
+            return t * ret
         })
-        vm.$watch("trend", function(t) {
-            var v = vm.selected, t = parseFloat(t)
-            vm.data.sort(function(a, b) {
-                var ret = a[v] > b[v] ? 1 : -1
-                return t * ret
-            })
+    })
+    vm.$watch("trend", function(t) {
+        var v = vm.selected, t = parseFloat(t)
+        vm.data.sort(function(a, b) {
+            var ret = a[v] > b[v] ? 1 : -1
+            return t * ret
         })
-    });
+    })
 </script>

@@ -188,8 +188,8 @@
             <input ms-duplex="phone" />
         </div>
     </fieldset>
+
     <style>
-        <style>
         .msform{
             width:500px;
             padding:5px;
@@ -212,76 +212,76 @@
             color: green;
         }
     </style>
-</style>
-<script type="text/javascript">
-    var model = avalon.define("test", function(vm) {
-        vm.prop = "xxx"
-        vm.array = ["aaa", "bbb", "ccc", "ddd"]
-        vm.data = {
-            aaa: "lll"
-        }
-        vm.propWatch = ""
-        vm.arrayWatch = 4
-        vm.dataAAAWatch = ""
-        vm.$watch("prop", function(a) {
-            vm.propWatch = a + " $watch"
-        })
-        vm.click = function() {
-            vm.prop = new Date - 1
-            vm.data.aaa = new Date - 2
-            vm.array.push(new Date - 3)
-        }
-    })
-    //在avalon.define外面绑定$watch回调
-    model.array.$watch("length", function(a) {
-        model.arrayWatch = a + " $watch"
-    })
-    model.data.$watch("aaa", function(a) {
-        model.dataAAAWatch = a + " $watch"
-    })
-            ;
-    (function() {
-        var props = ["aaa", "bbb", "ccc", "ddd"]
-        var backup = props.concat()
-        avalon.define("$watch2", function(vm) {
-            vm.aaa = "xxx"
-            vm.bbb = "yyy"
-            vm.ccc = "zzz"
-            vm.ddd = "uuu"
+
+    <script type="text/javascript">
+        var model = avalon.define("test", function(vm) {
+            vm.prop = "xxx"
+            vm.array = ["aaa", "bbb", "ccc", "ddd"]
+            vm.data = {
+                aaa: "lll"
+            }
             vm.propWatch = ""
-            vm.$watch("$all", function(name) {
-                if (name !== "propWatch") {
-                    vm.propWatch = name + "  属性发生改变"
-                }
+            vm.arrayWatch = 4
+            vm.dataAAAWatch = ""
+            vm.$watch("prop", function(a) {
+                vm.propWatch = a + " $watch"
             })
             vm.click = function() {
-                var index = Math.floor(Math.random() * props.length)
-                var prop = props.splice(index, 1)[0]
-                if (!props.length) {
-                    props = backup.concat()
-                }
-                vm[prop] = new Date - 1
+                vm.prop = new Date - 1
+                vm.data.aaa = new Date - 2
+                vm.array.push(new Date - 3)
             }
         })
-    })();
-    avalon.define("$watch3", function(vm) {
-        vm.phone = ""
-        vm.$watch("phone", function(a) {
-            var b = a.replace(/\s+/g, "")
-            var array = b.split("")
-            var ret = ""
-            for (var i = 0, n = array.length; i < n; i++) {
-                if (i > 10)
-                    break
-                if (i == 3) {
-                    ret += " "
-                }
-                if (i == 7) {
-                    ret += " "
-                }
-                ret += array[i]
-            }
-            vm.phone = ret
+        //在avalon.define外面绑定$watch回调
+        model.array.$watch("length", function(a) {
+            model.arrayWatch = a + " $watch"
         })
-    })
-</script>
+        model.data.$watch("aaa", function(a) {
+            model.dataAAAWatch = a + " $watch"
+        })
+                ;
+        (function() {
+            var props = ["aaa", "bbb", "ccc", "ddd"]
+            var backup = props.concat()
+            avalon.define("$watch2", function(vm) {
+                vm.aaa = "xxx"
+                vm.bbb = "yyy"
+                vm.ccc = "zzz"
+                vm.ddd = "uuu"
+                vm.propWatch = ""
+                vm.$watch("$all", function(name) {
+                    if (name !== "propWatch") {
+                        vm.propWatch = name + "  属性发生改变"
+                    }
+                })
+                vm.click = function() {
+                    var index = Math.floor(Math.random() * props.length)
+                    var prop = props.splice(index, 1)[0]
+                    if (!props.length) {
+                        props = backup.concat()
+                    }
+                    vm[prop] = new Date - 1
+                }
+            })
+        })();
+        avalon.define("$watch3", function(vm) {
+            vm.phone = ""
+            vm.$watch("phone", function(a) {
+                var b = a.replace(/\s+/g, "")
+                var array = b.split("")
+                var ret = ""
+                for (var i = 0, n = array.length; i < n; i++) {
+                    if (i > 10)
+                        break
+                    if (i == 3) {
+                        ret += " "
+                    }
+                    if (i == 7) {
+                        ret += " "
+                    }
+                    ret += array[i]
+                }
+                vm.phone = ret
+            })
+        })
+    </script>
