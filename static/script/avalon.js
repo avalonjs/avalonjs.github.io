@@ -3091,6 +3091,7 @@ bindingExecutors.attr = function(val, elem, data) {
                         }
                     }
                 }
+                avalon.log("include "+val)
                 xhr.open("GET", val, true)
                 if ("withCredentials" in xhr) {
                     xhr.withCredentials = true
