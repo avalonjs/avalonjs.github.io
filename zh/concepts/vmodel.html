@@ -3,5 +3,6 @@
    用户定义的VM都会放在avalon.vmodels对象中集中存储，因此VM必须指定$id属性，我们将通地<span>var vm = avalon.vmodels[$id]</span>来获取你的VM。
    此外，VM还拥有 $watch, $unwatch, $fire, $model等方法。</p>
 
-<p>avalon.define方法拥有两个参数，第一个是ID，第二个构成函数，会传一个对象让你添加各种属性与方法。</p>
-<p>注意:avalon.define会将第2个参数执行两次，实现对VM的修正，因此不要在里面执行函数，否则会产生一些意外</p>
+<center>
+    <img src="../../static/css/architecture.jpg" >
+</center>
