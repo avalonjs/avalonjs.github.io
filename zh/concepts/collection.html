@@ -130,7 +130,7 @@
 &lt;/html&gt;
     </pre>   
 </div>
-<fieldset ms-controller="c-collection1">
+<fieldset ms-controller="test">
     <legend>示例一</legend>
     <ul ms-each-el="array">
         <li >数组的第{{$index+1}}个元素为{{el}}</li>
@@ -166,7 +166,7 @@
     </table>
 </fieldset>
 <script>
-    avalon.define("c-collection1", function(vm) {
+    avalon.define("test", function(vm) {
         vm.array = ["1", "2", "3", "4"]
         vm.del = function() {
             this.$vmodel.$remove()

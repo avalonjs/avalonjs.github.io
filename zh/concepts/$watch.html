@@ -1,7 +1,7 @@
 <h3 id='c-$watch'>$watch方法</h3>
 <p>此方法是位于VM中，与$unwatch, $fire是一套东西，但不建议用户不要在同一个VM中调用$fire,很容易造成死循环。格式为：</p>
 <pre class="brush:js;gutter:false;toolbar:false;">
-      vm.$watch(prop, function(value, oldValue){
+  vm.$watch(prop, function(value, oldValue){
   })
 </pre>
 <p>prop为VM中的第一层属性，类型是string,boolean,number这些简单类型或是数组，当它们发生改变时，就会执行预先绑定的回调。
@@ -68,7 +68,7 @@
 </div>
 <fieldset>
     <legend>例子一</legend>
-    <div ms-controller="$watch1">
+    <div ms-controller="test">
         <p>prop: {{prop}} --> propWatch: {{propWatch}}</p>
         <p>array.length: {{array.size()}} --> arrayWatch: {{arrayWatch}}</p>
         <p>data.aaa: {{data.aaa}} --> dataAAAWatch: {{dataAAAWatch}}</p>
@@ -214,7 +214,7 @@
     </style>
 </style>
 <script type="text/javascript">
-    var model = avalon.define("$watch1", function(vm) {
+    var model = avalon.define("test", function(vm) {
         vm.prop = "xxx"
         vm.array = ["aaa", "bbb", "ccc", "ddd"]
         vm.data = {

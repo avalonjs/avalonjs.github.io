@@ -12,20 +12,21 @@
         &lt;script src="avalon.js" &gt;&lt;/script&gt;
  
         &lt;script&gt;
-            avalon.define("test", function(vm) {
-                vm.firstName = "司徒"
-                vm.lastName = "正美"
-                vm.fullName = {//一个包含set或get的对象
-                    set: function(val) {//里面必须用this指向vm，但不能使用vm
-                        var array = (val || "").split(" ");
-                        this.firstName = array[0] || "";
-                        this.lastName = array[1] || "";
-                    },
-                    get: function() {
-                        return this.firstName + " " + this.lastName;
-                    }
-                }
-            })
+    avalon.define({
+        $id: "test",
+        firstName: "司徒",
+        lastName: "正美",
+        fullName: {//一个包含set或get的对象
+            set: function(val) {//里面必须用this指向vm，但不能使用vm
+                var array = (val || "").split(" ");
+                this.firstName = array[0] || "";
+                this.lastName = array[1] || "";
+            },
+            get: function() {
+                return this.firstName + " " + this.lastName;
+            }
+        }
+    })
         &lt;/script&gt;
     &lt;/head&gt;
     &lt;body&gt;
@@ -39,11 +40,12 @@
 &lt;/html&gt;
 </pre>
 <script>
-    avalon.define("c-compute", function(vm) {
-        vm.firstName = "司徒"
-        vm.lastName = "正美"
-        vm.fullName = {//一个包含set或get的对象
-            set: function(val) {//里面必须用this指向scope，不能使用scope
+    avalon.define({
+        $id: "test",
+        firstName: "司徒",
+        lastName: "正美",
+        fullName: {//一个包含set或get的对象
+            set: function(val) {//里面必须用this指向vm，但不能使用vm
                 var array = (val || "").split(" ");
                 this.firstName = array[0] || "";
                 this.lastName = array[1] || "";
@@ -54,7 +56,7 @@
         }
     })
 </script>
-<div ms-controller="c-compute">
+<div ms-controller="test">
     <p>First name: <input ms-duplex="firstName" /></p>
     <p>Last name: <input ms-duplex="lastName"  /></p>
     <p>Hello,    <input ms-duplex="fullName"></p>

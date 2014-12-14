@@ -9,15 +9,16 @@
         &lt;script src="avalon.js" &gt;&lt;/script&gt;
  
         &lt;script&gt;
-            avalon.define("test", function(vm) {
-                vm.string = "xxx"
-                vm.bool = true
-                vm.number = 100
-                vm.object = {
-                    aaa: "aaa",
-                    bbb: "bbb"
-                }
-            })
+   avalon.define({
+        $id: "test",
+        string: "xxx",
+        bool: true,
+        number: 100,
+        object: {
+            aaa: "aaa",
+            bbb: "bbb"
+        }
+    })
         &lt;/script&gt;
     &lt;/head&gt;
     &lt;body&gt;
@@ -34,18 +35,19 @@
  
 </pre>
 <script>
-    avalon.define("c-observable", function(vm) {
-        vm.string = "xxx"
-        vm.bool = true
-        vm.number = 100
-        vm.object = {
+    avalon.define({
+        $id: "test",
+        string: "xxx",
+        bool: true,
+        number: 100,
+        object: {
             aaa: "aaa",
             bbb: "bbb"
         }
     })
 
 </script>
-<div ms-controller="c-observable">
+<div ms-controller="test">
     <input ms-duplex="string">{{string}}
     <input ms-duplex="bool" type="radio">{{bool}}
     <input ms-duplex="number" >{{number}}
