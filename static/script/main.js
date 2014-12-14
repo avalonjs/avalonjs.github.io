@@ -45,5 +45,8 @@ var vm = avalon.define({
             vm.currentPath = location.href.split("#")[1]
             console.log(vm.currentPath)
         })
+    },
+    highlight: function(){
+          SyntaxHighlighter.highlight()
     }
 })

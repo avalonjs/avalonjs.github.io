@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="./static/css/main.css" media="all" />
         <script src="static/script/avalon.js"></script>
+        <script src="static/highlight/shCore.js"></script>
         <script src="static/script/main.js"></script>
 
     </head>
@@ -25,21 +26,21 @@
 
                     </ul>
 
-                    <a class="toc_title" ms-href="#{{userLanguage}}/introduction.html" ms-click="changePath">
+                    <a class="toc_title" ms-href="#{{userLanguage}}/introduction.html" ms-click="changePath"  data-include-rendered="highlight">
                         介绍
                     </a>
 
 
 
-                    <a class="toc_title" ms-href="#{{userLanguage}}/concepts/index.html" ms-click="changePath">
+                    <a class="toc_title" ms-href="#{{userLanguage}}/concepts/index.html" ms-click="changePath"  data-include-rendered="highlight">
                         概心概念
                     </a>
                     <ul class="toc_section">
-                        <li ms-repeat=concepts>– <a ms-href="#{{userLanguage}}/concepts/{{el.id}}.html" ms-click="changePath">{{el.name}}</a></li>
+                        <li ms-repeat=concepts>– <a ms-href="#{{userLanguage}}/concepts/{{el.id}}.html" ms-click="changePath"  data-include-rendered="highlight">{{el.name}}</a></li>
                     </ul>
                 </td> 
                 <td class="main-content" valign="top">
-                    <div ms-include-src="currentPath"></div>
+                    <div ms-include-src="currentPath"  data-include-rendered="highlight"></div>
                 </td>
             </tr>
         </table>
