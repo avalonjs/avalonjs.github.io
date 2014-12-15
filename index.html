@@ -30,14 +30,15 @@
                         介绍
                     </a>
 
-
-
-                    <a class="toc_title" ms-href="#{{userLanguage}}/concepts/index.html" ms-click="changePath"  data-include-rendered="highlight">
+                    <a class="toc_title" ms-href="#{{userLanguage}}/concepts/vmodel.html" ms-click="changePath"  data-include-rendered="highlight">
                         概心概念
                     </a>
                     <ul class="toc_section">
                         <li ms-repeat=concepts>– <a ms-href="#{{userLanguage}}/concepts/{{el.id}}.html" ms-click="changePath"  data-include-rendered="highlight">{{el.name}}</a></li>
                     </ul>
+                    <a class="toc_title" ms-href="#{{userLanguage}}/bindings/index.html" ms-click="changePath"  data-include-rendered="highlight">
+                        绑定
+                    </a>
                 </td> 
                 <td class="main-content" valign="top">
                     <div ms-include-src="currentPath"  data-include-rendered="highlight"></div>

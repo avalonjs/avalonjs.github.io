@@ -1,0 +1,35 @@
+<p>avalon的绑定（或指令）， 这是定义在HTML中的特殊标记，代替我们操作DOM的一种DSL。它拥有以下三种类型：<p>
+<ul>
+    <li ms-skip>{{}}插值表达式， 这是开标签与闭标签间，换言之，也是位于文本节点中，innerText里。{{}}里面可以添加各种过滤器（以|进行标识）。
+        值得注意的是{{}}实际是文本绑定(ms-text)的一种形式。</li>
+    <li>ms-*绑定属性， 这是位于开标签的内部， 95%的绑定都以这种形式存在。 
+        它们的格式大概是这样划分的
+        <span style="color:green">"ms" + type + "-" + param1 + "-" + param1 + "-" + param2 + ... + number = value</span>
+        <pre ms-skip class="brush:javascript;gutter:false;toolbar:false">
+    ms-skip                //这个绑定属性没有值
+    ms-controller="expr"   //这个绑定属性没有参数
+    ms-if="expr"           //这个绑定属性没有参数
+    ms-if-loop="expr"       //这个绑定属性有一个参数
+    ms-repeat-el="array"    //这个绑定属性有一个参数
+    ms-attr-href="xxxx"    //这个绑定属性有一个参数
+    ms-attr-src="xxx/{{a}}/yyy/{{b}}"   //这个绑定属性的值包含插值表达式，注意只有少部分表示字符串类型的属性可以使用插值表达式
+    ms-click-1="fn"       //这个绑定属性的名字最后有数字，这是方便我们绑定更多点击事件 ms-click-2="fn"  ms-click-3="fn"  
+    ms-on-click="fn"     //只有表示事件与类名的绑定属性的可以加数字，如这个也可以写成  ms-on-click-0="fn"    
+    ms-class-1="xxx" ms-class-2="yyy" ms-class-3="xxx" //数字还表示绑定的次序
+    ms-css-background-color="xxx" //这个绑定属性有两个参数，但在css绑定里，相当于一个，会内部转换为backgroundColor 
+    ms-duplex-aaa-bbb-string="xxx"//这个绑定属性有三个参数，表示三种不同的拦截操作 
+        </pre>
+    </li>
+    <li>
+        data-xxx-yyy="xxx"，辅助指令，比如ms-duplex的某一个辅助指令为data-duplex-event="change"，ms-repeat的某一个辅助指令为data-repeat-rendered="yyy"
+
+    </li>
+</ul>
+<div ms-if="supportSVG"　ms-include-src="'bindings.svg'">   
+</div>
+<div ms-if="!supportSVG">   
+    <img src="bindings.png"/>
+</div>
+
+
+

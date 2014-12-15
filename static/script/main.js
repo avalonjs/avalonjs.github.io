@@ -44,6 +44,7 @@
                 id: "unobservable"
             }
         ],
+        supportSVG: !!window.dispatchEvent,
         changePath: function() {
             vm.currentPath = location.href.split("#")[1]
         },
