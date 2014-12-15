@@ -12,8 +12,12 @@
         currentPath: "zh/introduction.html",
         concepts: [
             {
-                name: "非监控属性",
-                id: "unobservable"
+                name: "视图模型",
+                id: "vmodel"
+            },
+            {
+                name: "数据模型",
+                id: "$model"
             },
             {
                 name: "监控属性",
@@ -36,13 +40,10 @@
                 id: "$fire"
             },
             {
-                name: "视图模型",
-                id: "vmodel"
-            },
-            {
-                name: "数据模型",
-                id: "$model"
-            }],
+                name: "非监控属性",
+                id: "unobservable"
+            }
+        ],
         changePath: function() {
             vm.currentPath = location.href.split("#")[1]
         },

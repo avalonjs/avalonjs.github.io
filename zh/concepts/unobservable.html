@@ -1,5 +1,5 @@
 <h3 id="c-unobservable">非监控属性</h3>
-<p>在VM中，改变它们不会引起视图改变的属性，这包括以$开头的属性，其名字放在$skipArray中的属性，函数。</p>
+<p>这包括框架添加的$id, $events, $model属性, $fire, $watch, $unwatch方法，及用户自己设置的以$开头的属性，放在$skipArray数组中的属性，值为函数、各种DOM节点的属性，总之，改变它们的值不会产生同步视图的效果。</p>
 <pre class="brush:html;gutter:false;toolbar:false">
 &lt;!DOCTYPE html&gt;
 &lt;html&gt;
