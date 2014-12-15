@@ -6,3 +6,75 @@
 <center>
     <img src="../static/css/architecture.png" alt="none" >
 </center>
+<p>视图里面，我们可以使用ms-controller, ms-important指定一个VM的作用域。</p>
+
+<p>此外，在ms-each, ms-with，ms-repeat绑定属性中，它们会创建一个临时的VM，我们称之为代理VM， 
+    用于放置$key, $val, $index, $last, $first, $remove等变量或方法。</p>
+
+<p>另外，avalon不允许在VM定义之后，再追加新属性与方法，比如下面的方式是错误的：</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+var vm = avalon.define({
+    $id:   "test", 
+    test1: "点击测试按钮没反应 绑定失败";
+});
+vm.one = function() {//不能再追加此方法
+    vm.test1 = "绑定成功";
+};
+</pre>
+<p>但我们可以通过以下方式，实现添加子属性。</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+var vm = avalon.define({
+    $id:   "test", 
+    placehoder: {}
+});
+setTimeout(function(){
+   vm.placehoder = {//我们必须要通过 = ，直接添加一个对象来 添加子属性， 不能
+      aaa: 1,      //vm.placehoder.aaa =1; vm.placehoder.bbb = 2这个分散地添加子属性
+      bbb: 2       
+   }
+}, 1000)
+</pre>
+<p>VM中的数据更新，只能通过 = 赋值方式实现。但要注意在IE6-8，由于VM是一个VBScript对象，为VM添加新属性会抛错，
+    因此我们想批量更新N个属性就要小心了。需要使用hasOwnProperty进行过滤 </p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+var vm = avalon.define({
+    $id:   "test", 
+    a: 1,
+    b: 2,
+    c: {}
+});
+var newObject = {
+   a: 5,
+   b: 6, 
+   c: {
+      k: 4
+   },
+   f: 9 //f原来是在vm中不存在，在IE6-8会报错
+})
+//方式1：IE9+及其他现代浏览器
+avalon.mix(vm, newObject)
+
+//方式2：IE6-8
+for(var i in vm){
+    if(vm.hasOwnProperty(i) && newObject.hasOwnProperty(i)){
+       vm[i] = newObject[i]
+    }
+}
+//方式3, 设计一个assignVM方法，方便mixin N个对象
+function assignVM(vm, firstSource){
+   for (var i = 1; i < arguments.length; i++) {
+        var nextSource = arguments[i];
+        if ( nextSource && typeof nextSource !== "object" ) continue;
+        for(var i in vm){
+           if(vm.hasOwnProperty(i) && nextSource.hasOwnProperty(i)){
+               vm[i] = nextSource[i]
+           }
+        }
+   }
+   return vm
+}
+
+assignVM(vm, newObject, {a: 8,h: 9}, {b: 6, j:0})
+</pre>
+
+<p>为了性能起见，请确保你的对象结构足哆遍平，套嵌层次不能太深，里面的数组不能太长。</p>
