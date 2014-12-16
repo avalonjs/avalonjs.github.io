@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+    </head>
+    <body>
+        <h1>oniui的设计心得</h1>
+
+
+        <p>oniui是国内第一个MVVM核心的UI库,放眼世界,angular, knockout等也没有存在像我们这样庞大完备的UI库.
+            基于DOM写库与基于MVVM写库是完全不一样,许多东西需要摸索,前人没有什么可借鉴之处.
+            UI库作为业务线上最常用最重要的工具, 一个正常的互联网公司在连年累月的生产过程中,都应该沉淀出一套出来.
+            既然是这样,一开始有目的地规划设计,总比有得什么就做什么,散乱地拼凑起来,对得起后来的使用者与我们自身!
+        </p>
+        <p>我们从经下几个维度介绍一个UI的设计</p>
+        <ul>
+            <li>组件的命名</li>
+            <li>组件的API一体性</li>
+            <li>组件内部的分层化</li>
+            <li>组件的换肤功能</li>
+            <li>组件间通信</li>
+            <li>组件的配置与实例的获取</li>
+
+        </ul>
+        <h2>组件的命名</h2>
+        <p>为了确保用户一眼就明白这组件是做什么,我们的命名是非常纯粹的,比如menu就是menu, button就是button,accordion就是accordion，但对于一些复杂的组件
+            我们不确保这个组件做出来，以后会不会大重构，比如grid，这太难了，于是我们搞了一个试水用的simpletree，后来发现其难当大任，
+            又搞了一个smartgrid。
+        </p>
+        <h2>组件的API一体性</h2>
+        <p>如何确保每个组件都有一些共同的方法,从而让他们看来是来浑然一体,而不是临时拼凑出来的杂牌军。
+            由于没有接口，我们又不愿意用继续，这需要一些强制约定实现的。</p>
+        <p>我们制定了一个叫oni.standard的规范，下面略挑一二给大家看看：</p>
+        <ol>
+            <li>每个组件必须有$init, $remove，onInit方法， 以便让框架自行管理创建与销毁</li>
+            <li>每个组件的$init方法内部, 在扫描后会调用一个onInit回调,传入当前组件的 vmodel, options, vmodels, this指向当前元素</li>
+            <li>每个组件必须有widgetElement属性，引用元素本身</li>
+            <li>每个组件的回调名应该以onXxx开头</li>
+            <li>有模板的组件的默认匹配项里必须getTemplate方法 ,用于修改template, template在vm中不可监控的</li>
+            <li>有组件的显示隐藏必须通过toggle属性, 对应onOpen,onClose回调</li>
+            <li>把数组形式的数据源对应的配置项命名为data</li>
+            <li>……</li>
+        </ol>
+        <h2>>组件内部的分层化</h2>
+        <p>一般的，我们的组件都拥有三大块，JS文件，html文件，scss文件。</p>
+        <p>JS文件是一个以AMD规范组织的JS模块，里面是widget的VM，它至少依赖着其模板与CSS。在我们公司内部，我们会通过构建工具，会将AMD规范转换为CJS模块（即nodejs的那种模块），然后再进行打包</p>
+        <p>html文件其实就是我们组件的模板，既然用了MVVM，我们就尽量通过绑定机制来代劳各种DOM操作，减少JS文件里面的DOM节点生成或字符串拼接等操作，
+            这么减少每个组件的代码量或提高维护性太说 ，都大有裨益的
+        </p>
+        <p>scss文件即SASS的源文件，oniui内置sass界中最强大的compass库，通过它来生成我们所需要CSS文件。</p>
+        <p>此外，由于我们JS代码里面也写满了文档注释，于是轻敲几行命令，于是文档就出来了，CSS也出来了，
+            然后我们加上avalon.xxx.ex1.html就形成了我们的官网。</p>
+        <h2>组件的换肤功能</h2>
+        <p>正如上所述，我们是用SCSS来写CSS，其最主要目的是为了未来的换肤功能。</p>
+        <p>chameleon是OniUI的皮肤生成系统,基于sass的compass框架改写而成. 直接路径下有oniui-theme.scss,oniui-common.scss这两个文件, 
+            其中oniui-common.scss会生成oniui-common.css,这个文件所有UI组件都应该引用,如simplegrid.js就是这样引用</p>
+
+        <p>....抄readme</p>
+        <h2>组件间通信</h2>
+        <p>自己补充</p>
+        <h2>组件的配置与实例的获取</h2>
+        <p>抄你上次的PPT</p>
+
+    </body>
+</html>

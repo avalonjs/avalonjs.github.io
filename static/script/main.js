@@ -56,6 +56,14 @@
             {
                 name: "ms-skip",
                 id: "controller"
+            },
+            {
+                name: "ms-text",
+                id: "text"
+            },
+            {
+                name: "ms-html",
+                id: "text"
             }
         ],
         supportSVG: !!window.dispatchEvent,
