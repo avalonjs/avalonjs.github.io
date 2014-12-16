@@ -44,6 +44,20 @@
                 id: "unobservable"
             }
         ],
+        bindings: [
+            {
+                name: "ms-controller",
+                id: "controller"
+            },
+            {
+                name: "ms-important",
+                id: "controller"
+            },
+            {
+                name: "ms-skip",
+                id: "controller"
+            }
+        ],
         supportSVG: !!window.dispatchEvent,
         changePath: function() {
             vm.currentPath = location.href.split("#")[1]
