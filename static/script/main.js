@@ -64,6 +64,10 @@
             {
                 name: "ms-html",
                 id: "text"
+            },
+            {
+                name: "ms-visible",
+                id: "visible"
             }
         ],
         supportSVG: !!window.dispatchEvent,
@@ -71,7 +75,6 @@
             setTimeout(function() {
                 vm.currentPath = location.href.split("#")[1]
             })
-
         },
         highlight: function() {
             SyntaxHighlighter.highlight()
