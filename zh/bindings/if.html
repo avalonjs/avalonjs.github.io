@@ -50,7 +50,7 @@
     （包括此元素其他绑定属性或它下面的子节点），将它放到一个叫ifSanctuary的DIV元素中，此元素是游离于DOM树之外的。
     为了能在重新插入DOM时找到正确的位置，avalon还得创建一个注释节点做路标。当表达式再次变为true时，就会将原元素替换掉注释节点。
     1.36后，avalon会在head标签内创建一个自定义的avalon标签，将ms-if要移除的元素放到它里面去。</p>
-<pre class="brush:javascrip;gutter:false;toolbar:false;">
+<pre class="brush:javascript;gutter:false;toolbar:false;">
 //1.3.8的源码
 bindingHandlers["if"] =
         bindingHandlers.data =

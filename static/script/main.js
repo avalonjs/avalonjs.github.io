@@ -74,8 +74,12 @@
                 id: "if"
             },
             {
-                name: "ms-data",
+                name: "ms-data-*",
                 id: "data"
+            },
+            {
+                name: "ms-attr-*",
+                id: "attr"
             }
         ],
         supportSVG: !!window.dispatchEvent,

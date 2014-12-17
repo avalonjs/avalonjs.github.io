@@ -18,7 +18,7 @@ body {
     font-size: 14px;
     line-height: 22px;
     font-family: Helvetica Neue, Helvetica, Arial;
-   
+
 }
 .interface {
     font-family: "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, sans-serif !important;
@@ -63,10 +63,32 @@ ul.toc_section {
     text-decoration: underline;
 }
 .main-content{
-   background:  #f4f4f4 url(background.png);
+    background:  #f4f4f4 url(background.png);
     padding:15px;
     font-size: 14px;
 }
 .main-content p{
     text-indent: 2em;
+}
+
+.shim-table{
+    width: 90%;
+    border: 1px solid gray;
+    border-collapse: collapse;
+}
+.shim-table td{
+    border: 1px solid gray;
+    padding:10px;
+}
+
+
+:not(pre) > code[class*="language-"] {
+    padding: .1em;
+    border-radius: .3em;
+}
+:not(pre) > code[class*="language-"], pre[class*="language-"] {
+    background: #f5f2f0;
+}
+code[class*="language-"] {
+    color: #d14;
 }
