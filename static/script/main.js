@@ -68,6 +68,14 @@
             {
                 name: "ms-visible",
                 id: "visible"
+            },
+            {
+                name: "ms-if",
+                id: "if"
+            },
+            {
+                name: "ms-data",
+                id: "data"
             }
         ],
         supportSVG: !!window.dispatchEvent,
