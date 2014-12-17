@@ -84,6 +84,10 @@
             {
                 name: "ms-classs-*",
                 id: "class"
+            },
+            {
+                name: "ms-css-*",
+                id: "css"
             }
         ],
         supportSVG: !!window.dispatchEvent,
