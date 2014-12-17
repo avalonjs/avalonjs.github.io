@@ -126,14 +126,12 @@
 <p><img src="zh/bindings/attr/1414746091609-ggggg.jpg" alt="enter image description here" title />
 <fieldset>
     <legend>小知识</legend>
-    <blockquote>
-        <p>在IE下，需要对属性进行区分，如果是<strong>固有属性</strong>使用elem[name] =
-            value赋值；是<strong>自定义属性</strong>，则直接使用elem.setAttribute(name,
-            value)；标准浏览器没有这么麻烦，全部使用elem.setAttribute(name,
-            value)，比如elem.setAttribute("value", "xxx")会自动同步到elee.value = "xxx"。</p>
-    </blockquote>
+    <p>在IE下，需要对属性进行区分，如果是<strong>固有属性</strong>使用elem[name] =
+        value赋值；是<strong>自定义属性</strong>，则直接使用elem.setAttribute(name,
+        value)；标准浏览器没有这么麻烦，全部使用elem.setAttribute(name,
+        value)，比如elem.setAttribute("value", "xxx")会自动同步到elee.value = "xxx"。</p>
     <pre class="brush:javascript;gutter:false;toolbar:false">
- if (boolMap[attrName]) {
+      if (boolMap[attrName]) {
             var bool = boolMap[attrName]
             if (typeof elem[bool] === "boolean") {
                 // IE6-11不支持动态设置fieldset的disabled属性，IE11下样式是生效了，

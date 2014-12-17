@@ -1,0 +1,266 @@
+<h2>类名操作(ms-class)</h2>
+<p>ms-class是<a href="https://github.com/RubyLouvre/avalon">avalon</a>用得最多的几个绑定之一，
+    也正因为如此其功能一直在扩充中。根据时期的不同，分为旧风格与新风格两种。</p>
+
+<p>旧风格是指<em>ms-class-xxx=&#8221;expr&#8221;</em>，*ms-class-aaa-bbb=&#8221;expr&#8221;*。
+    正如<a hhref="#zh/bindings/index.html">这里</a>
+    所讲，一个绑定属性大体分成三部分，第一部分是ms，第二部分是class，第三部分是第二个-之后的所有字符串，
+    它们被称之为<strong>param</strong>。上面的xxx与aaa-bbb都是我们要处理里的类名。等号后面的expr是一个表达式，
+    根据它们的真假值决定是添加或移除。不过旧风格的缺点非常明显</p>
+
+<blockquote>
+  <ol>
+  <li>每个ms-class只能控制一个类名，如果有N个类名其实都是由同一个绑定属性控制的，也不得分开写。</li>
+  <li>ms-class后面只能接受全部是小写的类名，因为在HTML 规范中，属性名都只能是小写，你就算大写了，它也会转换为小写 。</li>
+  <li>有些类名，我们想动态生成出来。</li>
+  </ol>
+</blockquote>
+
+<p>因此有了新风格一说。现在不推荐使用旧风格了，不过<a href="https://github.com/RubyLouvre/avalon">avalon</a>还是非常有节操地继续支持它。</p>
+
+<pre class="brush:html;gutter:false;toolbar:false">
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;旧风格&lt;/title&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width"&gt;
+        &lt;script src="avalon.js"&gt; &lt;/script&gt;
+        &lt;script&gt;
+            var model = avalon.define({
+                $id: "ms-class",
+                toggle: true,
+                click: function(e) {
+                    model.toggle = !model.toggle
+                }
+            })
+        &lt;/script&gt;
+        &lt;style&gt;
+            .test{
+                width:100px;
+                height:100px;
+                border:1px solid red;
+                color:red;
+                -webkit-user-select: none;  /* Chrome all / Safari all */
+                -moz-user-select: none;     /* Firefox all */
+                -ms-user-select: none;      /* IE 10+ */
+                -o-user-select: none;
+                user-select: none;          
+            }
+            .aaa{
+                color:blue;
+                border:1px solid blue;
+            }
+        &lt;/style&gt;
+    &lt;/head&gt;
+    &lt;body ms-controller="ms-class"&gt;
+        &lt;div class="test" ms-class-aaa="toggle" ms-click="click"&gt;点我&lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p><img src="zh/bindings/class/1409554031838-class1.gif" alt="enter image description here" title /></p>
+
+<p>新风格的格式为<em>ms-class=&#8221;class:expr&#8221;</em>。其中ms-class也可以带第三个参数
+    （因为属性名不能重要，因此需要加一点“杂质”骗过浏览器），但它只能是数值，根据它们的大小决定执行顺序
+    （也见第三节的扫描机制部分），如ms-class-1=&#8221;aaa&#8221;,ms-class-2=&#8221;bbb&#8221;。
+    新风格的属性值由冒号拆分两部分，第一部分是类名，类名中可以使用插值表达式（如ms-class=&#8221;width{{w}}: isOk&#8221;），
+    第二部分是可选，不写（不写时冒号也不用写了）就默认是添加操作，
+    写时就根据其计算结果决定是添加还是移除（如 者ms-class=&#8221;red:1+1&#8221;）。</p>
+
+<pre class="brush:html;gutter:false;toolbar:false">
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;新风格&lt;/title&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width"&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script&gt;
+            var model = avalon.define({
+                $id: "ms-class",
+                toggle: true,
+                click: function(e) {
+                    model.toggle = !model.toggle
+                }
+            })
+        &lt;/script&gt;
+        &lt;style&gt;
+            .test{
+                width:100px;
+                height:100px;
+                border:1px solid red;
+                color:red;
+                -webkit-user-select: none;  /* Chrome all / Safari all */
+                -moz-user-select: none;     /* Firefox all */
+                -ms-user-select: none;      /* IE 10+ */
+                -o-user-select: none;
+                user-select: none;          
+            }
+            .aaa{
+                color:blue;
+                border:1px solid blue;
+            }
+        &lt;/style&gt;
+    &lt;/head&gt;
+    &lt;body ms-controller="ms-class"&gt;
+        &lt;div class="test" ms-class="aaa:toggle" ms-click="click"&gt;点我&lt;/div&gt;
+        &lt;div  ms-class="aaa"  ms-class-1="bbb"  ms-class-2="ccc"&gt; 它的名类是aaa bbb ccc   &lt;/div&gt;
+        &lt;div  ms-class-2="aaa" ms-class="bbb"  ms-class-1="ccc" &gt;  它的名类是bbb ccc aaa   &lt;/div&gt;
+        &lt;div  ms-class="bbb"  ms-class-1="aaa"  ms-class-2="ccc"&gt;  它的名类是bbb aaa ccc   &lt;/div&gt;
+        &lt;div  ms-class="xxx yyy zzz" &gt;  它的名类是xxx yyy zzz   &lt;/div&gt;
+        &lt;div  ms-class="XXX YYY ZZZ:true" &gt;  它的名类是XXX YYY ZZZ    &lt;/div&gt;
+
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p><img src="zh/bindings/calss/1409556779440-class2.gif" alt="enter image description here" title /></p>
+
+<p>此外还有两个绑定，ms-active、 ms-hover。它们分别是用来摸拟:active, :hover效果，用法与ms-class一样，都分新旧风格。ms-active只在点击的那一瞬间有效果，ms-hover只在掠过时有效果，失去焦点或离开目标元素就会移除刚才添加的类名。</p>
+
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;ms-class&lt;/title&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;style&gt;
+            .ms-class div{
+                display:inline-block;
+                width:200px;
+                height:100px;
+                border: 1px solid  black;
+            }
+            .active{
+                background: black;
+                color: white;
+            }
+            .bgRed {
+                background:palegoldenrod;
+            }
+            .hover{
+                background: red;
+                color: white;
+            }
+        &lt;/style&gt;
+        &lt;script type="text/javascript"&gt;
+            var model = avalon.define({
+                $id: "test",
+                w: 500,
+                h: 200,
+                bottom: true,
+                num: "00",
+                className: "点我",
+                changeClassName: function() {
+                    model.num = (100 * Math.random()).toFixed(0);
+                    model.className = this.className
+                }
+            })
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body ms-controller="test" class="ms-class"&gt;
+        &lt;div ms-active="active" &gt;测试:active&lt;/div&gt;
+        &lt;div ms-hover="hover" &gt;测试:hover&lt;/div&gt;
+        &lt;div ms-class="bgRed width{{w}} height{{h}}" ms-css-width="h"&gt;
+            类名通过插值表达式生成&lt;br/&gt;
+            {{w}} * {{h}}&lt;br/&gt;
+            &lt;input data-duplex-event="change" ms-duplex="h"&gt;
+        &lt;/div&gt;
+        &lt;p&gt;&lt;button type="button" ms-class="test{{num}}" ms-click="changeClassName"&gt;{{className}}&lt;/button&gt;&lt;/p&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p><img src="zh/bindings/calss/1409563260672-class3.gif" alt="enter image description here" title /></p>
+
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width"&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script&gt;
+            var model = avalon.define({
+                $id: "test",
+                color: "red",
+                toggle: true,
+                changeToggle: function() {
+                    model.toggle = !model.toggle
+                },
+                switchColor: function() {
+                    model.color = model.color === "red" ? "blue" : "red"
+                }
+            })
+        &lt;/script&gt;
+        &lt;style&gt;
+            .ms-class-test{
+                background:green;
+                width:300px;
+                height:100px;
+            }
+            .c-red{
+                background: red;
+            }
+            .c-blue{
+                background: blue;
+            }
+        &lt;/style&gt;
+    &lt;/head&gt;
+    &lt;body ms-controller="test"&gt;
+        &lt;div class="ms-class-test" ms-hover="c-{{color}}:toggle"&gt; &lt;/div&gt;
+        &lt;button ms-click="switchColor"&gt; 点我改变类名&lt;/button&gt; &lt;button ms-click="changeToggle"&gt; 点我改变toggle&lt;/button&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p><img src="zh/bindings/calss/1409638303629-toggle.gif" alt="enter image description here" title /></p>
+
+<p>ms-class、 ms-hover、 ms-active涵盖了所有与类名相应的需求，并且使用上比jQuery还简单。最后看一下用它实现斑马线的效果吧。</p>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;ms-class&lt;/title&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width"&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script&gt;
+            avalon.define({
+                $id: "test",
+                array: avalon.range(0, 14)
+            })
+        &lt;/script&gt;
+        &lt;style&gt;
+            .zebra-table{
+                border-collapse: collapse;
+                width:400px;
+                border:1px solid black;
+            }
+            .zebra-table td{
+                border:1px solid black;
+                text-indent: 1em;
+            }
+            .zebra-table .even td{
+                background:black;
+                color:white;
+            }
+             .zebra-table .hover td{
+                color: red;
+                font-weight: bolder;
+            }
+        &lt;/style&gt;
+    &lt;/head&gt;
+    &lt;body ms-controller="test" &gt;
+        &lt;table class="zebra-table"&gt;
+            &lt;tr ms-repeat="array" ms-hover="hover" ms-class="even: $index % 2 == 0"&gt;&lt;td&gt;{{$index}}&lt;/td&gt;&lt;td&gt;{{ new Date - 0 | date("yyyy-MM-dd")}}&lt;/td&gt;&lt;/tr&gt;
+        &lt;/table&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p><img src="zh/bindings/calss/1409564192080-class4.gif" alt="enter image description here" title /></p>

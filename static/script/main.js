@@ -80,6 +80,10 @@
             {
                 name: "ms-attr-*",
                 id: "attr"
+            },
+            {
+                name: "ms-classs-*",
+                id: "class"
             }
         ],
         supportSVG: !!window.dispatchEvent,
