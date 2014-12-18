@@ -82,7 +82,7 @@
                 id: "attr"
             },
             {
-                name: "ms-classs-*",
+                name: "ms-class-*",
                 id: "class"
             },
             {
