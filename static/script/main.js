@@ -90,6 +90,10 @@
                 id: "css"
             },
             {
+                name: "ms-on-*",
+                id: "on"
+            },
+            {
                 name: "ms-include",
                 id: "include"
             }
@@ -98,6 +102,11 @@
         changePath: function() {
             setTimeout(function() {
                 vm.currentPath = location.href.split("#")[1]
+                try {
+                    window.scrollTo({left: 0, top: 0, behavior: 'smooth'})
+                } catch (e) {
+                    window.scrollTo(0, 0)
+                }
             })
         },
         highlight: function() {

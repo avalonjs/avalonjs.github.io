@@ -1,0 +1,211 @@
+<h2>事件绑定(ms-on-*)</h2>
+<p>之前的章节许多示例代码也或多或少地展示了如何使用ms-click来绑定事件了。能直接在模板上绑定是事件，这也是静态模板与动态绑定的一大区别。ms-click不是简单的onclick的别名，它在内部屏蔽了浏览器的差异，并且对许多浏览器暂时不支持的事件做了兼容处理。</p>
+
+<p>总的来说，事件绑定是使用ms-on-☆绑定来实现，但avalon也提供了许多快捷方式，让用户能直接以ms-eventName调用那些常用事件，如下</p>
+
+<blockquote>
+  <p>animationend、  blur、  change、  input、 click、 dblclick、 focus、 keydown、 keypress、 keyup、 mousedown、 mouseenter、 mouseleave、 mousemove、 mouseout、 mouseover、 mouseup、 scan、 scroll、 submit</p>
+</blockquote>
+
+<p>事件绑定的属性值的格式，必须是函数名或函数名后＋小括号（小括号里面添加参数）。</p>
+
+<p>avalon的事件绑定支持<strong>多投事件机制</strong>（同一个元素可以绑定N个同种事件，如ms-click=fn, ms-click-1=fn2, ms-click-2=fn3），支持<strong>传参</strong>（默认第一个参数为事件对象，如果第一个位置被占了，我们可以在其他位置使用<strong>$event</strong>引用事件对象。）</p>
+
+<pre class="brush:html;gutter:false">&lt;!DOCTYPE HTML&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;ms-on&lt;/title&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+        &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt; 
+        &lt;script src="avalon.js" &gt;&lt;/script&gt;
+        &lt;script&gt;
+            var model = avalon.define({
+                $id: "test",
+                firstName: "司徒",
+                array: ["aaa", "bbb", "ccc"],
+                argsClick: function(e, a, b) {
+                    alert([].slice.call(arguments).join(" "))
+                },
+                loopClick: function(a, e) {
+                    alert(a + "  " + e.type)
+                },
+                status: "",
+                callback: function(e) {
+                    model.status = e.type
+                },
+                field: "",
+                check: function(e) {
+                    model.field = this.value + "  " + e.type
+                },
+                submit: function() {
+                    var data = model.$model
+                    if (window.JSON) {
+                        setTimeout(function() {
+                            alert(JSON.stringify(data))
+                        })
+                    }
+                }
+            })
+
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;fieldset ms-controller="test"&gt;
+            &lt;legend&gt;有关事件回调传参&lt;/legend&gt;
+            &lt;div ms-mouseenter="callback" ms-mouseleave="callback"&gt;{{status}}&lt;br/&gt;
+                &lt;input ms-on-input="check"/&gt;{{field}}
+            &lt;/div&gt;
+            &lt;div ms-click="argsClick($event, 100, firstName)"&gt;点我&lt;/div&gt;
+            &lt;div ms-each-el="array" &gt;
+                &lt;p ms-click="loopClick(el, $event)"&gt;{{el}}&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;button ms-click="submit"&gt;点我&lt;/button&gt;
+        &lt;/fieldset&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p><img src="zh/bindings/on/1409902096503-click.gif" alt="enter image description here" title /></p>
+
+<pre class="brush:html;gutter:false">&lt;!DOCTYPE HTML&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;ms-on&lt;/title&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+        &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt; 
+        &lt;script src="avalon.js" &gt;&lt;/script&gt;
+        &lt;script&gt;
+            var count = 0
+            var model = avalon.define({
+                $id: "multi-click",
+                str1: "1",
+                str2: "2",
+                str3: "3",
+                click0: function() {
+                    model.str1 = "xxxxxxxxx" + (count++)
+                },
+                click1: function() {
+                    model.str2 = "xxxxxxxxx" + (count++)
+                },
+                click2: function() {
+                    model.str3 = "xxxxxxxxx" + (count++)
+                }
+            })
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;fieldset&gt;
+            &lt;legend&gt;一个元素绑定多个同种事件的回调&lt;/legend&gt;
+            &lt;div ms-controller="multi-click"&gt;
+                &lt;div ms-click="click0" ms-click-1="click1" ms-click-2="click2" &gt;请点我&lt;/div&gt;
+                &lt;div&gt;{{str1}}&lt;/div&gt;
+                &lt;div&gt;{{str2}}&lt;/div&gt;
+                &lt;div&gt;{{str3}}&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/fieldset&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p><img src="zh/bindings/on/1409902480576-click2.gif" alt="enter image description here" title /></p>
+
+<pre class="brush:html;gutter:false">&lt;!DOCTYPE HTML&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;ms-on&lt;/title&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+        &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt; 
+        &lt;script src="avalon.js" &gt;&lt;/script&gt;
+        &lt;script&gt;
+            avalon.define({
+                $id: "xxx",
+                fn: function() {
+                    console.log("11111111")
+                },
+                fn1: function() {
+                    console.log("2222222")
+                },
+                fn2: function() {
+                    console.log("3333333")
+                }
+            })
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div ms-controller="xxx" 
+             ms-on-mouseenter-3="fn"
+             ms-on-mouseenter-2="fn1"
+             ms-on-mouseenter-1="fn2"
+             style="width:100px;height:100px;background: red;"
+             &gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p><img src="zh/bindings/on/1409902782256-click3.gif" alt="enter image description here" title /></p>
+
+<p>avalon已经对ms-mouseenter, ms-mouseleave进行修复，可以在<a href="http://bl.ocks.org/mbostock/5247027">这里</a>与<a href="http://stackoverflow.com/questions/6130737/mouseenter-without-jquery">这里</a>了解这两个事件。到chrome30时，所有浏览器都原生支持这两个事件。</p>
+
+<pre class="brush:html;gutter:false">&lt;!DOCTYPE html&gt; &lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;ms-mouseenter, ms-mouseleave&lt;/title&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+        &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt; 
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script&gt;
+            avalon.define({
+                $id: "test",
+                fn1: function(e) {
+                    console.log(e.type)
+                    console.log(this)
+                },
+                fn2: function(e) {
+                    console.log(e.type)
+                    console.log(this)
+                }
+            })
+        &lt;/script&gt;
+    &lt;/head&gt;
+
+    &lt;body ms-controller="test"&gt;
+        &lt;div ms-mouseenter="fn1" ms-mouseleave="fn2" style="background: red;width:200px;height: 200px;padding:20px;"&gt;
+            &lt;div style="background: blue;width:160px;height: 160px;margin:20px;"&gt;&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/body&gt; &lt;/html&gt;
+</code></pre>
+
+<p><img src="zh/bindings/on/1409903572570-click4.gif" alt="enter image description here" title /></p>
+
+<p>最后是mousewheel事件的修改，主要问题是出现firefox上，它死活也不愿意支持mousewheel，在avalon里是用DOMMouseScroll或wheel实现模拟的。我们在事件对象通过wheelDelta属性是否为正数判定它在向上滚动。</p>
+
+<pre class="brush:html;gutter:false">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;ms-on-mousewheel&lt;/title&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+        &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt; 
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script&gt;
+            var model = avalon.define({
+                $id: "test",
+                text: "",
+                callback: function(e) {
+                    model.text = e.wheelDelta + "  " + e.type
+                }
+            })
+
+        &lt;/script&gt;
+    &lt;/head&gt;
+
+    &lt;body ms-controller="test"&gt;
+        &lt;div ms-on-mousewheel="callback" id="aaa" style="background: red;width:200px;height: 200px;"&gt;
+            {{text}}
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p><img src="zh/bindings/on/1409904002238-click5.gif" alt="enter image description here" title /></p>
+
+<p>此外avalon还对input，animationend事件进行修复，大家也可以直接用avalon.bind, avalon.fn.bind来绑定这些事件。但建议都用ms-on绑定来处理。</p>
