@@ -1,0 +1,123 @@
+<h2>双工绑定(ms-duplex)</h2>
+<p>ms-duplex是所有绑定属性中唯一能从V到VM同步的绑定，其余的绑定只能单向地从VM到V地同步。</p>
+<p>ms-duplex的语法为<strong>ms-duplex="prop"</strong>，注意属性值只能是一个属性值，不是表达式，比如我们
+    可以ms-duplex="aaa.bbb", ms-duplex="xxx", ms-duplex="aaa.bbb.ccc"，但不能是ms-duplex="fn(aaa)", ms-duplex="aaa+bbb"。
+    这正是因为它是双向的，它需要将当前表单元素的值，再赋给VM的某一个属性，而不能赋给一个表达式。
+</p>
+<p>此外，ms-duplex还有许多分支或叫衍生绑定，如<code class="language-javascript">ms-duplex-boolean</code>, 
+    <code class="language-javascript">ms-duplex-string</code>,
+    <code class="language-javascript">ms-duplex-number</code>,
+    <code class="language-javascript">ms-duplex-checked</code>
+    这4个是1.3.7后新增的(统称之为ms-duplex 2.0)，在之前，还有另外几个绑定与它们有着相同的功能。详看下表：
+</p>
+
+<p>旧有的ms-duplex家族与新的ms-duplex家族对比如下：</p>
+
+<table> 
+    <col width="190"><col width="220">
+    <tr><td>新</td><td>旧</td><td>功能</td></tr>
+    <tr><td>
+            <code class='language-javascript'>ms-duplex-checked</code>
+            <br>只能应用于radio、 checkbox
+        </td>
+        <td>
+            <code class='language-javascript'>ms-duplex</code>
+            <br>只能应用于radio
+            <br><code class='language-javascript'>ms-duplex-radio</code>
+            <br>checkbox
+        </td>
+        <td>通过checked属性同步VM</td>
+    </tr>
+    <tr>
+        <td>
+            <code class='language-javascript'>ms-duplex-string</code>
+            <br>应用于所有表单元素
+        </td>
+        <td>
+            <code class='language-javascript'>ms-duplex-text</code>
+            <br>只能应用于radio
+        </td>
+        <td>通过value属性同步VM</td>
+    </tr>
+    <tr>
+        <td>
+            <code class='language-javascript'>ms-duplex-boolean</code>
+            <br>应用于所有表单元素
+        </td>
+        <td>
+            <code class='language-javascript'>ms-duplex-bool</code>
+            <br>只能应用于radio
+        </td>
+        <td>value为&#8221;true&#8221;时转为true，其他值转为false同步VM</td>
+    </tr>
+    <tr>
+        <td>
+            <code class='language-javascript'>ms-duplex-number</code>
+            <br>应用于表单元素
+        </td>
+        <td>没有对应项</td>
+        <td>如果value是数字格式就转换为数值，否则不做转换，然后再同步VM</td>
+    </tr>
+    <tr>
+        <td>
+            <code class='language-javascript'>ms-duplex</code>
+            <br>相当于ms-duplex-string
+        </td>
+        <td>
+            <code class='language-javascript'>ms-duplex</code>
+            <br>在radio相当于ms-duplex-checked
+            <br>在其他上相当于ms-duplex-string</td>
+        <td>见上</td>
+    </tr>
+</table>
+
+<p>在avalon1.3.7中，添加了avalon.duplexHooks钩子对象， 什么ms-duplex-boolean都可以在它上面找到实现：</p>
+
+<pre class="brush:javascript;gutter:false;toolbar:false">
+
+function fixNull(val) {
+        return val == null ? "" : val
+    }
+    avalon.duplexHooks = {
+        checked: {
+            get: function(val, data) {
+                return !data.element.oldValue
+            }
+        },
+        string: {
+            get: function(val) {//同步到VM
+                return val
+            },
+            set: fixNull
+        },
+        "boolean": {
+            get: function(val) {
+                return val === "true"
+            },
+            set: fixNull
+        },
+        number: {
+            get: function(val) {
+                return isFinite(val) ? parseFloat(val) || 0 : val
+            },
+            set: fixNull
+        }
+    }
+</pre>
+
+<p>此外还有一个pipe内部方法，允许我们在ms-duplex-后面接N个单词，每个单词对应avalon.duplexHooks中一个对象，
+    我们称之为<code class='language-javascript'>拦截器</code>。 </p>
+
+<pre class="brush:javascript;gutter:false;toolbar:false">
+  function pipe(val, data, action, e) {
+        data.param.replace(rword, function(name) {
+            var hook = avalon.duplexHooks[name]
+            if (hook &amp;&amp; typeof hook[action] === "function") {
+                val = hook[action](val, data)
+            }
+        })
+        return val
+    }
+</pre>
+
+<p>有了拦截器机制，我们就可以用ms-duplex做更多的事情，如<a href="https://github.com/RubyLouvre/avalon.oniui/tree/master/mask">格式化处理</a>，<a href="https://github.com/RubyLouvre/avalon.oniui/tree/master/validation">数据验证</a>，带来N多兄弟，<code class='language-javascript'>ms-duplex-mask</code>、 <code class='language-javascript'>ms-duplex-int</code>、 <code class='language-javascript'>ms-duplex-chs</code>、<code class='language-javascript'>ms-duplex-email</code>、 <code class='language-javascript'> ms-duplex-url</code>、<code class='language-javascript'>ms-duplex-id</code>……用户缺什么就在duplexHooks造什么，制定性非常强大！</p>

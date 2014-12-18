@@ -96,6 +96,10 @@
             {
                 name: "ms-include",
                 id: "include"
+            },
+             {
+                name: "ms-duplex",
+                id: "duplex"
             }
         ],
         supportSVG: !!window.dispatchEvent,
