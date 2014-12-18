@@ -67,7 +67,8 @@
     （也见第三节的扫描机制部分），如ms-class-1=&#8221;aaa&#8221;,ms-class-2=&#8221;bbb&#8221;。
     新风格的属性值由冒号拆分两部分，第一部分是类名，类名中可以使用插值表达式（如ms-class=&#8221;width{{w}}: isOk&#8221;），
     第二部分是可选，不写（不写时冒号也不用写了）就默认是添加操作，
-    写时就根据其计算结果决定是添加还是移除（如 者ms-class=&#8221;red:1+1&#8221;）。</p>
+    写时就根据其计算结果决定是添加还是移除（如 者ms-class=&#8221;red:1+1&#8221;）。简言之，新风格的属性值
+    分为<span style="color:blueviolet">类名部分</span>与<span style="color:brown">表达式部分</span></p>
 
 <pre class="brush:html;gutter:false;toolbar:false">
 
@@ -261,6 +262,48 @@
         &lt;/table&gt;
     &lt;/body&gt;
 &lt;/html&gt;
-</code></pre>
+</pre>
+
 
 <p><img src="zh/bindings/class/1409564192080-class4.gif" alt="enter image description here" title /></p>
+<p>我们再比较一下ms-class新风格与ms-attr-class的区别吧。ms-class新风格不会试图将类名部分转换为变量，
+    只有当出现{{}}才只会将里面的东西当成表达式求值。而ms-attr-class总是会尝试将整个属性值变成一个变量，
+    如ms-attr-class="aaa"相当于ms-attr-class="{{aaa}}"，ms-attr-class="{{aaa}}222"相当于ms-attr-class="aaa+'222'"。
+</p>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head lang="en"&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;title&gt;ms-class与ms-attr-class&lt;/title&gt;
+        &lt;style&gt;
+            .aaa{
+                background: blue;
+            }
+            .bbb {
+                background: red;
+            }
+        &lt;/style&gt;
+    &lt;/head&gt;
+    &lt;body ms-controller="test"&gt;
+        &lt;table&gt;
+            &lt;tr&gt;
+                &lt;td ms-class="aaa"&gt;ms-class不带表达式&lt;/td&gt; 
+                &lt;td ms-class="{{aaa}}"&gt;ms-class带表达式&lt;/td&gt;
+                &lt;td ms-attr-class="aaa"&gt;ms-attr-class不带表达式&lt;/td&gt;
+                &lt;td ms-attr-class="{{aaa}}"&gt;ms-attr-class带表达式&lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/table&gt;
+        &lt;script type="text/javascript" src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script&gt;
+
+var test = avalon.define({
+    $id: "test",
+    aaa: "bbb"
+})
+        &lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p><img src="zh/bindings/class/ms-class-4.jpg" alt="enter image description here" title /></p>
