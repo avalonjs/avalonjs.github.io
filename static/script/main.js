@@ -88,6 +88,10 @@
             {
                 name: "ms-css-*",
                 id: "css"
+            },
+            {
+                name: "ms-include",
+                id: "include"
             }
         ],
         supportSVG: !!window.dispatchEvent,
