@@ -69,6 +69,8 @@ ul.toc_section {
 }
 .main-content p{
     text-indent: 2em;
+    margin-top: 2em;
+    width:800px;
 }
 
 .shim-table{
@@ -76,7 +78,7 @@ ul.toc_section {
     border: 1px solid gray;
     border-collapse: collapse;
 }
-.shim-table td{
+.shim-table td,.shim-table th{
     border: 1px solid gray;
     padding:10px;
 }

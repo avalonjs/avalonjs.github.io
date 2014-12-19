@@ -4,7 +4,8 @@
     可以ms-duplex="aaa.bbb", ms-duplex="xxx", ms-duplex="aaa.bbb.ccc"，但不能是ms-duplex="fn(aaa)", ms-duplex="aaa+bbb"。
     这正是因为它是双向的，它需要将当前表单元素的值，再赋给VM的某一个属性，而不能赋给一个表达式。
 </p>
-<p>此外，ms-duplex还有许多分支或叫衍生绑定，如<code class="language-javascript">ms-duplex-boolean</code>, 
+<p>此外，ms-duplex还有许多分支或叫衍生绑定，如
+    <code class="language-javascript">ms-duplex-boolean</code>, 
     <code class="language-javascript">ms-duplex-string</code>,
     <code class="language-javascript">ms-duplex-number</code>,
     <code class="language-javascript">ms-duplex-checked</code>
@@ -71,39 +72,6 @@
     </tr>
 </table>
 
-<p>在avalon1.3.7中，添加了avalon.duplexHooks钩子对象， 什么ms-duplex-boolean都可以在它上面找到实现：</p>
-
-<pre class="brush:javascript;gutter:false;toolbar:false">
-
-function fixNull(val) {
-        return val == null ? "" : val
-    }
-    avalon.duplexHooks = {
-        checked: {
-            get: function(val, data) {
-                return !data.element.oldValue
-            }
-        },
-        string: {
-            get: function(val) {//同步到VM
-                return val
-            },
-            set: fixNull
-        },
-        "boolean": {
-            get: function(val) {
-                return val === "true"
-            },
-            set: fixNull
-        },
-        number: {
-            get: function(val) {
-                return isFinite(val) ? parseFloat(val) || 0 : val
-            },
-            set: fixNull
-        }
-    }
-</pre>
 
 <p>我们再回来说表单元素。现行可以供avalon操作的的HTML4表单元素有text, textarea, password, radio, checkbox, select，
     其中select根据multiple属性分为单选下拉框，多选下拉框。text, textarea, password比较简单，直接取其value属性同步就行了。
@@ -239,8 +207,8 @@ function fixNull(val) {
 </pre>
 <p><img src="zh/bindings/duplex/duplex1.gif" alt="enter image description here" title /></p>
 <p>接着下来，我们说一下如何一开始就勾选好某些radio，checkbox。如果对应的绑定属性是ms-duplex-checked就简单了，只要让它们在VM中对应的属性为
-true就行了。如果是要根据value值进行勾选，就分情况讨论。radio，要求VM中对应的属性等于某个radio的value值；checkbox，由于是一组组出现的，
-因此要求在VM中对应一个数组，然后将需要选中的checkbox的值放进去就行了。我们看下例：
+    true就行了。如果是要根据value值进行勾选，就分情况讨论。radio，要求VM中对应的属性等于某个radio的value值；checkbox，由于是一组组出现的，
+    因此要求在VM中对应一个数组，然后将需要选中的checkbox的值放进去就行了。我们看下例：
 </p>
 
 <pre class="brush:html;gutter:false;toolbar:false">
@@ -328,10 +296,42 @@ true就行了。如果是要根据value值进行勾选，就分情况讨论。ra
 &lt;/html&gt;
 </pre>
 <p><img src="zh/bindings/duplex/duplex3.gif" alt="enter image description here" title /></p>
+<p>在avalon1.3.7中，添加了avalon.duplexHooks钩子对象。上面放置了一个个包含set, get, init方法的对象，我称之为拦截器。
+    我们的衔生绑定，如ms-duplex-string，其实就是对应其中string拦截器，此外，ms-duplex上面可以添加<strong>N个拦截器</strong>，如ms-duplex-aaa-bbb-ccc。
+    由于ms-duplex是一个特性节点，根据HTML5的规范，属性名只能是小写，因此大家在命名拦截器的名字时要小心点，不能出现“-”与大写。
+<p>avalon.duplexHooks自带的4个拦截器的实现：</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+function fixNull(val) {
+        return val == null ? "" : val
+    }
+    avalon.duplexHooks = {
+        checked: {
+            get: function(val, data) {
+                return !data.element.oldValue
+            }
+        },
+        string: {
+            get: function(val) {//同步到VM
+                return val
+            },
+            set: fixNull
+        },
+        "boolean": {
+            get: function(val) {
+                return val === "true"
+            },
+            set: fixNull
+        },
+        number: {
+            get: function(val) {
+                return isFinite(val) ? parseFloat(val) || 0 : val
+            },
+            set: fixNull
+        }
+    }
+</pre>
 
-<p>此外还有一个pipe内部方法，允许我们在ms-duplex-后面接N个单词，每个单词对应avalon.duplexHooks中一个对象，
-    我们称之为<code class='language-javascript'>拦截器</code>。 </p>
-
+<p>此外avalon1.3.7还添加了一个pipe内部方法，通过它调用各种拦截器。简单而言，从V到VM同步，会经过其get方法；从VM到V同步，会经过其set方法。 </p>
 <pre class="brush:javascript;gutter:false;toolbar:false">
   function pipe(val, data, action, e) {
         data.param.replace(rword, function(name) {
@@ -344,7 +344,188 @@ true就行了。如果是要根据value值进行勾选，就分情况讨论。ra
     }
 </pre>
 
+<p>ms-duplex是默认使用oniput事件监听text，textearea，password元素的value变动，
+    换言之，每改动一下字符串，都会进行同步，同步时会进入对应的拦截器，ms-duplex其实等同于ms-duplex-string。
+    换言之，就使用string拦截器，而从V到VM，则经过avalon。duplexHooks。string。get方法，它的第一个参数为当前的value值，
+    第二个参数为data包含你需要的各种信息。这样如果存在第二个拦截器，如ms-duplex-string-secondinterceptor，
+    就会到secondinterceptor里面去。</p>
+<p>在表单元素上,avalon还会添加了一个oldValue属性,其值为一个字符串,用户的每次改动,都会先用element.value 与 element.oldValue进行比较。
+    只有不一致,才进入pipe方法,然后再到各个拦截器。
+</p>
 
 <p>有了拦截器机制，我们就可以用ms-duplex做更多的事情，如<a href="https://github.com/RubyLouvre/avalon.oniui/tree/master/mask">格式化处理</a>，<a href="https://github.com/RubyLouvre/avalon.oniui/tree/master/validation">数据验证</a>，带来N多兄弟，<code class='language-javascript'>ms-duplex-mask</code>、 <code class='language-javascript'>ms-duplex-int</code>、 <code class='language-javascript'>ms-duplex-chs</code>、
     <code class='language-javascript'>ms-duplex-email</code>、 <code class='language-javascript'> ms-duplex-url</code>、
     <code class='language-javascript'>ms-duplex-id</code>……用户缺什么就在duplexHooks造什么，制定性非常强大！</p>
+
+<p>双工绑定之所以能实现 从 V到VM的同步，只要是通过三种途径。第一种是绑定不同的事件进行实时临听，
+    第二种是重写了元素节点的value值的内部setter方法；
+    换言之就是 <code class='language-javascript'> Object.getOwnPropertyDescriptor( HTMLInputElement.prototype, "value").set</code>方法，
+    这是IE9+，firefox中使用的技术，IE6-8直接使用onpropertychange就能实现相同的效果；第三种是使用全局定时器轮询，这有点延时但没有办法，
+    主要用在chrome，safari浏览器上。因此双工绑定没什么神秘，肯定是有人帮你做了各种监听手段，才能实现同步。
+<p>
+<p style="color: red">由于向前兼容问题，请不要在radio、checkbox上直接使用ms-duplex，一定要使用衍生绑定。</p>
+<table class="shim-table">
+    <tr>
+        <th>绑定名</th> <th>表单元素类型</th>  <th>IE6-8下绑定的事件</th> <th>标准浏览器绑定的事件</th>
+    </tr>
+    <tr>
+        <td>ms-duplex及 ms-duplex-string, ms-duplex-number, ms-duplex-boolean </td> 
+        <td>text, textarea, password</td> 
+        <td>selectionchange, propertychange, dragend</td> 
+        <td>input, compositionstart, compositionend</td>
+    </tr>
+    <tr>
+        <td>ms-duplex-string, ms-duplex-number, ms-duplex-boolean</td> 
+        <td>radio, checkbox</td> 
+        <td>click</td> 
+        <td>change</td>
+    </tr>
+    <tr>
+        <td>ms-duplex-checked</td> 
+        <td>radio, checkbox</td> 
+        <td>mouseup</td> 
+        <td>click</td>
+    </tr>
+    <tr>
+        <td>ms-duplex 及 ms-duplex-string, ms-duplex-number, ms-duplex-boolean</td> 
+        <td>select</td> 
+        <td>change</td> 
+        <td>change</td>
+    </tr>
+</table>
+
+<p>如果你在某一段时间内，不想监听了，还可以用data-duplex-observe="false"辅助指令进行禁用。
+    这些辅助指令由于是 data-*属性，我们还可以通过ms-data-*指令动态生成，如ms-data-duplex-observe="zzz"。
+    如果你想改动VM的属性时，让对应表单元素获得焦点，可以使用data-duplex-focus辅助指令。
+    如果你想改变text表单元素上默认监听行为，可以使用data-duplex-event="change"辅助指令，考虑到兼容问题，
+    用户应该只使用change, click, mouseover, mouseout, focus, blur这几个事件。</p>
+
+<table class="shim-table" caption="duplex的辅助指令一览">
+    <tr>
+        <th>名字</th> <th>说明</th>  
+    </tr>
+    <tr>
+        <td>data-duplex-changed="funName" </td> 
+        <td>变动回调</td> 
+    </tr>
+    <tr>
+        <td>data-duplex-observe="boolean" </td> 
+        <td>是否继续监听</td> 
+    </tr>
+    <tr>
+        <td>data-duplex-focus="boolean" </td> 
+        <td>是否让对应表单元素获得焦点</td> 
+    </tr>
+    <tr>
+        <td>data-duplex-event="eventName"</td> 
+        <td>改变监听事件</td> 
+    </tr>
+</table>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;ms-duplex&lt;/title&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+        &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt; 
+        &lt;script src="avalon.js" &gt;&lt;/script&gt;
+        &lt;script&gt;
+            avalon.define({
+                $id: "test",
+                aaa: {
+                    xxx: "444",
+                    yyy: "555"
+                },
+                bbb: "yyy",
+                zzz: "text"
+            })
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body ms-controller="test"&gt;
+        &lt;input ms-duplex="aaa['xxx']"&gt;
+        &lt;input ms-duplex="aaa[bbb]"&gt;
+        &lt;input ms-duplex="zzz" ms-data-duplex-observe="zzz"/&gt;
+        &lt;p&gt;{{aaa.xxx}}&lt;/p&gt;
+        &lt;p&gt;{{aaa.yyy}}&lt;/p&gt;
+        &lt;p&gt;{{zzz}}&lt;/p&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p><img src="zh/bindings/duplex/duplex4.gif" alt="enter image description here" title /></p>
+<p>注意上面第三个文本域，当它输入了false，就会同步到ms-data-duplex-observe，于是就中止继续监听了。</p>
+
+<p>下一个例子，演示ms-duplex如何与循环绑定生成的代理VM的属性配合使用。</p>
+<pre class="brush:html;gutter:false;toolbar:false;">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+        &lt;script src="../avalon.js" &gt;&lt;/script&gt;
+        &lt;script&gt;
+            var model = avalon.define({
+                $id: "ms-duplex-5",
+                rows: {name: 'a', age: 45},
+                text: "OO",
+                arr: [{name: "55"}],
+                log: function() {
+                    if (window.JSON && JSON.stringify) {
+                        var value = model.$model
+                        document.getElementById("ms-duplex-show-json").value = JSON.stringify(value, 4, "\t")
+                    }
+                }
+            });
+
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;fieldset ms-controller="ms-duplex-5"&gt;
+            &lt;table class="shim-table"&gt;
+                &lt;tr ms-repeat-row='rows'&gt;
+                    &lt;td&gt;
+                        {{$key}}: {{$val}} &lt;input ms-duplex="$val"&gt;
+                    &lt;/td&gt;
+                &lt;/tr&gt;
+            &lt;/table&gt;
+            &lt;ul&gt;
+                &lt;li ms-repeat="arr"&gt;{{el.name}}&lt;input ms-duplex="el.name"&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+            &lt;p&gt;text: &lt;input ms-duplex="text"/&gt;&lt;/p&gt;
+            &lt;p&gt;
+                &lt;button ms-click="log"&gt;打印出来&lt;/button&gt;
+            &lt;/p&gt;
+            &lt;textarea id="ms-duplex-show-json" style="width:60%;height:260px;"&gt;&lt;/textarea&gt;
+        &lt;/fieldset&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<fieldset ms-controller="ms-duplex-5">
+    <script>
+        var model = avalon.define({
+            $id: "ms-duplex-5",
+            rows: {name: 'a', age: 45},
+            text: "OO",
+            arr: [{name: "55"}],
+            log: function() {
+                if (window.JSON && JSON.stringify) {
+                    var value = model.$model
+                    document.getElementById("ms-duplex-show-json").value = JSON.stringify(value, 4, "\t")
+                }
+            }
+        })
+    </script>
+    <table class="shim-table">
+        <tr ms-repeat-row='rows'>
+            <td>
+                {{$key}}: {{$val}} <input ms-duplex="$val">
+            </td>
+        </tr>
+    </table>
+    <ul>
+        <li ms-repeat="arr">{{el.name}}<input ms-duplex="el.name"></li>
+    </ul>
+    <p>text: <input ms-duplex="text"/></p>
+    <p>
+        <button ms-click="log">打印出来</button>
+    </p>
+    <textarea id="ms-duplex-show-json" style="width:60%;height:260px;"></textarea>
+</fieldset>
