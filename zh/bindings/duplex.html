@@ -13,7 +13,7 @@
 
 <p>旧有的ms-duplex家族与新的ms-duplex家族对比如下：</p>
 
-<table> 
+<table class="shim-table"> 
     <col width="190"><col width="220">
     <tr><td>新</td><td>旧</td><td>功能</td></tr>
     <tr><td>
@@ -237,7 +237,49 @@ function fixNull(val) {
 &lt;/html&gt;
 
 </pre>
-<p><img src="zh/bindings/on/duplex1.gif" alt="enter image description here" title /></p>
+<p><img src="zh/bindings/duplex/duplex1.gif" alt="enter image description here" title /></p>
+<p>接着下来，我们说一下如何一开始就勾选好某些radio，checkbox。如果对应的绑定属性是ms-duplex-checked就简单了，只要让它们在VM中对应的属性为
+true就行了。如果是要根据value值进行勾选，就分情况讨论。radio，要求VM中对应的属性等于某个radio的value值；checkbox，由于是一组组出现的，
+因此要求在VM中对应一个数组，然后将需要选中的checkbox的值放进去就行了。我们看下例：
+</p>
+
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;ms-duplex&lt;/title&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+        &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt;
+        &lt;script src="avalon.js" &gt;&lt;/script&gt;
+        &lt;script&gt;
+            var vm = avalon.define({
+                $id: "test2",
+                sex: "man",
+                lang: ["javascript","ruby"],
+                langtext: "javascript,ruby"
+            })
+            vm.lang.$watch("length", function(){
+                vm.langtext = vm.lang.join(",")
+            })
+
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div ms-controller="test2"&gt;
+            &lt;p&gt;&lt;input type="radio" ms-duplex-string="sex" value="man"&gt;男
+                &lt;input type="radio" ms-duplex-string="sex" value="woman"&gt;女&lt;/p&gt;
+            &lt;p&gt;
+                &lt;input type="checkbox" ms-duplex-string="lang" value="#C"&gt;#C
+                &lt;input type="checkbox" ms-duplex-string="lang" value="java"&gt;java
+                &lt;input type="checkbox" ms-duplex-string="lang" value="ruby"&gt;ruby
+                &lt;input type="checkbox" ms-duplex-string="lang" value="javascript"&gt;javascript
+            &lt;/p&gt;
+            &lt;p&gt;{{sex}}                   {{langtext}}&lt;/P&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p><img src="zh/bindings/duplex/duplex2.gif" alt="enter image description here" title /></p>
 
 
 <p>此外还有一个pipe内部方法，允许我们在ms-duplex-后面接N个单词，每个单词对应avalon.duplexHooks中一个对象，
