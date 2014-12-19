@@ -11,7 +11,7 @@
     这4个是1.3.7后新增的(统称之为ms-duplex 2.0)，在之前，还有另外几个绑定与它们有着相同的功能。详看下表：
 </p>
 
-<p>旧有的ms-duplex家族与新的ms-duplex家族对比如下：</p>
+<p>ms-duplex 2.0与旧有的ms-duplex家族（avalon现在还支持它们）对比如下：</p>
 
 <table class="shim-table"> 
     <col width="190"><col width="220">
@@ -280,7 +280,54 @@ true就行了。如果是要根据value值进行勾选，就分情况讨论。ra
 &lt;/html&gt;
 </pre>
 <p><img src="zh/bindings/duplex/duplex2.gif" alt="enter image description here" title /></p>
+<p>ms-duplex拥有一个叫data-duplex-changed的辅助指令，要求属性值对应VM中的一个函数，注意只能是函数名，不能写括号，不能传参。
+    它们将当前转换好的element.value传给你（如ms-duplex-number会将值转换为数字），this对应当前元素节点。</p>
+<pre class="brush:html;gutter:false;toolbar:false">
 
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;ms-duplex&lt;/title&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+        &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt; 
+        &lt;script src="avalon.js" &gt;&lt;/script&gt;
+        &lt;script&gt;
+            var model = avalon.define({
+                $id: "test",
+                text: "xxx",
+                textcb: "",
+                textchange: function(a) {
+                    model.textcb = a
+                },
+                radio: "radio",
+                radiocb: "",
+                radiochange: function(a) {
+                    model.radiocb = a
+                },
+                select: "2222",
+                selectcb: "",
+                selectchange: function(a) {
+                    model.selectcb = a
+                }
+            })
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body ms-controller="test"&gt;
+        &lt;h3&gt;data-duplex-changed回调&lt;/h3&gt;
+        &lt;div&gt;&lt;input ms-duplex="text" data-duplex-changed="textchange"&gt;{{textcb}}&lt;/div&gt;
+        &lt;div&gt;&lt;input ms-duplex-checked="radio" type="radio" data-duplex-changed="radiochange"&gt;{{radiocb}}&lt;/div&gt;
+        &lt;div&gt;
+            &lt;select ms-duplex="select" data-duplex-changed="selectchange"&gt;
+                &lt;option&gt;1111&lt;/option&gt;
+                &lt;option&gt;2222&lt;/option&gt;
+                &lt;option&gt;3333&lt;/option&gt;
+                &lt;option&gt;4444&lt;/option&gt;
+            &lt;/select&gt;
+            {{selectcb}}&lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p><img src="zh/bindings/duplex/duplex3.gif" alt="enter image description here" title /></p>
 
 <p>此外还有一个pipe内部方法，允许我们在ms-duplex-后面接N个单词，每个单词对应avalon.duplexHooks中一个对象，
     我们称之为<code class='language-javascript'>拦截器</code>。 </p>
