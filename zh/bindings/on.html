@@ -179,7 +179,8 @@
 
 <p>最后是mousewheel事件的修改，主要问题是出现firefox上，它死活也不愿意支持mousewheel，在avalon里是用DOMMouseScroll或wheel实现模拟的。我们在事件对象通过wheelDelta属性是否为正数判定它在向上滚动。</p>
 
-<pre class="brush:html;gutter:false">&lt;!DOCTYPE html&gt;
+<pre class="brush:html;gutter:false">
+&lt;!DOCTYPE html&gt;
 &lt;html&gt;
     &lt;head&gt;
         &lt;title&gt;ms-on-mousewheel&lt;/title&gt;
@@ -207,5 +208,39 @@
 </code></pre>
 
 <p><img src="zh/bindings/on/1409904002238-click5.gif" alt="enter image description here" title /></p>
-
+<h3>如何解除ms-on-*, ms-click等绑定的事件回调?</h3>
+<p>抱歉地告诉你，不能。不过我们可以用另一个折衷的方式达到相同的效果。看一下面的例子：</p>
+<pre class="brush:html;gutter:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script&gt;
+           var vm = avalon.define({
+                $id: "test",
+                fn: function(){
+                    alert(1)
+                }
+            })
+            setTimeout(function(){
+                vm.fn = function(){
+                    alert(2)
+                }
+            }, 3000)
+             setTimeout(function(){
+                vm.fn = function(){
+                    alert(3)
+                }
+            }, 6000)
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div ms-controller="test"&gt;
+            &lt;button type="button" ms-click="fn"&gt;点击&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p><img src="zh/bindings/on/click6.gif" alt="enter image description here" title /></p>
 <p>此外avalon还对input，animationend事件进行修复，大家也可以直接用avalon.bind, avalon.fn.bind来绑定这些事件。但建议都用ms-on绑定来处理。</p>

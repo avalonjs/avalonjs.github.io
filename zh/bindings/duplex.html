@@ -105,6 +105,140 @@ function fixNull(val) {
     }
 </pre>
 
+<p>我们再回来说表单元素。现行可以供avalon操作的的HTML4表单元素有text, textarea, password, radio, checkbox, select，
+    其中select根据multiple属性分为单选下拉框，多选下拉框。text, textarea, password比较简单，直接取其value属性同步就行了。
+    radio与checkbox就需分情况讨论，如果用户就想根据此元素是否被勾选进行操作，那么就需要用ms-duplex-checked，
+    如果用户就是想从多个radio或多个checkbox的value值中进行选择，就需要ms-duplex(ms-duplex-string)，ms-duplex-number, ms-duplex-boolean。
+    select的值其实就是被选中的option的value值或text值。
+    但select为多选下拉框时，与checkbox一样，是显示一组的东西，因此它们需要在VM中对应的一个数组。
+</p>
+
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;TODO supply a title&lt;/title&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width"&gt;
+        &lt;script src="../avalon.js" &gt;&lt;/script&gt;
+        &lt;script&gt;
+            var model = avalon.define({
+                $id: "test",
+                a: true,
+                b: true,
+                c: "",
+                d: "",
+                e: 10,
+                f: true,
+                g: ["b", "c"],
+                h: [1, 4],
+                i: [false],
+                j: "2222",
+                k: 2222,
+                l: false,
+                m: ["bbbb","dddd"],
+                n: [11,44],
+            });
+            model.$watch("$all", function(a, b) {
+                if (!/^avalon\-/.test(a)) {
+                    avalon.log([a, b, typeof b].join("   "))
+                }
+            })
+            model.g.$watch("length", function() {
+                avalon.log(model.g)
+            })
+            model.h.$watch("length", function() {
+                avalon.log(model.h)
+            })
+            model.i.$watch("length", function() {
+                avalon.log(model.i)
+            })
+              model.m.$watch("length", function() {
+                avalon.log(model.m)
+            })
+              model.n.$watch("length", function() {
+                avalon.log(model.n)
+            })
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div ms-controller="test"&gt;
+            &lt;h3 style="text-align: center"&gt;ms-duplex 2.0&lt;/h3&gt;
+            &lt;table&gt;
+                &lt;tr&gt;
+                    &lt;td&gt;
+                        &lt;p&gt;ms-duplex-checked&lt;input ms-duplex-checked="a" type="radio" /&gt;{{a}}&lt;/p&gt;
+                        &lt;p&gt;ms-duplex-checked&lt;input ms-duplex-checked="b" type="checkbox"/&gt;{{b}}&lt;/p&gt;
+                        &lt;p&gt;ms-duplex-string&lt;input ms-duplex="c" /&gt;{{c}}&lt;/p&gt;
+                        &lt;p&gt;ms-duplex-string&lt;input ms-duplex-string="d" /&gt;{{d}}&lt;/p&gt;
+                        &lt;p&gt;ms-duplex-number&lt;input ms-duplex-number="e" /&gt;{{e}}&lt;/p&gt;
+                        &lt;p&gt;ms-duplex-boolean&lt;input ms-duplex-boolean="f" data-duplex-event="change" /&gt;{{f}}&lt;/p&gt;
+                    &lt;/td&gt;
+                    &lt;td&gt;
+                        &lt;p&gt;ms-duplex-string
+                            &lt;input ms-duplex-string="g" type="checkbox" value="a" /&gt;
+                            &lt;input ms-duplex-string="g" type="checkbox" value="b" /&gt;
+                            &lt;input ms-duplex-string="g" type="checkbox" value="c" /&gt;
+                            &lt;input ms-duplex-string="g" type="checkbox" value="d" /&gt;
+                            {{g}}&lt;/p&gt;
+                        &lt;p&gt;ms-duplex-number
+                            &lt;input ms-duplex-number="h" type="checkbox" value="1" /&gt;
+                            &lt;input ms-duplex-number="h" type="checkbox" value="2" /&gt;
+                            &lt;input ms-duplex-number="h" type="checkbox" value="3" /&gt;
+                            &lt;input ms-duplex-number="h" type="checkbox" value="4" /&gt;
+                            {{h}}&lt;/p&gt;
+                        &lt;p&gt;ms-duplex-boolean
+                            &lt;input ms-duplex-boolean="i" type="checkbox" value="false" /&gt;
+                            &lt;input ms-duplex-boolean="i" type="checkbox" value="true" /&gt;
+                            {{i}}&lt;/p&gt;
+                        &lt;p&gt;ms-duplex-string/ms-duplex
+                            &lt;select ms-duplex="j"&gt;
+                                &lt;option&gt;1111&lt;/option&gt;
+                                &lt;option&gt;2222&lt;/option&gt;
+                                &lt;option&gt;3333&lt;/option&gt;
+                            &lt;/select&gt;
+                        &lt;/p&gt;
+                        &lt;p&gt;ms-duplex-number
+                            &lt;select ms-duplex-number="k"&gt;
+                                &lt;option&gt;1111&lt;/option&gt;
+                                &lt;option&gt;2222&lt;/option&gt;
+                                &lt;option&gt;3333&lt;/option&gt;
+                            &lt;/select&gt;
+                        &lt;/p&gt;
+                        &lt;p&gt;ms-duplex-boolean
+                            &lt;select ms-duplex-boolean="l"&gt;
+                                &lt;option&gt;true&lt;/option&gt;
+                                &lt;option&gt;false&lt;/option&gt;
+                            &lt;/select&gt;
+                        &lt;/p&gt;
+                    &lt;/td&gt;
+                    &lt;td&gt;
+                        &lt;p&gt;ms-duplex-string/ms-duplex&lt;br/&gt;
+                            &lt;select ms-duplex="m" multiple&gt;
+                                &lt;option&gt;aaaa&lt;/option&gt;
+                                &lt;option&gt;bbbb&lt;/option&gt;
+                                &lt;option&gt;cccc&lt;/option&gt;
+                                &lt;option&gt;dddd&lt;/option&gt;
+                            &lt;/select&gt;
+                        &lt;/p&gt;
+                        &lt;p&gt;ms-duplex-number&lt;br/&gt;
+                            &lt;select ms-duplex-number="n" multiple&gt;
+                                &lt;option&gt;11&lt;/option&gt;
+                                &lt;option&gt;22&lt;/option&gt;
+                                &lt;option&gt;33&lt;/option&gt;
+                                &lt;option&gt;44&lt;/option&gt;
+                            &lt;/select&gt;
+                        &lt;/p&gt;
+                    &lt;/td&gt;
+                &lt;/tr&gt;
+            &lt;/table&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+
+</pre>
+
+
 <p>此外还有一个pipe内部方法，允许我们在ms-duplex-后面接N个单词，每个单词对应avalon.duplexHooks中一个对象，
     我们称之为<code class='language-javascript'>拦截器</code>。 </p>
 
@@ -120,4 +254,7 @@ function fixNull(val) {
     }
 </pre>
 
-<p>有了拦截器机制，我们就可以用ms-duplex做更多的事情，如<a href="https://github.com/RubyLouvre/avalon.oniui/tree/master/mask">格式化处理</a>，<a href="https://github.com/RubyLouvre/avalon.oniui/tree/master/validation">数据验证</a>，带来N多兄弟，<code class='language-javascript'>ms-duplex-mask</code>、 <code class='language-javascript'>ms-duplex-int</code>、 <code class='language-javascript'>ms-duplex-chs</code>、<code class='language-javascript'>ms-duplex-email</code>、 <code class='language-javascript'> ms-duplex-url</code>、<code class='language-javascript'>ms-duplex-id</code>……用户缺什么就在duplexHooks造什么，制定性非常强大！</p>
+
+<p>有了拦截器机制，我们就可以用ms-duplex做更多的事情，如<a href="https://github.com/RubyLouvre/avalon.oniui/tree/master/mask">格式化处理</a>，<a href="https://github.com/RubyLouvre/avalon.oniui/tree/master/validation">数据验证</a>，带来N多兄弟，<code class='language-javascript'>ms-duplex-mask</code>、 <code class='language-javascript'>ms-duplex-int</code>、 <code class='language-javascript'>ms-duplex-chs</code>、
+    <code class='language-javascript'>ms-duplex-email</code>、 <code class='language-javascript'> ms-duplex-url</code>、
+    <code class='language-javascript'>ms-duplex-id</code>……用户缺什么就在duplexHooks造什么，制定性非常强大！</p>
