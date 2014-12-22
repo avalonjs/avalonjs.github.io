@@ -54,6 +54,16 @@
                 </td>
             </tr>
         </table>
+        <script>
+var div = document.createElement("div")
+div.ontouchstart = function() {
+    alert(111)
+}
+var evt = document.createEvent('TouchEvent');
+evt.initTouchEvent('touchstart', true, true);
+div.dispatchEvent(evt)
+
+        </script>
 
     </body>
 </html>

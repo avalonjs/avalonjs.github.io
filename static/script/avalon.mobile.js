@@ -4511,7 +4511,7 @@ avalon.ready(function() {
                     return false
             }
         },
-        canFix: function(element) {
+        canFix: function(element, type) {
             // 如果设备不支持触摸就不需要修复了
             if (!touchSupported) {
                 return false
