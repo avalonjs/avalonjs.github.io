@@ -102,6 +102,12 @@
                 id: "duplex"
             }
         ],
+        mobiles:[
+             {
+                name: "触屏事件",
+                id: "touch"
+            }
+        ],
         supportSVG: !!window.dispatchEvent,
         changePath: function() {
             setTimeout(function() {

@@ -42,6 +42,12 @@
                     <ul class="toc_section">
                         <li ms-repeat="bindings">– <a ms-href="#{{userLanguage}}/bindings/{{el.id}}.html" ms-click="changePath"  data-include-rendered="highlight">{{el.name}}</a></li>
                     </ul>
+                    <a class="toc_title" ms-href="#{{userLanguage}}/mobiles/index.html" ms-click="changePath"  data-include-rendered="highlight">
+                        移动端相关
+                    </a>
+                    <ul class="toc_section">
+                        <li ms-repeat="mobiles">– <a ms-href="#{{userLanguage}}/mobiles/{{el.id}}.html" ms-click="changePath"  data-include-rendered="highlight">{{el.name}}</a></li>
+                    </ul>
                 </td> 
                 <td class="main-content" valign="top">
                     <div ms-include-src="currentPath"  data-include-rendered="highlight"></div>
