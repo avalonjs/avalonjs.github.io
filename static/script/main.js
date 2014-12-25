@@ -97,13 +97,25 @@
                 name: "ms-include",
                 id: "include"
             },
-             {
+            {
                 name: "ms-duplex",
                 id: "duplex"
+            },
+            {
+                name: "ms-repeat",
+                id: "repeat"
+            },
+            {
+                name: "ms-each",
+                id: "repeat"
+            },
+            {
+                name: "ms-with",
+                id: "repeat"
             }
         ],
-        mobiles:[
-             {
+        mobiles: [
+            {
                 name: "触屏事件",
                 id: "touch"
             }
