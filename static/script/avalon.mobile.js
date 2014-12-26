@@ -4325,6 +4325,7 @@
         var ghostPrevent = false //用于在全阻止默认的点击事件
         var IE11touch = navigator.pointerEnabled
         var IE9_10touch = navigator.msPointerEnabled
+         avalon.log("check 1")
         if (isIOS) {
             function removeSelf() {
                 var p = this.parentNode
@@ -4431,7 +4432,7 @@
                     console.log("++++++++++++++++++")
                     avalon.fastclick.fireEvent(element, "click", event)//触发click事件
                     W3CFire(element, "tap")//触发tap事件
-                    avalon.log("add click")
+                   
                     if (forElement) {
                         
                         avalon.fastclick.fireEvent(forElement, "click", event)
