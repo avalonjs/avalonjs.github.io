@@ -4487,11 +4487,11 @@
             if (isClick ? avalon.fastclick.canFix(element) : true) {
                 data.specialBind = function(element, callback) {
                     element.addEventListener(touchNames[0], touchstart)
-                    element.addEventListener(data.param, callback)
+                //    element.addEventListener(data.param, callback)
                 }
                 data.specialUnbind = function(element, callback) {
                     element.removeEventListener(touchNames[0], touchstart)
-                    element.removeEventListener(data.param, callback)
+                 //   element.removeEventListener(data.param, callback)
                 }
             }
         }
@@ -4525,6 +4525,7 @@
                 var clickEvent = document.createEvent("MouseEvents")
                 clickEvent.initMouseEvent(type, true, true, window, 1, event.screenX, event.screenY, event.clientX, event.clientY, false, false, false, false, 0, null)
                 clickEvent.markFastClick = "司徒正美";
+                avalon.log(clickEvent)
                 element.dispatchEvent(clickEvent)
             },
             focus: function(target) {
