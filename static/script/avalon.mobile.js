@@ -4492,8 +4492,8 @@
 
             var isClick = data.param === "click"
             avalon.log("canFix "+ avalon.fastclick.canFix(element))
-            if (isClick ? avalon.fastclick.canFix(element) : true) {
-                console.log("chick 333")
+           // if (isClick ? avalon.fastclick.canFix(element) : true) {
+                console.log("chick 4")
                 data.specialBind = function(element, callback) {
                     element.addEventListener(touchNames[0], touchstart)
                     element.addEventListener(data.param, callback)
@@ -4502,15 +4502,16 @@
                     element.removeEventListener(touchNames[0], touchstart)
                     element.removeEventListener(data.param, callback)
                 }
-            }
+          //  }
         }
 
 
         document.addEventListener("click", function(e) {
-            console.log(e.markFastClick +"全局阻止")
+            console.log(e.markFastClick +"全局阻止"+ ghostPrevent)
 
             if (ghostPrevent) {
                 if (!e.markFastClick) {//阻止浏览器自己触发的点击事件
+                    console.log("++++++++++++++++++++++OO")
                     e.stopPropagation()
                     e.preventDefault()
                 }
