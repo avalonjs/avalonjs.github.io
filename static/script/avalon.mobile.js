@@ -4349,11 +4349,10 @@
         var isIOS = /iP(ad|hone|od)/.test(ua)
         var self = bindingHandlers.on
         var touchProxy = {}
-        var ghostPrevent = false //用于在全阻止默认的点击事件
+
         var IE11touch = navigator.pointerEnabled
         var IE9_10touch = navigator.msPointerEnabled
 
-        avalon.log("check 2")
         var w3ctouch = (function() {
             var supported = false
             //http://stackoverflow.com/questions/5713393/creating-and-firing-touch-events-on-a-touch-enabled-browser
@@ -4491,14 +4490,16 @@
             }
 
             var isClick = data.param === "click"
-          //  avalon.log("canFix " + avalon.fastclick.canFix(element))
+            //  avalon.log("canFix " + avalon.fastclick.canFix(element))
             // if (isClick ? avalon.fastclick.canFix(element) : true) {
-            avalon.log("chick 41")
+            avalon.log("chick 11")
 
             data.specialBind = function(element, callback) {
                 var fixCallback = function(e) {
-                    e.stopImmediatePropagation()
-                    callback.call(element, e)
+                    // e.stopImmediatePropagation()
+                    if (isClick ? e.markFastClick : true) {
+                        callback.call(element, e)
+                    }
                 }
                 element.addEventListener(touchNames[0], touchstart)
                 element.addEventListener(data.param, fixCallback)
