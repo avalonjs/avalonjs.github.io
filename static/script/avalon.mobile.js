@@ -28,7 +28,27 @@
             console.log.apply(console, arguments)
         }
     }
-
+    if (/iP(ad|hone|od)/.test(navigator.userAgent)) {
+        function removeSelf() {
+            var p = this.parentNode
+            if (p.remove) {
+                p.remove()
+            } else {
+                p.parentNode.removeChild(this)
+            }
+        }
+        var log = function() {
+            var str = JSON.stringify([].slice.call(arguments))
+            avalon.ready(function() {
+                var div = document.createElement("div")
+                div.style.cssText = "border: 1px solid #999;margin-top:10px"
+                div.innerHTML = str + "<button type=button>X</button>"
+                var button = div.getElementsByTagName("button")[0]
+                button.onclick = removeSelf
+                document.body.appendChild(div)
+            })
+        }
+    }
     var subscribers = "$" + expose
     var otherRequire = window.require
     var otherDefine = window.define
@@ -4325,28 +4345,8 @@
         var ghostPrevent = false //用于在全阻止默认的点击事件
         var IE11touch = navigator.pointerEnabled
         var IE9_10touch = navigator.msPointerEnabled
-         avalon.log("check 1")
-        if (isIOS) {
-            function removeSelf() {
-                var p = this.parentNode
-                if (p.remove) {
-                    p.remove()
-                } else {
-                    p.parentNode.removeChild(this)
-                }
-            }
-            avalon.log = function() {
-                var str = JSON.stringify([].slice.call(arguments))
-                avalon.ready(function() {
-                    var div = document.createElement("div")
-                    div.style.cssText = "border: 1px solid #999;margin-top:10px"
-                    div.innerHTML = str + "<button type=button>X</button>"
-                    var button = div.getElementsByTagName("button")[0]
-                    button.onclick = removeSelf
-                    document.body.appendChild(div)
-                })
-            }
-        }
+
+        avalon.log("check 1")
         var w3ctouch = (function() {
             var supported = false
             //http://stackoverflow.com/questions/5713393/creating-and-firing-touch-events-on-a-touch-enabled-browser
@@ -4498,7 +4498,7 @@
 
 
         document.addEventListener("click", function(e) {
-            avalog.log(e.markFastClick+" maskFastClick")
+            avalog.log(e.markFastClick + " maskFastClick")
             if (ghostPrevent) {
                 if (!e.markFastClick) {//阻止浏览器自己触发的点击事件
                     e.stopPropagation()
