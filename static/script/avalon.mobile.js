@@ -4430,17 +4430,19 @@
                     }
                     avalon.fastclick.fireEvent(element, "click", event)//触发click事件
                     W3CFire(element, "tap")//触发tap事件
+                    avalon.log("add click")
                     if (forElement) {
+                        
                         avalon.fastclick.fireEvent(forElement, "click", event)
-                       // W3CFire(element, "tap")//触发tap事件
+                        W3CFire(element, "tap")//触发tap事件
                     }
                     if (canDoubleClick) {
                         //Windows default double-click time is 500 ms (half a second)
                         //http://ux.stackexchange.com/questions/40364/what-is-the-expected-timeframe-of-a-double-click
                         //http://msdn.microsoft.com/en-us/library/windows/desktop/bb760404(v=vs.85).aspx
                         if (diff > 500) {
-                          //  avalon.fastclick.fireEvent(element, "dblclick", event)//触发dblclick事件
-                           // W3CFire(element, "doubletap")//触发doubletap事件
+                            avalon.fastclick.fireEvent(element, "dblclick", event)//触发dblclick事件
+                            W3CFire(element, "doubletap")//触发doubletap事件
                         }
                         touchProxy.doubleIndex = 0
                     }
