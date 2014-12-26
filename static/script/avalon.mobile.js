@@ -4428,6 +4428,7 @@
                     } else {
                         fastclick.focus(element)
                     }
+                    console.log("++++++++++++++++++")
                     avalon.fastclick.fireEvent(element, "click", event)//触发click事件
                     W3CFire(element, "tap")//触发tap事件
                     avalon.log("add click")
@@ -4499,6 +4500,7 @@
 
 
         document.addEventListener("click", function(e) {
+            avalog.log(e.markFastClick+" maskFastClick")
             if (ghostPrevent) {
                 if (!e.markFastClick) {//阻止浏览器自己触发的点击事件
                     e.stopPropagation()
