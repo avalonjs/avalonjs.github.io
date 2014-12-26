@@ -4494,13 +4494,17 @@
             avalon.log("canFix "+ avalon.fastclick.canFix(element))
            // if (isClick ? avalon.fastclick.canFix(element) : true) {
                 console.log("chick 4")
+                var fixCallback = function(e){
+                    e.stopImmediatePropagation()
+                   callback.call(element, e)
+                }
                 data.specialBind = function(element, callback) {
                     element.addEventListener(touchNames[0], touchstart)
-                    element.addEventListener(data.param, callback)
+                    element.addEventListener(data.param, fixCallback)
                 }
                 data.specialUnbind = function(element, callback) {
                     element.removeEventListener(touchNames[0], touchstart)
-                    element.removeEventListener(data.param, callback)
+                    element.removeEventListener(data.param, fixCallback)
                 }
           //  }
         }
