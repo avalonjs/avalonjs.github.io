@@ -103,24 +103,6 @@
     avalon = function(el) { //创建jQuery式的无new 实例化结构
         return new avalon.init(el)
     }
-    Event.prototype.fix = function() {
-        return "x"
-    }
-    var log = function() {
-        try {
-            var str = JSON.stringify([].slice.call(arguments))
-        } catch (e) {
-            str = [].slice.call(arguments).join(",")
-        }
-        avalon.ready(function() {
-            var div = document.createElement("div")
-            div.style.cssText = "border: 1px solid #999;margin-top:10px"
-            div.innerHTML = str + "<button type=button>X</button>"
-            var button = div.getElementsByTagName("button")[0]
-            button.onclick = removeSelf
-            document.body.appendChild(div)
-        })
-    }
     avalon.init = function(el) {
         this[0] = this.element = el
     }
@@ -4370,6 +4352,10 @@
             return supported
         })()
         var touchSupported = w3ctouch || IE11touch || IE9_10touch
+
+//        if (!touchSupported) {
+//            return false
+//        }
         //合成做成触屏事件所需要的各种原生事件
         var touchNames = ["mousedown", "mousemove", "mouseup", ""]
         if (w3ctouch) {
@@ -4417,10 +4403,6 @@
                 if (totalX < fastclick.dragDistance && totalY < fastclick.dragDistance) {
                     if (!touchProxy.tapping)
                         return
-                    ghostPrevent = true //在这里阻止浏览器的默认事件
-                    setTimeout(function() {
-                        ghostPrevent = false
-                    }, fastclick.preventTime)
                     // 失去焦点的处理
                     if (document.activeElement && document.activeElement !== element) {
                         document.activeElement.blur()
@@ -4489,48 +4471,26 @@
                 }
             }
 
-            var isClick = data.param === "click"
-            //  avalon.log("canFix " + avalon.fastclick.canFix(element))
-            // if (isClick ? avalon.fastclick.canFix(element) : true) {
-            avalon.log("chick 11")
-
+            function needFixClick(e) {
+                return e.type === "click" || e.type === "dblclick"
+            }
             data.specialBind = function(element, callback) {
-                var fixCallback = function(e) {
-                    // e.stopImmediatePropagation()
-                    if (isClick ? e.markFastClick : true) {
+                function wrapCallback(e) {
+                    if (needFixClick(e) ? e.hasFixClick : true) {
                         callback.call(element, e)
                     }
                 }
                 element.addEventListener(touchNames[0], touchstart)
-                element.addEventListener(data.param, fixCallback)
+                element.addEventListener(data.param, wrapCallback)
             }
-            data.specialUnbind = function(element, callback) {
+            data.specialUnbind = function() {
                 element.removeEventListener(touchNames[0], touchstart)
-                element.removeEventListener(data.param, fixCallback)
+                element.removeEventListener(data.param, wrapCallback)
             }
-            //  }
         }
 
 
-//        document.addEventListener("click", function(e) {
-//         //   avalon.log(e.markFastClick + "全局阻止" + ghostPrevent)
-//
-//            if (ghostPrevent) {
-//                if (!e.markFastClick) {//阻止浏览器自己触发的点击事件
-//                    avalon.log("++++++++++++++++++++++OO")
-//                    e.stopPropagation()
-//                    e.preventDefault()
-//                }
-//            }
-//            var target = e.target
-//            if (target.href && target.href.match(/#(\w+)/)) {
-//                var id = RegExp.$1
-//                if (id) {
-//                    var el = document.getElementById(id)
-//                    //这里做锚点的滚动处理,或做在scroll插件中
-//                }
-//            }
-//        }, true)
+
 //fastclick只要是处理移动端点击存在300ms延迟的问题
 //这是苹果乱搞异致的，他们想在小屏幕设备上通过快速点击两次，将放大了的网页缩放至原始比例。
         var fastclick = avalon.fastclick = {
@@ -4542,7 +4502,7 @@
                 var clickEvent = document.createEvent("MouseEvents")
                 clickEvent.initMouseEvent(type, true, true, window, 1, event.screenX, event.screenY, event.clientX, event.clientY, false, false, false, false, 0, null)
                 //  clickEvent.markFastClick = "司徒正美";
-                Object.defineProperty(clickEvent, "markFastClick", {
+                Object.defineProperty(clickEvent, "hasFixClick", {
                     get: function() {
                         return "司徒正美"
                     }
@@ -4594,48 +4554,6 @@
                     default:
                         return false
                 }
-            },
-            canFix: function(element) {
-                // 如果设备不支持触摸就不需要修复了
-                if (!touchSupported) {
-                    return false
-                }
-                //在Android 平台的chrome 32，为了避免点击延迟，允许用户设置如下代码
-                // <meta name="viewport" content="user-scalable=no">
-                // <meta name="viewport" content="initial-scale=1,maximum-scale=1">
-                // 可禁用双击缩放
-                // 此外，iPhone 诞生时就有的另一个约定是，在渲染桌面端站点的时候，
-                // 使用 980 像素的视口宽度，而非设备本身的宽度（iPhone 是 320 像素宽）时，
-                // 即用户定义了<meta name="viewport" content="width=device-width">时
-                // 也禁用双击缩放
-                // 另外，如果页面宽度少于viewport宽度（document.documentElement.scrollWidth <= window.outerWidth）
-                // 也禁用双击缩放
-                var chromeVersion = +(/Chrome\/([0-9]+)/.exec(ua) || [0, 0])[1]
-//                if (chromeVersion) {//chrome 安卓版如果指定了特定的meta也不需要修复
-//                    if (isAndroid) {
-//                        var metaViewport = document.querySelector('meta[name=viewport]')
-//                        if (metaViewport) {
-//                          
-//                            if (metaViewport.content.indexOf('user-scalable=no') !== -1) {
-//                                return false
-//                            }
-//                            if (chromeVersion > 31 && document.documentElement.scrollWidth <= window.outerWidth) {
-//                                return false
-//                            }
-//                        }
-//                    }
-//                }
-                //IE10-11中为元素节点添加了一个touch-action属性决定能否进行双指缩放或者双击缩放
-                //  a[href], button {
-                //    -ms-touch-action: none; /* IE10 */
-                //    touch-action: none;     /* IE11 */
-                //}
-                //参考自 http://thx.alibaba-inc.com/mobile/300ms-click-delay/
-                if (element.style.msTouchAction === 'none') {
-
-                    return false
-                }
-                return true
             }
         };
 
@@ -4645,7 +4563,6 @@
         })
 
         //各种摸屏事件的示意图 http://quojs.tapquo.com/  http://touch.code.baidu.com/
-
     }
 
 
