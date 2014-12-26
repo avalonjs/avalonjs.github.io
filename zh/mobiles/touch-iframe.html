@@ -29,34 +29,40 @@
             avalon.ready(function() {
 
                 avalon.define("touch", function(vm) {
-                    vm.tap = function() {
-                        this.innerHTML = "轻触" + Date.now()
+                    vm.tap = function(e) {
+                        this.innerHTML = "轻触" + Date.now() + e.type
                     }
-                    vm.swipeleft = function() {
-                        this.innerHTML = "向左划 " + Date.now()
+                    vm.click = function(e) {
+                        this.innerHTML = "点击" + Date.now() + e.type
                     }
-                    vm.swiperight = function() {
-                        this.innerHTML = "向右划 " + Date.now()
+                    vm.doubletap = function(e) {
+                        this.innerHTML = "双触 " + Date.now() + e.type
                     }
-                    vm.swipeup = function() {
-                        this.innerHTML = "向上划 " + Date.now()
+                    vm.dblclick = function(e) {
+                        this.innerHTML = "双击 " + Date.now() + e.type
                     }
-                    vm.swipedown = function() {
-                        this.innerHTML = "向下划 " + Date.now()
+                    vm.hold = function(e) {
+                        this.innerHTML = "长按" + Date.now() + e.type
                     }
-                    vm.hold = function() {
-                        this.innerHTML = "长按 " + Date.now()
+                    vm.longtap = function(e) {
+                        this.innerHTML = "长摁" + Date.now() + e.type
                     }
-                    vm.doubletap = function() {
-                        this.innerHTML = "双击 " + Date.now()
+                    vm.swipeleft = function(e) {
+                        this.innerHTML = "向左划← " + Date.now() + e.type
                     }
-                    vm.singletap = function() {
-                        this.innerHTML = "单击 " + Date.now()
+                    vm.swiperight = function(e) {
+                        this.innerHTML = "向右划→ " + Date.now() + e.type
                     }
+                    vm.swipeup = function(e) {
+                        this.innerHTML = "向上划↑ " + Date.now() + e.type
+                    }
+                    vm.swipedown = function(e) {
+                        this.innerHTML = "向下划↓ " + Date.now() + e.type
+                    }
+
+
                     vm.array = avalon.range(0, 400)
-                    vm.scroll = function() {
-                        console.log("scroll")
-                    }
+
                 })
                 avalon.scan()
             })
@@ -69,11 +75,20 @@
         <div ms-on-click='tap' class='box'>
             轻触
         </div>
-        <div ms-on-dblclick='doubletap' class='box' style="background: red">
+        <div ms-on-click='click' class='box'  style="background: yellowgreen">
+            单击
+        </div>
+        <div ms-on-dblclick='dblclick' class='box' style="background: red">
             双击
+        </div>
+        <div ms-on-doubletap='doubletap' class='box' style="background: orchid">
+            双触
         </div>
         <div ms-on-hold='hold' class='box' style="background: purple">
             长按
+        </div>
+        <div ms-on-hold='longtap' class='box' style="background: purple">
+            长摁
         </div>
         <div ms-on-swipeleft='swipeleft' class='box' style="background: #39b3d7">
             向左划
@@ -87,6 +102,9 @@
         <div ms-on-swipedown='swipedown' class='box' style="background: #ed9c28">
             向下划
         </div>
-
+        <br clear="both"/>
+        <div>
+            【手指动作】thumb up:赞 pinch:捏/拧/掐 pluck:采摘/拔 rip:拆开/撕掉 scratch:抓/挠/刮/划 snap:打响指 flip:掷（硬币）click:点击 press:按/压 point to:指向 squeeze out:挤出/拧出 show the middle finger竖起中指 flick dust:弹掉灰尘 wipe:擦拭 strum:弹拨 grip:抓住 clench:握紧
+        </div>
     </body>
 </html>

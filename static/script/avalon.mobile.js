@@ -4353,9 +4353,6 @@
         })()
         var touchSupported = w3ctouch || IE11touch || IE9_10touch
 
-//        if (!touchSupported) {
-//            return false
-//        }
         //合成做成触屏事件所需要的各种原生事件
         var touchNames = ["mousedown", "mousemove", "mouseup", ""]
         if (w3ctouch) {
@@ -4379,11 +4376,11 @@
                 y: e.clientY
             }
         }
-        function resetState() {
-            touchProxy.tapping = false
-            if (touchProxy.event === "hold") {
-                touchProxy.holdTimeout = new Date
-            }
+        function resetState(e) {
+            var e = getCoordinates(event)
+
+            touchProxy.deltaX += Math.abs(touchProxy.x - e.x)
+            touchProxy.deltaY += Math.abs(touchProxy.y - e.y)
             avalon(touchProxy.element).removeClass(fastclick.activeClass)
         }
         function touchend(event) {
@@ -4397,12 +4394,17 @@
                 touchProxy.doubleIndex = 0
                 canDoubleClick = true
             }
-            //如果按住时间满足触发click, dbclick, hold, swipe
-            if (diff < fastclick.clickDuration && fastclick.canClick(element)) {
+            if (totalX > 30 || totalY > 30) {
+                //如果用户滑动的距离有点大，就认为是swipe事件
+                var direction = swipeDirection(touchProxy.x, e.x, touchProxy.y, e.y)
+                var details = {
+                    direction: direction
+                }
+                W3CFire(element, "swipe", details)
+                W3CFire(element, "swipe" + direction, details)
+            } else {
                 //如果移动的距离太少，则认为是tap,click,hold,dblclick
-                if (totalX < fastclick.dragDistance && totalY < fastclick.dragDistance) {
-                    if (!touchProxy.tapping)
-                        return
+                if (fastclick.canClick(element)) {
                     // 失去焦点的处理
                     if (document.activeElement && document.activeElement !== element) {
                         document.activeElement.blur()
@@ -4427,19 +4429,16 @@
                         //Windows default double-click time is 500 ms (half a second)
                         //http://ux.stackexchange.com/questions/40364/what-is-the-expected-timeframe-of-a-double-click
                         //http://msdn.microsoft.com/en-us/library/windows/desktop/bb760404(v=vs.85).aspx
-                        if (diff > 500) {
+                        if (diff < 250) {
                             avalon.fastclick.fireEvent(element, "dblclick", event)//触发dblclick事件
                             W3CFire(element, "doubletap")//触发doubletap事件
                         }
                         touchProxy.doubleIndex = 0
                     }
+
                     if (diff > 750) {
                         W3CFire(element, "hold")
                     }
-                } else {
-                    //如果用户滑动的距离有点大，就认为是swipe事件
-                    W3CFire(element, "swipe")
-                    W3CFire(element, "swipe" + (swipeDirection(touchProxy.x, e.x, touchProxy.y, e.y)))
                 }
             }
             resetState()
@@ -4464,44 +4463,48 @@
                     touchProxy.doubleIndex = 1
                     touchProxy.doubleStartTime = Date.now()
                 } else {
-                    touchProxy.doubleIndex++
+                    if (!touchProxy.doubleIndex) {
+                        touchProxy.doubleIndex = 1
+                    } else {
+                        touchProxy.doubleIndex = 2
+                    }
                 }
                 if (touchProxy.tapping && avalon.fastclick.canClick(element)) {
                     avalon(element).addClass(fastclick.activeClass)
                 }
             }
 
-            function needFixClick(e) {
-                return e.type === "click" || e.type === "dblclick"
+            function needFixClick(type) {
+                return type === "click" || type === "dblclick"
             }
-            data.specialBind = function(element, callback) {
-                function wrapCallback(e) {
-                    if (needFixClick(e) ? e.hasFixClick : true) {
-                        callback.call(element, e)
+            if (needFixClick(data.param) ? touchSupported : true) {
+                data.specialBind = function(element, callback) {
+                    function wrapCallback(e) {
+                        //在移动端上,如果用户是用click, dblclick绑定事件那么注意屏蔽原生的click,dblclick,只让手动触发的进来
+                        if (needFixClick(e.type) ? e.hasFixClick : true) {
+                            callback.call(element, e)
+                        }
                     }
+                    element.addEventListener(touchNames[0], touchstart)
+                    element.addEventListener(data.param, wrapCallback)
                 }
-                element.addEventListener(touchNames[0], touchstart)
-                element.addEventListener(data.param, wrapCallback)
-            }
-            data.specialUnbind = function() {
-                element.removeEventListener(touchNames[0], touchstart)
-                element.removeEventListener(data.param, wrapCallback)
+                data.specialUnbind = function() {
+                    element.removeEventListener(touchNames[0], touchstart)
+                    element.removeEventListener(data.param, wrapCallback)
+                }
             }
         }
 
-
-
-//fastclick只要是处理移动端点击存在300ms延迟的问题
-//这是苹果乱搞异致的，他们想在小屏幕设备上通过快速点击两次，将放大了的网页缩放至原始比例。
+        //fastclick只要是处理移动端点击存在300ms延迟的问题
+        //这是苹果乱搞异致的，他们想在小屏幕设备上通过快速点击两次，将放大了的网页缩放至原始比例。
         var fastclick = avalon.fastclick = {
             activeClass: "ms-click-active",
             clickDuration: 750, //小于750ms是点击，长于它是长按或拖动
             dragDistance: 10, //最大移动的距离
-            preventTime: 2500, //2500ms还原ghostPrevent
             fireEvent: function(element, type, event) {
                 var clickEvent = document.createEvent("MouseEvents")
-                clickEvent.initMouseEvent(type, true, true, window, 1, event.screenX, event.screenY, event.clientX, event.clientY, false, false, false, false, 0, null)
-                //  clickEvent.markFastClick = "司徒正美";
+                clickEvent.initMouseEvent(type, true, true, window, 1, event.screenX, event.screenY, 
+                event.clientX, event.clientY, false, false, false, false, 0, null)
                 Object.defineProperty(clickEvent, "hasFixClick", {
                     get: function() {
                         return "司徒正美"
@@ -4558,7 +4561,7 @@
         };
 
 
-        ["swipe", "swipeleft", "swiperight", "swipeup", "swipedown", "doubletap", "tap", "hold"].forEach(function(method) {
+        ["swipe", "swipeleft", "swiperight", "swipeup", "swipedown", "doubletap", "tap","longtap", "hold"].forEach(function(method) {
             self[method + "Hook"] = self["clickHook"]
         })
 
