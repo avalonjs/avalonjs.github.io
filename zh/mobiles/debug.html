@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+    </head>
+    <body>
+        <script>
+            var log = function() {
+                try {
+                    var str = JSON.stringify([].slice.call(arguments))
+                } catch (e) {
+                    str = [].slice.call(arguments).join(",")
+                }
+                avalon.ready(function() {
+                    var div = document.createElement("div")
+                    div.style.cssText = "border: 1px solid #999;margin-top:10px"
+                    div.innerHTML = str + "<button type=button>X</button>"
+                    var button = div.getElementsByTagName("button")[0]
+                    button.onclick = removeSelf
+                    document.body.appendChild(div)
+                })
+            }
+        </script>
+    </body>
+</html>

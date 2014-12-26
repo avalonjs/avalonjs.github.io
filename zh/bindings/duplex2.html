@@ -1,0 +1,18 @@
+<h2>ms-duplex 背后的技术盛宴</h2>
+<p>ms-duplex作为双工绑定，充许我们从VM同到V，或从V同步到VM。VM到V比较简单，略过，但从V到VM就麻烦。</p>
+<p>用户大致上有4种方式改变input.value的值，第一种是用键盘输入回退剪切贴粘，
+    第二种是通过input.value = newValue，第三种是通过input.setAttribute("value",newValue)，第四种是语音输入。</p>
+<p>其中第三种与第四种都可以合并到第二种去，它们的目标都是要改input.value。</p>
+<p>对于第一种，我们需要使用各种事件进行监听。目前avalon的策略如下:</p>
+<ul>
+    <li>IE6-8, document绑定selectionchange， element.onpropertychange, element.ondragend</li>
+    <li>IE9-11, document绑定selectionchange， element.oninput, element.ondragend</li>
+    <li>其他, element.oninput， element.compositionstart, element.oncompositionend</li>
+</ul>
+<p>然后是第二种情况，由于除了onpropertychange事件，我们无法得知用户是何时改了element.value值，需要使用一些比较的方式</p>
+<ul>
+    <li>IE6-8, element.onpropertychange，其实不用再设置了。</li>
+    <li>IE9-11, firefox， Object.defineProperty(HTMLInputElement, "value", {set, get})</li>
+    <li>chrome, safari8  Object.defineProperty(element, "value", {set, get})</li>
+    <li>其他使用轮询</li>
+</ul>
