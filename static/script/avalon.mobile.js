@@ -4327,10 +4327,11 @@
         var IE9_10touch = navigator.msPointerEnabled
         if (isIOS) {
             function removeSelf() {
-                if (this.remove) {
-                    this.remove()
+                var p = this.parentNode
+                if (p.remove) {
+                    p.remove()
                 } else {
-                    this.parentNode.removeChild(this)
+                    p.parentNode.removeChild(this)
                 }
             }
             avalon.log = function() {
