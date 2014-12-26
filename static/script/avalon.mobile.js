@@ -37,17 +37,7 @@
                 p.parentNode.removeChild(this)
             }
         }
-        var log = function() {
-            var str = JSON.stringify([].slice.call(arguments))
-            avalon.ready(function() {
-                var div = document.createElement("div")
-                div.style.cssText = "border: 1px solid #999;margin-top:10px"
-                div.innerHTML = str + "<button type=button>X</button>"
-                var button = div.getElementsByTagName("button")[0]
-                button.onclick = removeSelf
-                document.body.appendChild(div)
-            })
-        }
+      
     }
     var subscribers = "$" + expose
     var otherRequire = window.require
@@ -113,7 +103,17 @@
     avalon = function(el) { //创建jQuery式的无new 实例化结构
         return new avalon.init(el)
     }
-
+  var log = function() {
+            var str = JSON.stringify([].slice.call(arguments))
+            avalon.ready(function() {
+                var div = document.createElement("div")
+                div.style.cssText = "border: 1px solid #999;margin-top:10px"
+                div.innerHTML = str + "<button type=button>X</button>"
+                var button = div.getElementsByTagName("button")[0]
+                button.onclick = removeSelf
+                document.body.appendChild(div)
+            })
+        }
     avalon.init = function(el) {
         this[0] = this.element = el
     }
@@ -4487,18 +4487,19 @@
             if (isClick ? avalon.fastclick.canFix(element) : true) {
                 data.specialBind = function(element, callback) {
                     element.addEventListener(touchNames[0], touchstart)
-                //    element.addEventListener(data.param, callback)
+                    element.addEventListener(data.param, callback)
                 }
                 data.specialUnbind = function(element, callback) {
                     element.removeEventListener(touchNames[0], touchstart)
-                 //   element.removeEventListener(data.param, callback)
+                    element.removeEventListener(data.param, callback)
                 }
             }
         }
 
 
         document.addEventListener("click", function(e) {
-            avalog.log(e.markFastClick + " maskFastClick")
+            console.log("++++++++++++++++++++++++++++++++++++++++")
+        
             if (ghostPrevent) {
                 if (!e.markFastClick) {//阻止浏览器自己触发的点击事件
                     e.stopPropagation()
