@@ -11,6 +11,9 @@
         .list-view-title{
             border: 1px solid #ccc;
             padding: 5px;
+            -webkit-touch-callout: none;
+            user-select:none;
+            -webkit-user-select: none;
         }
 
         .list-view-item{
@@ -25,25 +28,25 @@
         </div>
     </body>
     <script type="text/javascript">
-    var vmodel = avalon.define({
-        $id: "controller",
-        data: [{
-                "title": "标题1",
-                "content": "正文1<br>正文1",
-                "toggle": true
-            }, {
-                "title": "标题2",
-                "content": "正文2<br>正文2<br>正文2",
-                "toggle": false
-            }],
-        _switch: function(item, e) {
-            avalon.log(e.timeStamp +"!")
-            if (item.toggle) {
-                item.toggle = false;
-            } else {
-                item.toggle = true;
-            }
+var vmodel = avalon.define({
+    $id: "controller",
+    data: [{
+            "title": "标题1",
+            "content": "正文1<br>正文1",
+            "toggle": true
+        }, {
+            "title": "标题2",
+            "content": "正文2<br>正文2<br>正文2",
+            "toggle": false
+        }],
+    _switch: function(item, e) {
+        avalon.log(e.timeStamp + "!")
+        if (item.toggle) {
+            item.toggle = false;
+        } else {
+            item.toggle = true;
         }
-    })
+    }
+})
     </script>
 </html>
