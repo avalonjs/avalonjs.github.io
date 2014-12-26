@@ -1,17 +1,17 @@
-<h2>数据填充(ms-text, ms-html, {{prop}}, {{prop|html}})</h2>
+<h2 ms-skip>数据填充(ms-text, ms-html, {{prop}}, {{prop|html}})</h2>
 
 
 <p>本章节介绍<a href="https://github.com/RubyLouvre/avalon">avalon</a>最简单的功能，将数据打印到页面上。
     这是所有后端模板最基本的功能，然后加上each， if， include等语法，实现更精细的制定。
     <a href="https://github.com/RubyLouvre/avalon">avalon</a>通过绑定属性，其实将整个页面变成一个动态模板(详看<a href="http://www.html-js.com/article/Mini-MVVM-framework-Avalon-meditation-third-dynamic-template">这里</a>)。将数据输出到页面涉及到以下指令。</p>
 
-<ul>
-<li>{{prop}}</li>
-<li>{{prop|html}}</li>
-<li>ms-text</li>
-<li>ms-html</li>
-<li>ms-value</li>
-<li>ms-duplex</li>
+<ul ms-skip>
+    <li>{{prop}}</li>
+    <li>{{prop|html}}</li>
+    <li>ms-text</li>
+    <li>ms-html</li>
+    <li>ms-value</li>
+    <li>ms-duplex</li>
 </ul>
 
 <p>{{prop}}是最简单实用的指令，什么helloworld用它做最适合了。</p>
@@ -39,14 +39,14 @@
 
 <p><img src="zh/bindings/text/1409228882210-text4.jpg" alt="enter image description here" title /></p>
 
-<p>{{prop | html}}其实是加一个<strong>过滤器</strong>，也只有文本节点中的插值表达式可以加各种过滤器实现各种功能。
+<p ms-skip>{{prop | html}}其实是加一个<strong>过滤器</strong>，也只有文本节点中的插值表达式可以加各种过滤器实现各种功能。
     html过滤器就是将此字符串转换为一个文档碎片再插入当前位置。此 外，这个{{prop|html}}，框架还是对它开了小灶，允许它本来就是一个文档碎片或元素节点或NodeList。
 如果是一个元素节点，将会将它的子节点然后抽出来，放到一个空文档碎片中。如果是一个NodeList，也会将它的所有元素放到一个空文档碎片中。
 换言之，殊途同归，都以文档碎片进行操作单元。
 
 </p>
 
-<p>ms-text与ms-html其实就是{{prop}}、{{prop|html}}的真身，框架内部都是走同一处理函数。不过ms-text、 ms-html作为一个绑定属性，必须附于元素节点之上，因此没有前者那么方便。</p>
+<p ms-skip>ms-text与ms-html其实就是{{prop}}、{{prop|html}}的真身，框架内部都是走同一处理函数。不过ms-text、 ms-html作为一个绑定属性，必须附于元素节点之上，因此没有前者那么方便。</p>
 
 <pre class="brush:javascript;gutter:false;toolbar:false">&lt;!DOCTYPE html&gt;
 &lt;html&gt;
@@ -72,7 +72,7 @@
 
 <p><img src="zh/bindings/text/1409224270310-text1.jpg" alt="enter image description here" title /></p>
 
-<p>此外，我们还可以通过config方法，更改插值表达式的界定符，因为{{}}可能被其他框架的模板所占用。建议界定符的长度大于1，不要设置为&gt;&gt;这样的位操作符。比如在DOMReady之前，我们调用如下语句：</p>
+<p ms-skip>此外，我们还可以通过config方法，更改插值表达式的界定符，因为{{}}可能被其他框架的模板所占用。建议界定符的长度大于1，不要设置为&gt;&gt;这样的位操作符。比如在DOMReady之前，我们调用如下语句：</p>
 
 <pre class="brush:javascript;gutter:false;toolbar:false">avalon.config({
    interpolate: ["&lt;%", "%&gt;"] //  要求openTag 不等于closeTag就能配置成功
@@ -88,7 +88,8 @@
 <p ms-skip style="color:#a9ea00">此外，我们还可以首屏使用ms-text、 ms-html代替{{prop}}、 {{prop|html}}。在1.3.8中，它们也支持<strong>过滤器</strong>了，因此它们四个完全可以互换。</p>
 <p>上述四种指令是用在文本节点上，但数据还能通过表单元素的value值显示出来，于是有了ms-value指令。ms-value为了应对复杂的显示，也支持插值表达式，但里面不能使用过滤器。</p>
 
-<pre class="brush:javascript;gutter:false;toolbar:false">&lt;!DOCTYPE html&gt;
+<pre ms-skip class="brush:javascript;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
 &lt;html&gt;
     &lt;head&gt;
         &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/&gt;
