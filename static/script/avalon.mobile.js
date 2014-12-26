@@ -4429,12 +4429,9 @@
                     } else {
                         fastclick.focus(element)
                     }
-                    console.log("++++++++++++++++++")
                     avalon.fastclick.fireEvent(element, "click", event)//触发click事件
-                    W3CFire(element, "tap")//触发tap事件
-                   
+                    W3CFire(element, "tap")//触发tap事件 
                     if (forElement) {
-                        
                         avalon.fastclick.fireEvent(forElement, "click", event)
                         W3CFire(element, "tap")//触发tap事件
                     }
