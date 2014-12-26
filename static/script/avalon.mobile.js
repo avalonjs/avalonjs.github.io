@@ -4491,6 +4491,7 @@
             }
 
             var isClick = data.param === "click"
+            avalon.log("canFix "+ avalon.fastclick.canFix(element))
             if (isClick ? avalon.fastclick.canFix(element) : true) {
                 console.log("chick 333")
                 data.specialBind = function(element, callback) {
@@ -4603,19 +4604,20 @@
                 // 另外，如果页面宽度少于viewport宽度（document.documentElement.scrollWidth <= window.outerWidth）
                 // 也禁用双击缩放
                 var chromeVersion = +(/Chrome\/([0-9]+)/.exec(ua) || [0, 0])[1]
-                if (chromeVersion) {//chrome 安卓版如果指定了特定的meta也不需要修复
-                    if (isAndroid) {
-                        var metaViewport = document.querySelector('meta[name=viewport]')
-                        if (metaViewport) {
-                            if (metaViewport.content.indexOf('user-scalable=no') !== -1) {
-                                return false
-                            }
-                            if (chromeVersion > 31 && document.documentElement.scrollWidth <= window.outerWidth) {
-                                return false
-                            }
-                        }
-                    }
-                }
+//                if (chromeVersion) {//chrome 安卓版如果指定了特定的meta也不需要修复
+//                    if (isAndroid) {
+//                        var metaViewport = document.querySelector('meta[name=viewport]')
+//                        if (metaViewport) {
+//                          
+//                            if (metaViewport.content.indexOf('user-scalable=no') !== -1) {
+//                                return false
+//                            }
+//                            if (chromeVersion > 31 && document.documentElement.scrollWidth <= window.outerWidth) {
+//                                return false
+//                            }
+//                        }
+//                    }
+//                }
                 //IE10-11中为元素节点添加了一个touch-action属性决定能否进行双指缩放或者双击缩放
                 //  a[href], button {
                 //    -ms-touch-action: none; /* IE10 */
@@ -4623,6 +4625,7 @@
                 //}
                 //参考自 http://thx.alibaba-inc.com/mobile/300ms-click-delay/
                 if (element.style.msTouchAction === 'none') {
+                    
                     return false
                 }
                 return true
