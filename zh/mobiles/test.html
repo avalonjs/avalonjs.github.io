@@ -20,7 +20,7 @@
     <body ms-controller="controller">
         <p>https://github.com/amfe/lib.gesture</p>
         <div ms-repeat-item="data" class="list-view-item">
-            <div class="list-view-title" ms-click="_switch(item)">{{item.title}}</div>
+            <div class="list-view-title" ms-on-click="_switch(item,$event)">{{item.title}}</div>
             <div class="list-view-content" ms-visible="item.toggle">{{item.content|html}}</div>
         </div>
     </body>
@@ -36,8 +36,8 @@
                 "content": "正文2<br>正文2<br>正文2",
                 "toggle": false
             }],
-        _switch: function(item) {
-            avalon.log(item.toggle)
+        _switch: function(item, e) {
+            avalon.log(e.markFastClick+"!")
             if (item.toggle) {
                 item.toggle = false;
             } else {

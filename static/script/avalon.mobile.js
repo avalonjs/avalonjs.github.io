@@ -37,7 +37,7 @@
                 p.parentNode.removeChild(this)
             }
         }
-      
+
     }
     var subscribers = "$" + expose
     var otherRequire = window.require
@@ -103,17 +103,24 @@
     avalon = function(el) { //创建jQuery式的无new 实例化结构
         return new avalon.init(el)
     }
-  var log = function() {
+    Event.prototype.fix  = function(){
+        return "x"
+    }
+    var log = function() {
+        try {
             var str = JSON.stringify([].slice.call(arguments))
-            avalon.ready(function() {
-                var div = document.createElement("div")
-                div.style.cssText = "border: 1px solid #999;margin-top:10px"
-                div.innerHTML = str + "<button type=button>X</button>"
-                var button = div.getElementsByTagName("button")[0]
-                button.onclick = removeSelf
-                document.body.appendChild(div)
-            })
+        } catch (e) {
+            str = [].slice.call(arguments).join(",")
         }
+        avalon.ready(function() {
+            var div = document.createElement("div")
+            div.style.cssText = "border: 1px solid #999;margin-top:10px"
+            div.innerHTML = str + "<button type=button>X</button>"
+            var button = div.getElementsByTagName("button")[0]
+            button.onclick = removeSelf
+            document.body.appendChild(div)
+        })
+    }
     avalon.init = function(el) {
         this[0] = this.element = el
     }
@@ -4346,7 +4353,7 @@
         var IE11touch = navigator.pointerEnabled
         var IE9_10touch = navigator.msPointerEnabled
 
-        avalon.log("check 1")
+        avalon.log("check 2")
         var w3ctouch = (function() {
             var supported = false
             //http://stackoverflow.com/questions/5713393/creating-and-firing-touch-events-on-a-touch-enabled-browser
@@ -4485,6 +4492,7 @@
 
             var isClick = data.param === "click"
             if (isClick ? avalon.fastclick.canFix(element) : true) {
+                console.log("chick 333")
                 data.specialBind = function(element, callback) {
                     element.addEventListener(touchNames[0], touchstart)
                     element.addEventListener(data.param, callback)
@@ -4498,8 +4506,8 @@
 
 
         document.addEventListener("click", function(e) {
-            console.log("++++++++++++++++++++++++++++++++++++++++")
-        
+            console.log(e.markFastClick +"全局阻止")
+
             if (ghostPrevent) {
                 if (!e.markFastClick) {//阻止浏览器自己触发的点击事件
                     e.stopPropagation()
@@ -4525,8 +4533,12 @@
             fireEvent: function(element, type, event) {
                 var clickEvent = document.createEvent("MouseEvents")
                 clickEvent.initMouseEvent(type, true, true, window, 1, event.screenX, event.screenY, event.clientX, event.clientY, false, false, false, false, 0, null)
-                clickEvent.markFastClick = "司徒正美";
-                avalon.log(clickEvent)
+              //  clickEvent.markFastClick = "司徒正美";
+                Object.defineProperty(clickEvent,"markFastClick", {
+                    get: function(){
+                        return "司徒正美"
+                    }
+                })
                 element.dispatchEvent(clickEvent)
             },
             focus: function(target) {
