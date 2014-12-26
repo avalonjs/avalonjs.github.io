@@ -103,7 +103,7 @@
     avalon = function(el) { //创建jQuery式的无new 实例化结构
         return new avalon.init(el)
     }
-    Event.prototype.fix  = function(){
+    Event.prototype.fix = function() {
         return "x"
     }
     var log = function() {
@@ -4491,27 +4491,28 @@
             }
 
             var isClick = data.param === "click"
-            avalon.log("canFix "+ avalon.fastclick.canFix(element))
-           // if (isClick ? avalon.fastclick.canFix(element) : true) {
-                console.log("chick 4")
-                var fixCallback = function(e){
+            avalon.log("canFix " + avalon.fastclick.canFix(element))
+            // if (isClick ? avalon.fastclick.canFix(element) : true) {
+            console.log("chick 41")
+
+            data.specialBind = function(element, callback) {
+                var fixCallback = function(e) {
                     e.stopImmediatePropagation()
-                   callback.call(element, e)
+                    callback.call(element, e)
                 }
-                data.specialBind = function(element, callback) {
-                    element.addEventListener(touchNames[0], touchstart)
-                    element.addEventListener(data.param, fixCallback)
-                }
-                data.specialUnbind = function(element, callback) {
-                    element.removeEventListener(touchNames[0], touchstart)
-                    element.removeEventListener(data.param, fixCallback)
-                }
-          //  }
+                element.addEventListener(touchNames[0], touchstart)
+                element.addEventListener(data.param, fixCallback)
+            }
+            data.specialUnbind = function(element, callback) {
+                element.removeEventListener(touchNames[0], touchstart)
+                element.removeEventListener(data.param, fixCallback)
+            }
+            //  }
         }
 
 
         document.addEventListener("click", function(e) {
-            console.log(e.markFastClick +"全局阻止"+ ghostPrevent)
+            console.log(e.markFastClick + "全局阻止" + ghostPrevent)
 
             if (ghostPrevent) {
                 if (!e.markFastClick) {//阻止浏览器自己触发的点击事件
@@ -4539,9 +4540,9 @@
             fireEvent: function(element, type, event) {
                 var clickEvent = document.createEvent("MouseEvents")
                 clickEvent.initMouseEvent(type, true, true, window, 1, event.screenX, event.screenY, event.clientX, event.clientY, false, false, false, false, 0, null)
-              //  clickEvent.markFastClick = "司徒正美";
-                Object.defineProperty(clickEvent,"markFastClick", {
-                    get: function(){
+                //  clickEvent.markFastClick = "司徒正美";
+                Object.defineProperty(clickEvent, "markFastClick", {
+                    get: function() {
                         return "司徒正美"
                     }
                 })
@@ -4630,7 +4631,7 @@
                 //}
                 //参考自 http://thx.alibaba-inc.com/mobile/300ms-click-delay/
                 if (element.style.msTouchAction === 'none') {
-                    
+
                     return false
                 }
                 return true
