@@ -4491,9 +4491,9 @@
             }
 
             var isClick = data.param === "click"
-            avalon.log("canFix " + avalon.fastclick.canFix(element))
+          //  avalon.log("canFix " + avalon.fastclick.canFix(element))
             // if (isClick ? avalon.fastclick.canFix(element) : true) {
-            console.log("chick 41")
+            avalon.log("chick 41")
 
             data.specialBind = function(element, callback) {
                 var fixCallback = function(e) {
@@ -4511,25 +4511,25 @@
         }
 
 
-        document.addEventListener("click", function(e) {
-            console.log(e.markFastClick + "全局阻止" + ghostPrevent)
-
-            if (ghostPrevent) {
-                if (!e.markFastClick) {//阻止浏览器自己触发的点击事件
-                    console.log("++++++++++++++++++++++OO")
-                    e.stopPropagation()
-                    e.preventDefault()
-                }
-            }
-            var target = e.target
-            if (target.href && target.href.match(/#(\w+)/)) {
-                var id = RegExp.$1
-                if (id) {
-                    var el = document.getElementById(id)
-                    //这里做锚点的滚动处理,或做在scroll插件中
-                }
-            }
-        }, true)
+//        document.addEventListener("click", function(e) {
+//         //   avalon.log(e.markFastClick + "全局阻止" + ghostPrevent)
+//
+//            if (ghostPrevent) {
+//                if (!e.markFastClick) {//阻止浏览器自己触发的点击事件
+//                    avalon.log("++++++++++++++++++++++OO")
+//                    e.stopPropagation()
+//                    e.preventDefault()
+//                }
+//            }
+//            var target = e.target
+//            if (target.href && target.href.match(/#(\w+)/)) {
+//                var id = RegExp.$1
+//                if (id) {
+//                    var el = document.getElementById(id)
+//                    //这里做锚点的滚动处理,或做在scroll插件中
+//                }
+//            }
+//        }, true)
 //fastclick只要是处理移动端点击存在300ms延迟的问题
 //这是苹果乱搞异致的，他们想在小屏幕设备上通过快速点击两次，将放大了的网页缩放至原始比例。
         var fastclick = avalon.fastclick = {
