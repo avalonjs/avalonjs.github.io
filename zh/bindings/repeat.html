@@ -19,10 +19,10 @@
         <td>$first</td><td>Boolean</td><td>ms-repeat, ms-each， 当前循环的元素是否为数组的第一个元素。</td>
     </tr>
     <tr>
-        <td>$remove</td><td>Function</td><td>ms-repeat, ms-each， 用于从数组中删除当前循环。</td>
+        <td>$last</td><td>Boolean</td><td>ms-repeat, ms-each， 当前循环的元素是否为数组的最后一个元素。</td>
     </tr>
     <tr>
-        <td>$last</td><td>Number</td><td>ms-repeat, ms-each， 当前循环的元素是否为数组的最后一个元素。</td>
+        <td>$remove</td><td>Function</td><td>ms-repeat, ms-each， 用于从数组中删除当前循环。</td>
     </tr>
     <tr>
         <td>$key</td><td>String</td><td>ms-repeat, ms-with 当前循环中的某一个键名，此为一个不可监控的属性。</td>
@@ -43,3 +43,71 @@ for(var i = 0, n = array.length; i < n; i++){  //----> ms-each-el=array
     avalon就会递归地将此属性也转换为VM，俗值子VM。这些子VM就是ms-with, ms-repeat的目标对象。并且，这些子VM的所有键值对，会转换为一个个withProxy对象，
 　　它们都拥有$key, $val, $outer属性与方法。如果我们想更新一个键值对，对不起，不能单个转换，需要将整个子VM重新赋以一个新的对象。
 </p>
+<pre class="brush:html;gutter:false;toolbar:false;">
+&lt;!DOCTYPE HTML&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;ms-repeat&lt;/title&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+        &lt;script src="avalon.js" &gt;&lt;/script&gt;
+        &lt;script &gt;
+            var model = avalon.define({
+                $id: "test",
+                object: {
+                    a: 1,
+                    b: 1,
+                    c: 1,
+                    d: 1
+                },
+                text: "初始状态"
+            })
+            setTimeout(function() {
+                model.text = "修改"
+                model.object = {
+                    a: 2,
+                    b: 2,
+                    c: 2,
+                    d: 2
+                }
+            }, 1000)
+            setTimeout(function() {
+                model.text = "移除"
+                model.object = {
+                    a: 3,
+                    b: 3
+                }
+            }, 2000)
+            setTimeout(function() {
+                model.text = "添加"
+                model.object = {
+                    a: 3,
+                    b: 3,
+                    f: 4,
+                    g: 4
+                }
+            }, 3000)
+            setTimeout(function() {
+                model.text = "排序"
+                model.object = {
+                    g: 4,
+                    f: 4,
+                    b: 3,
+                    a: 3
+                }
+            }, 4000)
+        &lt;/script&gt;
+
+    &lt;/head&gt;
+    &lt;body ms-controller="test" &gt;
+        &lt;p&gt;演示对象循环的对象被整个替换掉的效果&lt;/p&gt;
+        &lt;p&gt;{{text}}实验&lt;/p&gt;
+        &lt;ul&gt;
+            &lt;li ms-repeat="object"&gt;{{$key}}:&lt;strong&gt;{{$val}}&lt;/strong&gt;(通过ms-repeat实现)&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;ol ms-with="object"&gt;
+            &lt;li&gt;{{$key}}:&lt;strong&gt;{{$val}}&lt;/strong&gt;(通过ms-with实现)&lt;/li&gt;
+        &lt;/ol&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p><img src="zh/bindings/repeat/repeat1.gif"  /></p>
