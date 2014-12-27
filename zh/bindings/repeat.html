@@ -111,3 +111,33 @@ for(var i = 0, n = array.length; i < n; i++){  //----> ms-each-el=array
 &lt;/html&gt;
 </pre>
 <p><img src="zh/bindings/repeat/repeat1.gif"  /></p>
+<p>接下来我们看ms-repeat, ms-each是如何循环一个数组的。</p>
+<pre class="brush:html;gutter:false;toolbar:false;">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;TODO supply a title&lt;/title&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width"&gt;
+        &lt;script src="avalon.js" &gt;&lt;/script&gt;
+        &lt;script&gt;
+            avalon.define({
+                $id: "test",
+                array: ["葡萄", "椰子", "火龙果", "橙子"]
+            })
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body ms-controller="test"&gt;
+        &lt;ul&gt;
+            &lt;li ms-repeat="array" ms-click="$remove"&gt;{{el}}、{{$index}}、{{$first}}、{{$last}}&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;ul ms-each="array"&gt;
+            &lt;li ms-click="$remove"&gt;{{el}}、{{$index}}、{{$first}}、{{$last}}&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p><img src="zh/bindings/repeat/repeat2.gif"  /></p>
+
+在VM上，所有数组如果名字以$开头，或放到$skipArray中，都会转换为监控数组。
+
