@@ -1,0 +1,45 @@
+<h2>跨模块通信</h2>
+<p>avalon的每一个VM相当于一个模块，我们是通过$watch与$fire方法在它们之间交流信息。</p>
+<p>想在模块间交流信息， 我们就需要在$fire方法的第一个参数上加上一点东西。这个也在核心概念一节提到过，
+分别是all!, up!, down!。all!就是除了当前这个VM，将avalon.vmodels上的VM都触发一遍。up!, down!则需要根据这些VM对应的
+ms-controller元素在DOM树的顺序进行触发。
+</p>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script&gt;
+            var vm = avalon.define({
+                $id: "test"
+            })
+            vm.$watch("aaa", function() {
+                console.log(arguments)//3秒后输出1,2,3,4
+            })
+            var vm2 = avalon.define({
+                $id: "test2"
+            })
+            setTimeout(function() {
+                vm2.$fire("all!aaa", 1, 2, 3, 4)
+            }, 3000)
+
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div ms-controller="test"&gt;
+            &lt;button type="button" ms-click="fn"&gt;点击&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+你的数据可以用PHP直接拍到VM上
+
+<pre class="brush:html;gutter:false;toolbar:false">
+
+var model = avalon.define({
+   $id: "test",
+   array: <?php echo $arr; ?>
+  
+})
+</pre>

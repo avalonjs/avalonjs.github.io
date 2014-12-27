@@ -1,0 +1,113 @@
+<h2>循环绑定(ms-repeat, ms-each, ms-with)</h2>
+<p>avalon最早期从knockout那里引入ms-each用于循环数组， ms-with用于循环对象，
+    它们都是以当前元素的innerHTML作为模板， 生成一整片HTML。</p>
+<p>后来avalon又从angular那里引入ms-repeat，它们自行根据对象的内部，内部执行ms-each或ms-with的逻辑，
+    不过ms-repeat是以当前元素的outerHTML作为模板，生成一整片HTML。
+</p>
+<p>ms-repeat, ms-each, ms-with在循环过程中会生成一个个代理VM对象，这些VM代理允许我们使用一些我们没有定义的属性或方法。
+<table class="shim-table">
+    <tr>
+        <th>名字</th>  <th>类型</th><th>说明</th>
+    </tr>
+    <tr>
+        <td>el</td><td>任何类型</td><td>ms-repeat-*, ms-each-*这个*所代表的全小写单词，不存在默认为el，引用着当前循环的元素。</td>
+    </tr>
+    <tr>
+        <td>$index</td><td>Number</td><td>ms-repeat, ms-each， 当前循环元素对应的索引值。</td>
+    </tr>
+    <tr>
+        <td>$first</td><td>Boolean</td><td>ms-repeat, ms-each， 当前循环的元素是否为数组的第一个元素。</td>
+    </tr>
+    <tr>
+        <td>$last</td><td>Boolean</td><td>ms-repeat, ms-each， 当前循环的元素是否为数组的最后一个元素。</td>
+    </tr>
+    <tr>
+        <td>$remove</td><td>Function</td><td>ms-repeat, ms-each， 用于从数组中删除当前循环。</td>
+    </tr>
+    <tr>
+        <td>$key</td><td>String</td><td>ms-repeat, ms-with 当前循环中的某一个键名，此为一个不可监控的属性。</td>
+    </tr>
+    <tr>
+        <td>$val</td><td>任何类型</td><td>ms-repeat, ms-with 当前循环中的某一个键值。</td>
+    </tr>
+</table>
+<pre class="brush:javascript;gutter:false;toolbar:false;">
+for(var i = 0, n = array.length; i < n; i++){  //----> ms-each-el=array
+   var el = array[i] // $index --> i
+   for(var j = 0, k = el.length; j < k; j++){  //---> ms-each-elem=el
+        var elem = el[j] // elem.$outer --->  el
+    }
+}
+</pre>
+<p>我们先解说ms-with或ms-repeat的目标为对象的情况，这个比较简单。avalon.define会将一个对象转换为VM，当这个对象的一个属性也为对象时，
+    avalon就会递归地将此属性也转换为VM，俗值子VM。这些子VM就是ms-with, ms-repeat的目标对象。并且，这些子VM的所有键值对，会转换为一个个withProxy对象，
+　　它们都拥有$key, $val, $outer属性与方法。如果我们想更新一个键值对，对不起，不能单个转换，需要将整个子VM重新赋以一个新的对象。
+</p>
+<pre class="brush:html;gutter:false;toolbar:false;">
+&lt;!DOCTYPE HTML&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;ms-repeat&lt;/title&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+        &lt;script src="avalon.js" &gt;&lt;/script&gt;
+        &lt;script &gt;
+            var model = avalon.define({
+                $id: "test",
+                object: {
+                    a: 1,
+                    b: 1,
+                    c: 1,
+                    d: 1
+                },
+                text: "初始状态"
+            })
+            setTimeout(function() {
+                model.text = "修改"
+                model.object = {
+                    a: 2,
+                    b: 2,
+                    c: 2,
+                    d: 2
+                }
+            }, 1000)
+            setTimeout(function() {
+                model.text = "移除"
+                model.object = {
+                    a: 3,
+                    b: 3
+                }
+            }, 2000)
+            setTimeout(function() {
+                model.text = "添加"
+                model.object = {
+                    a: 3,
+                    b: 3,
+                    f: 4,
+                    g: 4
+                }
+            }, 3000)
+            setTimeout(function() {
+                model.text = "排序"
+                model.object = {
+                    g: 4,
+                    f: 4,
+                    b: 3,
+                    a: 3
+                }
+            }, 4000)
+        &lt;/script&gt;
+
+    &lt;/head&gt;
+    &lt;body ms-controller="test" &gt;
+        &lt;p&gt;演示对象循环的对象被整个替换掉的效果&lt;/p&gt;
+        &lt;p&gt;{{text}}实验&lt;/p&gt;
+        &lt;ul&gt;
+            &lt;li ms-repeat="object"&gt;{{$key}}:&lt;strong&gt;{{$val}}&lt;/strong&gt;(通过ms-repeat实现)&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;ol ms-with="object"&gt;
+            &lt;li&gt;{{$key}}:&lt;strong&gt;{{$val}}&lt;/strong&gt;(通过ms-with实现)&lt;/li&gt;
+        &lt;/ol&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p><img src="zh/bindings/repeat/repeat1.gif"  /></p>

@@ -1,32 +1,43 @@
-<p>avalon是一个简单易用迷你的MVVM框架，它最早发布于2012.09.15，为解决同一业务逻辑存在各种视图呈现而开发出来的。
-    事实上，这问题其实也可以简单地利用一般的前端模板加jQuery 事件委托 搞定，但随着业务的膨胀，
-    代码就充满了各种选择器与事件回调，难以维护。因此彻底的将业务与逻辑分离，就只能求助于架构。
-    最初想到的是MVC，尝试过backbone，但代码不降反升，很偶尔的机会，碰上微软的WPF，
-    优雅的MVVM架构立即吸引住我，我觉得这就是我一直追求的解决之道。</p>
-
-<p>MVVM将所有前端代码彻底分成两部分，视图的处理通过绑定实现（angular有个更炫酷的名词叫指令），
+<table>
+    <tr>
+        <td>
+            <img style="width:200px; height:200px;" src="static/css/logo_avalon.png"/>
+        </td>
+        <td>
+            <p style="max-width:590px;margin:0px;"><strong style="font-size:18px">avalon</strong>是一个简单易用迷你的MVVM框架，它最早发布于2012.09.15，为解决同一业务逻辑存在各种视图呈现而开发出来的。
+                事实上，这问题其实也可以简单地利用一般的前端模板加jQuery 事件委托 搞定，但随着业务的膨胀，
+                代码就充满了各种选择器与事件回调，难以维护。因此彻底的将业务与逻辑分离，就只能求助于架构。
+                最初想到的是MVC，尝试过backbone，但代码不降反升，很偶尔的机会，碰上微软的WPF，
+                优雅的MVVM架构立马吸引住我，我觉得这就是我一直寻找的解决之道。</p>
+        </td>
+    </tr>
+</table>
+<p style="margin-top:0px;">avalon将所有前端代码彻底分成两部分，视图的处理通过绑定实现（angular有个更炫酷的名词叫指令），
     业务逻辑则集中在一个个叫VM的对象中处理。我们只要操作VM的数据，它就自然而然地神奇地同步到视图。
     显然所有神秘都有其内幕，C#是通过一种叫访问器属性的语句实现，那么JS也有没有对应的东西。
     感谢上帝，IE8最早引入这东西（Object.defineProperty），可惜有BUG，但带动了其他浏览器实现它，IE9+便能安全使用它。
     对于老式IE，我找了好久，实在没有办法，使用VBScript实现了。</p>
 
-<p>Object.defineProperty或VBS的作用是将对象的某一个属性，转换一个setter与getter，
+<p >Object.defineProperty或VBS的作用是将对象的某一个属性，转换一个setter与getter，
     我们只要劫持这两个方法，通过Pub/Sub模式就能偷偷操作视图。为了纪念WPF的指引，我将此项目以WPF最初的开发代号avalon来命名。
     它真的能让前端人员脱离DOM的苦海，来到数据的乐园中！</p>
-
 <h1>优势</h1>
 
-<blockquote style="background: rgb(155, 159, 221);padding:10px; border: 1px solid rgb(191,199,238); ">
+<blockquote style="display: inline-block;padding:10px; border: 1px solid rgb(191,199,238); ">
     <p>绝对的优势就是降低了耦合， 让开发者从复杂的各种事件中挣脱出来。 举一个简单地例子，
         同一个状态可能跟若干个事件的发生顺序与发生时的附加参数都有关系，
         不用 MVC (包括 MVVM) 的情况下, 逻辑可能非常复杂而且脆弱。
         并且通常需要在不同的地方维护相关度非常高的一些逻辑，
         稍有疏忽就会酿成 bug 不能自拔。使用这类框架能从根本上降低应用开发的逻辑难度， 并且让应用更稳健。</p>
 
-    <p>除此之外， 也免去了一些重复的体力劳动， 一个 {value} 就代替了一行 $(selector).text(value)。
+    <p ms-skip>除此之外， 也免去了一些重复的体力劳动， 一个 {{value}} 就代替了一行 $(selector).text(value)。
         一些个常用的 directive 也能快速实现一些原本可能需要较多代码才能实现的功能</p>
 </blockquote>
-
+<style>
+    .task-list li{
+        max-width: 800px;
+    }
+</style>
 <ul class="task-list">
     <li>使用简单,作者是吃透了knockout, angular,rivets API设计出来，没有太多复杂的概念，
         指令数量控制得当，基本能覆盖所有jQuery操作，
@@ -64,4 +75,6 @@
     <li><strong>操作数据即操作DOM</strong>，对ViewModel的操作都会同步到View与Model去</li>
     <li>自带AMD模块加载器，省得与其他加载器进行整合</li>
 </ul>
+
+<p>avalon的前缀是ms，意即mass， 弥撒，记念我之前的框架mass Framework。</p>
 
