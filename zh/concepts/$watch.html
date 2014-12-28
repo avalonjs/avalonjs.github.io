@@ -11,8 +11,12 @@
 <p>如果目标对象是数组，那么只能监听它的长度变化，并只能跑到avalon.define的外面绑定$watch回调。</p>
 <p>如果你想监听二级或三级对象的属性时，需要跑到avalon.define的外面，定位到目标属性的父对象上添加$watch回调。</p>
 <pre class="brush:js;gutter:false;">
-                 var model = avalon.define("xxx", function(vm){
-                      vm.data.xxx = 222
+                 var model = avalon.define({
+                      id: "test",
+                      data: {
+                            xxx: 222,
+                            yyy: 333
+                      }
                  })
                  model.data.$watch("xxx", function(a,b){
                     //................
@@ -28,24 +32,26 @@
         &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
         &lt;script src="avalon.js"&gt;&lt;/script&gt;
         &lt;script&gt;
-            var model = avalon.define("$watch1", function(vm) {
-                vm.prop = "xxx"
-                vm.array = ["aaa", "bbb", "ccc", "ddd"]
-                vm.data = {
+           var model = avalon.define({
+                id: "$watch1",
+                prop: "xxx",
+                array: ["aaa", "bbb", "ccc", "ddd"],
+                data: {
                     aaa: "lll"
-                }
-                vm.propWatch = ""
-                vm.arrayWatch = 4
-                vm.dataAAAWatch = ""
-                vm.$watch("prop", function(a) {
-                    vm.propWatch = a + " $watch"
-                })
-                vm.click = function() {
-                    vm.prop = new Date - 1
-                    vm.data.aaa = new Date - 2
-                    vm.array.push(new Date - 3)
+                },
+                propWatch: "",
+                arrayWatch: 4,
+                dataAAAWatch: "",
+                click: function() {
+                    model.prop = new Date - 1
+                    model.data.aaa = new Date - 2
+                    model.array.push(new Date - 3)
                 }
             })
+            model.$watch("prop", function(a) {
+                model.propWatch = a + " $watch"
+            })
+
             //在avalon.define外面绑定$watch回调
             model.array.$watch("length", function(a) {
                 model.arrayWatch = a + " $watch"
@@ -87,24 +93,25 @@
         &lt;script&gt;
             var props = ["aaa", "bbb", "ccc", "ddd"]
             var backup = props.concat()
-            var model = avalon.define("$watch2", function(vm) {
-                vm.aaa = "xxx"
-                vm.bbb = "yyy"
-                vm.ccc = "zzz"
-                vm.ddd = "uuu"
-                vm.propWatch = ""
-                vm.$watch("$all", function(name) {
-                    if (name !== "propWatch") {
-                        vm.propWatch = name + "  属性发生改变"
-                    }
-                })
-                vm.click = function() {
+            var model = avalon.define({
+                $id: "$watch2",
+                aaa: "xxx",
+                bbb: "yyy",
+                ccc: "zzz",
+                ddd: "uuu",
+                propWatch: "",
+                click: function() {
                     var index = Math.floor(Math.random() * props.length)
                     var prop = props.splice(index, 1)[0]
                     if (!props.length) {
                         props = backup.concat()
                     }
-                    vm[prop] = new Date - 1
+                    model[prop] = new Date - 1
+                }
+            })
+            model.$watch("$all", function(name) {
+                if (name !== "propWatch") {
+                    model.propWatch = name + "  属性发生改变"
                 }
             })
 
@@ -151,27 +158,27 @@
         &lt;script src="avalon.js"&gt;&lt;/script&gt;
         &lt;script&gt;
 
-            avalon.define("mobile", function(vm) {
-                vm.phone = ""
-                vm.$watch("phone", function(a) {
-                    var b = a.replace(/\s+/g, "")
-                    var array = b.split("")
-                    var ret = ""
-                    for (var i = 0, n = array.length; i &lt; n; i++) {
-                        if (i &gt; 10)//不能超过11位 
-                            break
-                        if (i == 3) {
-                            ret += " "
-                        }
-                        if (i == 7) {
-                            ret += " "
-                        }
-                        ret += array[i]
-                    }
-                    vm.phone = ret
-                })
+           var model = avalon.define({
+                $id : "mobile",
+                phone : ""
             })
-
+            model.$watch("phone", function(a) {
+                var b = a.replace(/\s+/g, "")
+                var array = b.split("")
+                var ret = ""
+                for (var i = 0, n = array.length; i &lt; n; i++) {
+                    if (i &gt; 10)//不能超过11位 
+                        break
+                    if (i == 3) {
+                        ret += " "
+                    }
+                    if (i == 7) {
+                        ret += " "
+                    }
+                    ret += array[i]
+                }
+                model.phone = ret
+            })
         &lt;/script&gt;
     &lt;/head&gt;
     &lt;body&gt;
