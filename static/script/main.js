@@ -135,4 +135,8 @@
             SyntaxHighlighter.highlight()
         }
     })
+    var href = location.href
+    if (href.indexOf("#zh") !== -1 || href.indexOf("#en") !== -1) {
+        vm.currentPath = href.split("#")[1]
+    }
 })()
