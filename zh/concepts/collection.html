@@ -98,17 +98,17 @@
             &lt;ul ms-each-el="array"&gt;
                 &lt;li &gt;数组的第{{$index+1}}个元素为{{el}}&lt;/li&gt;
             &lt;/ul&gt;
-            &lt;p&gt;对数组进行push操作，并回车&lt;input ms-keypress="push"&gt;&lt;/p&gt;
-            &lt;p&gt;对数组进行unshift操作，并回车&lt;input ms-keypress="unshift"&gt;&lt;/p&gt;
-            &lt;p&gt;对数组进行ensure操作，并回车&lt;input ms-keypress="ensure"&gt;&lt;br/&gt;
-                (只有数组不存在此元素才push进去)&lt;/p&gt;
-            &lt;p&gt;对数组进行remove操作，并回车&lt;input ms-keypress="remove"&gt;&lt;/p&gt;
-            &lt;p&gt;对数组进行removeAt操作，并回车&lt;input ms-keypress="removeAt"&gt;&lt;/p&gt;
-            &lt;p&gt;&lt;button type="button" ms-click="sort"&gt;对数组进行sort操作&lt;/button&gt;&lt;/p&gt;
-            &lt;p&gt;&lt;button type="button" ms-click="reverse"&gt;对数组进行reverse操作&lt;/button&gt;&lt;/p&gt;
-            &lt;p&gt;&lt;button type="button" ms-click="shift"&gt;对数组进行shift操作&lt;/button&gt;&lt;/p&gt;
-            &lt;p&gt;&lt;button type="button" ms-click="pop"&gt;对数组进行pop操作&lt;/button&gt;&lt;/p&gt;
-            &lt;p&gt;当前数组的长度为&lt;span style="color:red"&gt;{{array.size()}}&lt;/span&gt;，注意 我们无法修改数组length的固有行为，因此它无法同步视图，需要用size方法。&lt;/p&gt;
+   &lt;div&gt;对数组进行push操作，并回车&lt;input ms-keypress="push"&gt;&lt;/div&gt;
+            &lt;div&gt;对数组进行unshift操作，并回车&lt;input ms-keypress="unshift"&gt;&lt;/div&gt;
+            &lt;div&gt;对数组进行ensure操作，并回车&lt;input ms-keypress="ensure"&gt;&lt;br/&gt;
+                (只有数组不存在此元素才push进去)&lt;/div&gt;
+            &lt;div&gt;对数组进行remove操作，并回车&lt;input ms-keypress="remove"&gt;&lt;/div&gt;
+            &lt;div&gt;对数组进行removeAt操作，并回车&lt;input ms-keypress="removeAt"&gt;&lt;/div&gt;
+            &lt;div&gt;&lt;button type="button" ms-click="sort"&gt;对数组进行sort操作&lt;/button&gt;&lt;/div&gt;
+            &lt;div&gt;&lt;button type="button" ms-click="reverse"&gt;对数组进行reverse操作&lt;/button&gt;&lt;/div&gt;
+            &lt;div&gt;&lt;button type="button" ms-click="shift"&gt;对数组进行shift操作&lt;/button&gt;&lt;/div&gt;
+            &lt;div&gt;&lt;button type="button" ms-click="pop"&gt;对数组进行pop操作&lt;/button&gt;&lt;/div&gt;
+            &lt;div&gt;当前数组的长度为&lt;span style="color:red"&gt;{{array.size()}}&lt;/span&gt;，注意 我们无法修改数组length的固有行为，因此它无法同步视图，需要用size方法。&lt;/div&gt;
         &lt;/fieldset&gt;
         &lt;fieldset ms-controller="page"&gt;
             &lt;legend&gt;示例二&lt;/legend&gt;
@@ -137,17 +137,17 @@
     <ul ms-each-el="array">
         <li >数组的第{{$index+1}}个元素为{{el}}</li>
     </ul>
-    <p>对数组进行push操作，并回车<input ms-keypress="push"></p>
-    <p>对数组进行unshift操作，并回车<input ms-keypress="unshift"></p>
-    <p>对数组进行ensure操作，并回车<input ms-keypress="ensure"><br/>
-        (只有数组不存在此元素才push进去)</p>
-    <p>对数组进行remove操作，并回车<input ms-keypress="remove"></p>
-    <p>对数组进行removeAt操作，并回车<input ms-keypress="removeAt"></p>
-    <p><button type="button" ms-click="sort">对数组进行sort操作</button></p>
-    <p><button type="button" ms-click="reverse">对数组进行reverse操作</button></p>
-    <p><button type="button" ms-click="shift">对数组进行shift操作</button></p>
-    <p><button type="button" ms-click="pop">对数组进行pop操作</button></p>
-    <p>当前数组的长度为<span style="color:red">{{array.size()}}</span>，注意 我们无法修改数组length的固有行为，因此它无法同步视图，需要用size方法。</p>
+    <div>对数组进行push操作，并回车<input ms-keypress="push"></div>
+    <div>对数组进行unshift操作，并回车<input ms-keypress="unshift"></div>
+    <div>对数组进行ensure操作，并回车<input ms-keypress="ensure"><br/>
+        (只有数组不存在此元素才push进去)</div>
+    <div>对数组进行remove操作，并回车<input ms-keypress="remove"></div>
+    <div>对数组进行removeAt操作，并回车<input ms-keypress="removeAt"></div>
+    <div><button type="button" ms-click="sort">对数组进行sort操作</button></div>
+    <div><button type="button" ms-click="reverse">对数组进行reverse操作</button></div>
+    <div><button type="button" ms-click="shift">对数组进行shift操作</button></div>
+    <div><button type="button" ms-click="pop">对数组进行pop操作</button></div>
+    <div>当前数组的长度为<span style="color:red">{{array.size()}}</span>，注意 我们无法修改数组length的固有行为，因此它无法同步视图，需要用size方法。</div>
 </fieldset>
 <fieldset ms-controller="c-collection2">
     <legend>示例二</legend>
