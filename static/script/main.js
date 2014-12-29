@@ -122,6 +122,16 @@
                 id: "repeat"
             }
         ].sort(),
+        engineering: [
+             {
+                name: "跨模块通信",
+                id: "communication"
+            },
+              {
+                name: "与富文本编辑器的整合",
+                id: "integratewithrichtext"
+            }
+        ],
         mobiles: [
             {
                 name: "触屏事件",
