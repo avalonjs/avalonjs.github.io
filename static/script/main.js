@@ -87,11 +87,11 @@
             },
             {
                 name: "ms-active-*",
-                id: "css"
+                id: "class"
             },
             {
                 name: "ms-hover-*",
-                id: "css"
+                id: "class"
             },
             {
                 name: "ms-css-*",
