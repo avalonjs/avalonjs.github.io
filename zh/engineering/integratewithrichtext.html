@@ -193,3 +193,111 @@
     &lt;/fieldset&gt;
 &lt;/form&gt;
 </pre>
+
+<h1>UEditor</h1>
+<script>
+    require.config({
+        paths: {
+            ueditor: "http://ueditor.baidu.com/ueditor/ueditor.all.js"
+        },
+        shim: {
+            ueditor: {
+                exports: "UE"
+            }
+        }
+    })
+    var URL = "http://ueditor.baidu.com/ueditor/"
+    window.UEDITOR_CONFIG = {
+        //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的从新定义
+        toolbars: [[
+                'fullscreen', 'source', '|', 'undo', 'redo', '|',
+                'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+                'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+                'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
+                'directionalityltr', 'directionalityrtl', 'indent', '|',
+                'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+                'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+                'simpleupload', 'insertimage', 'emotion', 'scrawl', 'insertvideo', 'music', 'attachment', 'map', 'gmap', 'insertframe', 'insertcode', 'webapp', 'pagebreak', 'template', 'background', '|',
+                'horizontal', 'date', 'time', 'spechars', 'snapscreen', 'wordimage', '|',
+                'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', 'charts', '|',
+                'print', 'preview', 'searchreplace', 'help', 'drafts'
+            ]],
+        lang: "zh-cn",
+        langPath: URL + "lang/",
+        theme: 'default',
+        themePath: URL + "/themes/",
+        iframeCssUrl: URL + '/themes/iframe.css', //给编辑器内部引入一个css文件
+        codeMirrorJsUrl: URL + "third-party/codemirror/codemirror.js",
+        codeMirrorCssUrl: URL + "third-party/codemirror/codemirror.css"
+    }
+    avalon.define({
+        $id: "ueditor",
+        text: ""
+    })
+    require(["ueditor"], function() {
+        var ue = UE.getEditor('ueditor');
+        ue.addListener("contentChange", function() {
+            avalon.vmodels.ueditor.text = ue.getContent()
+        })
+    })
+</script>
+<form method="post" action="somepage" ms-controller="ueditor">
+    <textarea name="content" style="width:100%" id="ueditor" ms-duplex="text"></textarea>
+    <fieldset><legend>输出内容</legend>
+        {{text}}
+    </fieldset>
+</form>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;script&gt;
+    require.config({
+        paths: {
+            ueditor: "http://ueditor.baidu.com/ueditor/ueditor.all.js"
+        },
+        shim: {
+            ueditor: {
+                exports: "UE"
+            }
+        }
+    })
+    var URL = "http://ueditor.baidu.com/ueditor/"
+    window.UEDITOR_CONFIG = {
+        //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的从新定义
+        toolbars: [[
+                'fullscreen', 'source', '|', 'undo', 'redo', '|',
+                'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+                'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+                'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
+                'directionalityltr', 'directionalityrtl', 'indent', '|',
+                'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+                'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+                'simpleupload', 'insertimage', 'emotion', 'scrawl', 'insertvideo', 'music', 'attachment', 'map', 'gmap', 'insertframe', 'insertcode', 'webapp', 'pagebreak', 'template', 'background', '|',
+                'horizontal', 'date', 'time', 'spechars', 'snapscreen', 'wordimage', '|',
+                'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', 'charts', '|',
+                'print', 'preview', 'searchreplace', 'help', 'drafts'
+            ]],
+        lang: "zh-cn",
+        langPath: URL + "lang/",
+        theme: 'default',
+        themePath: URL + "/themes/",
+        iframeCssUrl: URL + '/themes/iframe.css', //给编辑器内部引入一个css文件
+        codeMirrorJsUrl: URL + "third-party/codemirror/codemirror.js",
+        codeMirrorCssUrl: URL + "third-party/codemirror/codemirror.css"
+    }
+    avalon.define({
+        $id: "ueditor",
+        text: ""
+    })
+    require(["ueditor"], function() {
+        var ue = UE.getEditor('ueditor');
+        ue.addListener("contentChange", function() {
+            avalon.vmodels.ueditor.text = ue.getContent()
+        })
+    })
+&lt;/script&gt;
+&lt;form method="post" action="somepage" ms-controller="ueditor"&gt;
+    &lt;textarea name="content" style="width:100%" id="ueditor" ms-duplex="text"&gt;&lt;/textarea&gt;
+    &lt;fieldset&gt;&lt;legend&gt;输出内容&lt;/legend&gt;
+        {{text}}
+    &lt;/fieldset&gt;
+&lt;/form&gt;
+</pre>
