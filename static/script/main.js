@@ -86,6 +86,14 @@
                 id: "class"
             },
             {
+                name: "ms-active-*",
+                id: "css"
+            },
+            {
+                name: "ms-hover-*",
+                id: "css"
+            },
+            {
                 name: "ms-css-*",
                 id: "css"
             },
@@ -113,7 +121,7 @@
                 name: "ms-with",
                 id: "repeat"
             }
-        ],
+        ].sort(),
         mobiles: [
             {
                 name: "触屏事件",
