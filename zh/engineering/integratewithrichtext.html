@@ -1,7 +1,5 @@
 <h2>与富本文编辑器的整合</h2>
-<script>
-
-</script>
+<h3>tinymce</h3>
 
 <script type="text/javascript">
     //使用requirejs风格的AMD加载器配置tinymce
@@ -18,11 +16,10 @@
 
     //由于tinymce体积超大,需要等到它存在时,才给它实例化
     require(["tinymce", "ready!"], function(tinymce) {
-        console.log(tinymce)
         //参看这里http://www.tinymce.com/tryit/basic.php
         tinymce.PluginManager.load('moxiemanager', 'http://www.tinymce.com/js/moxiemanager/plugin.min.js');
         tinymce.init({
-            selector: "textarea.only_tinymce",//
+            selector: "textarea.only_tinymce", //
             plugins: [
                 "advlist autolink lists link image charmap print preview anchor",
                 "searchreplace visualblocks code fullscreen",
@@ -63,7 +60,7 @@
         },
         shim: {
             tinymce: {
-                exports: "tinymce"//这是原来jQuery库的命名空间，必须写上
+                exports: "tinymce"
             }
         }
     })
@@ -92,10 +89,7 @@
             toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
         });
     })
-
-&lt;/script&gt;
-&lt;script&gt;
-    avalon.define({
+   avalon.define({
         $id: "tinymce",
         text: ""
     })
@@ -107,4 +101,95 @@
     &lt;/fieldset&gt;
 &lt;/form&gt;
 </pre>
+<h3>kindeditor</h3>
 
+<script type="text/javascript">
+    //使用requirejs风格的AMD加载器配置kindeditor
+    require.config({
+        paths: {
+            kindeditor: "http://kindeditor.net/ke4/kindeditor-min.js",
+            kindezh: "http://kindeditor.net/ke4/lang/zh_CN.js"//语言包
+        },
+        shim: {
+            kindeditor: {
+                exports: "KindEditor"
+            },
+            kindezh: {
+                exports: "KindEditor"
+            }
+        }
+    })
+
+    //http://kindeditor.net/docs/usage.html
+    require(["kindeditor", "ready!"], function(K) {
+        require(["kindezh"], function() {//加载中文语言包，必须等到上面的加载回来
+            var editor = K.create("#kindeditor")
+            var iframe = editor.container[0].getElementsByTagName("iframe")[0]
+
+            var iframeWindow = iframe.contentWindow || iframe.contentDocument.parentWindow
+            function sync(e) {
+                avalon.vmodels.kindeditor.text = editor.html()
+            }
+            avalon.bind(iframeWindow, "keydown", sync)
+            avalon.bind(iframeWindow, "blur", sync)
+
+        })
+
+    })
+    avalon.define({
+        $id: "kindeditor",
+        text: ""
+    })
+</script>
+<form method="post" action="somepage" ms-controller="kindeditor">
+    <textarea name="content" style="width:100%" id="kindeditor" ms-duplex="text"></textarea>
+    <fieldset><legend>输出内容</legend>
+        {{text}}
+    </fieldset>
+</form>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;script type="text/javascript"&gt;
+    //使用requirejs风格的AMD加载器配置kindeditor
+    require.config({
+        paths: {
+            kindeditor: "http://kindeditor.net/ke4/kindeditor-min.js",
+            kindezh: "http://kindeditor.net/ke4/lang/zh_CN.js"//语言包
+        },
+        shim: {
+            kindeditor: {
+                exports: "KindEditor"
+            },
+            kindezh: {
+                exports: "KindEditor"
+            }
+        }
+    })
+
+    //http://kindeditor.net/docs/usage.html
+    require(["kindeditor", "ready!"], function(K) {
+        require(["kindezh"], function() {//加载中文语言包，必须等到上面的加载回来
+            var editor = K.create("#kindeditor")
+            var iframe = editor.container[0].getElementsByTagName("iframe")[0]
+
+            var iframeWindow = iframe.contentWindow || iframe.contentDocument.parentWindow
+            function sync(e) {
+                avalon.vmodels.kindeditor.text = editor.html()
+            }
+            avalon.bind(iframeWindow, "keydown", sync)
+            avalon.bind(iframeWindow, "blur", sync)
+
+        })
+
+    })
+    avalon.define({
+        $id: "kindeditor",
+        text: ""
+    })
+&lt;/script&gt;
+&lt;form method="post" action="somepage" ms-controller="kindeditor"&gt;
+    &lt;textarea name="content" style="width:100%" id="kindeditor" ms-duplex="text"&gt;&lt;/textarea&gt;
+    &lt;fieldset&gt;&lt;legend&gt;输出内容&lt;/legend&gt;
+        {{text}}
+    &lt;/fieldset&gt;
+&lt;/form&gt;
+</pre>
