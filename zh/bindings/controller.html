@@ -41,6 +41,7 @@
     &lt;/div&gt;
 &lt;/div&gt;
     </pre>   
+
     <h3>ViewModel</h3>
     <pre class="brush:html;gutter:false;toolbar:false">
   　avalon.ready(function() {
@@ -68,6 +69,29 @@
 </div>
 <fieldset>
     <div><img src="zh/bindings/controller/controller.png"/></div>
+    <script>
+        avalon.ready(function() {
+            avalon.define({
+                $id: "AAA",
+                name: "liger",
+                color: "green"
+            });
+            avalon.define({
+                $id: "BBB",
+                name: "sphinx",
+                color: "red"
+            });
+            avalon.define({
+                $id: "CCC",
+                name: "dragon" //不存在color
+            });
+            avalon.define({
+                $id: "DDD",
+                name: "sirenia" //不存在color
+            });
+            avalon.scan()
+        })
+    </script>
     <div ms-controller="AAA">
         <div>{{name}} :  {{color}}</div>
         <div ms-controller="BBB">
