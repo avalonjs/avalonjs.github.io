@@ -200,6 +200,131 @@ for(var i = 0, n = array.length; i < n; i++){  //----> ms-each-el=array
         {{el.text}}
     </div>
 </div>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE HTML&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+        &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt; 
+        &lt;script src="avalon.js" &gt;&lt;/script&gt;
+        &lt;script&gt;
+            new function() {
+                if (!Date.now) {//fix 旧式IE
+                    Date.now = function() {
+                        return new Date - 0;
+                    }
+                }
+                var model = avalon.define({
+                    $id: "repeatgrid",
+                    selected: "name",
+                    options: ["name", "size", "date"],
+                    trend: 1,
+                    data: [
+                        {name: "aaa", size: 213, date: Date.now() + 20},
+                        {name: "bbb", size: 4576, date: Date.now() - 4},
+                        {name: "ccc", size: 563, date: Date.now() - 7},
+                        {name: "eee", size: 3713, date: Date.now() + 9},
+                        {name: "555", size: 389, date: Date.now() - 20}
+                    ]
+                })
+                model.$watch("selected", function(v) {
+                    var t = parseFloat(model.trend)
+                    model.data.sort(function(a, b) {
+                        if (v === "name") {
+                            return t * a[v].toLocaleString(b[v])
+                        } else {
+                            var ret = a[v] &gt; b[v] ? 1 : -1
+                            return t * ret
+                        }
+                    })
+                })
+                model.$watch("trend", function(t) {
+                    var v = model.selected, t = parseFloat(t)
+                    model.data.sort(function(a, b) {
+                        var ret = a[v] &gt; b[v] ? 1 : -1
+                        return t * ret
+                    })
+                })
+            }
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body ms-controller="repeatgrid"&gt;
+        &lt;p&gt;
+            &lt;select ms-duplex="selected"&gt;
+                &lt;option  ms-repeat="options"&gt;{{el}}&lt;/option&gt;
+            &lt;/select&gt;
+            &lt;select ms-duplex="trend"&gt;
+                &lt;option value="1"&gt;up&lt;/option&gt;
+                &lt;option value="-1"&gt;down&lt;/option&gt;
+            &lt;/select&gt;
+        &lt;/p&gt;
+        &lt;table width="500px" border="1"&gt;
+            &lt;tbody &gt;
+                &lt;tr ms-repeat="data"&gt;
+                    &lt;td&gt;{{el.name}}&lt;/td&gt; &lt;td&gt;{{el.size}}&lt;/td&gt; &lt;td&gt;{{el.date}}&lt;/td&gt;
+                &lt;/tr&gt;
+            &lt;/tbody&gt;
+        &lt;/table&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
 
-
+<script>
+    new function() {
+        if (!Date.now) {//fix 旧式IE
+            Date.now = function() {
+                return new Date - 0;
+            }
+        }
+        var model = avalon.define({
+            $id: "repeatgrid",
+            selected: "name",
+            options: ["name", "size", "date"],
+            trend: 1,
+            data: [
+                {name: "aaa", size: 213, date: Date.now() + 20},
+                {name: "bbb", size: 4576, date: Date.now() - 4},
+                {name: "ccc", size: 563, date: Date.now() - 7},
+                {name: "eee", size: 3713, date: Date.now() + 9},
+                {name: "555", size: 389, date: Date.now() - 20}
+            ]
+        })
+        model.$watch("selected", function(v) {
+            var t = parseFloat(model.trend)
+            model.data.sort(function(a, b) {
+                if (v === "name") {
+                    return t * a[v].toLocaleString(b[v])
+                } else {
+                    var ret = a[v] > b[v] ? 1 : -1
+                    return t * ret
+                }
+            })
+        })
+        model.$watch("trend", function(t) {
+            var v = model.selected, t = parseFloat(t)
+            model.data.sort(function(a, b) {
+                var ret = a[v] > b[v] ? 1 : -1
+                return t * ret
+            })
+        })
+    }
+</script>
+<div ms-controller="repeatgrid">
+    <p>
+        <select ms-duplex="selected">
+            <option  ms-repeat="options">{{el}}</option>
+        </select>
+        <select ms-duplex="trend">
+            <option value="1">up</option>
+            <option value="-1">down</option>
+        </select>
+    </p>
+    <table width="500px" border="1">
+        <tbody >
+            <tr ms-repeat="data">
+                <td>{{el.name}}</td> <td>{{el.size}}</td> <td>{{el.date}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
