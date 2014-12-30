@@ -7,7 +7,7 @@
   <p>animationend、  blur、  change、  input、 click、 dblclick、 focus、 keydown、 keypress、 keyup、 mousedown、 mouseenter、 mouseleave、 mousemove、 mouseout、 mouseover、 mouseup、 scan、 scroll、 submit</p>
 </blockquote>
 
-<p>事件绑定的属性值的格式，必须是函数名或函数名后＋小括号。
+<p>事件绑定的属性值的格式，必须是函数名或函数名后＋小括号(ms-on-click="aaa.fn"是不被允许的)。
     小括号不是必须的。它用于添加参数，并且有一个特殊的<strong>$event</strong>参数，指向事件对象。如果不写小括号，默认第一个参数就是事件对象。</p>
 <p style="color:red">注意:ms-duplex与ms-input不能用在同一元素上。</p>
 <p>IE6-8下，事件对象的许多属性与方法与标准浏览器不一样，不过放心，avalon已经帮你修正了。详见下面源码：</p>
