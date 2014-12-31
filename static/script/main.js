@@ -5,7 +5,7 @@
         var nav = navigator;
         return (nav.browserLanguage || nav.language || nav.userLanguage || "").substr(0, 2);
     }
-    ;
+    var menuNodes = []
     var vm = avalon.define({
         $id: "main",
         userLanguage: browserLanguage() === "zh" ? "zh" : "en",
@@ -44,6 +44,9 @@
                 id: "unobservable"
             }
         ],
+        collectMenu: function() {
+            avalon.Array.ensure(menuNodes, this)
+        },
         bindings: [
             {
                 name: "ms-controller",
@@ -122,7 +125,7 @@
                 id: "repeat"
             }
         ].sort(),
-        fitlers: [
+        filters: [
             {
                 name: "html",
                 id: "html"
@@ -178,6 +181,17 @@
         ],
         supportSVG: !!window.dispatchEvent,
         changePath: function() {
+            var next = this
+            if (next.nodeName === "A") {
+                while (next = next.nextSibling) {
+                    if (next.nodeType === 1) {
+                        break
+                    }
+                }
+                menuNodes.forEach(function(el) {
+                    el.style.display = el === next ? "" : "none"
+                })
+            }
             setTimeout(function() {
                 vm.currentPath = location.href.split("#")[1]
                 try {
