@@ -1,2 +1,44 @@
 <h2>number</h2>
-<p></p>
+<p>对需要处理的数字的整数部分插入千分号（每三个数字插入一个逗号），有一个参数fractionSize，用于保留小数点的后几位</p>
+<ul>
+    <li>fractionSize:小数部分的精度，默认为3。</li>
+</ul>
+<pre class="brush:html;gutter:false;toolbar:false;">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;TODO supply a title&lt;/title&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width"&gt;
+        &lt;script src="avalon.js" &gt;&lt;/script&gt;
+        &lt;script&gt;
+            avalon.define({
+                $id: "test",
+                aaa: 1234.56789
+            })
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body &gt;
+        &lt;div ms-controller="test"&gt;
+            &lt;p&gt;输入数字: &lt;input ms-duplex="aaa"&gt;&lt;/p&gt;
+            &lt;p&gt;不处理：{{aaa}}&lt;/p&gt;
+            &lt;p&gt;不传参：{{aaa|number}}&lt;/p&gt;
+            &lt;p&gt;不保留小数：{{aaa|number(0)}}&lt;/p&gt;
+            &lt;p&gt;负数:{{-aaa|number(4)}}&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<script>
+    avalon.define({
+        $id: "numberFilter",
+        aaa: 1234.56789
+    })
+</script>
+<div ms-controller="numberFilter">
+    <p>输入数字: <input ms-duplex="aaa"></p>
+    <p>不处理：{{aaa}}</p>
+    <p>不传参：{{aaa|number}}</p>
+    <p>不保留小数：{{aaa|number(0)}}</p>
+    <p>负数:{{-aaa|number(4)}}</p>
+</div>

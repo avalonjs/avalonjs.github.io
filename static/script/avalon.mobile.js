@@ -5,7 +5,7 @@
  http://weibo.com/jslouvre/
  
  Released under the MIT license
-avalon.mobile.js(支持触屏事件) 1.381 build in 2014.12.29 
+avalon.mobile.js(支持触屏事件) 1.381 build in 2014.12.31 
 _______
 support IE6+ and other browsers
  ==================================================*/
@@ -1249,11 +1249,8 @@ function disposeData(data) {
 }
 
 function notifySubscribers(list) { //通知依赖于这个访问器的订阅者更新自身
-    clearTimeout(removeID)
     if (new Date() - beginTime > 444) {
         removeSubscribers()
-    } else {
-        removeID = setTimeout(removeSubscribers, 444)
     }
     if (list && list.length) {
         var args = aslice.call(arguments, 1)
@@ -1350,41 +1347,11 @@ avalon.clearHTML = function(node) {
 /*********************************************************************
  *                           扫描系统                                 *
  **********************************************************************/
-var scanObject = {}
-avalon.scanCallback = function(fn, group) {
-    group = group || "$all"
-    var array = scanObject[group] || (scanObject[group] = [])
-    array.push(fn)
-}
+
 avalon.scan = function(elem, vmodel, group) {
     elem = elem || root
-    group = group || "$all"
-    var array = scanObject[group] || []
     var vmodels = vmodel ? [].concat(vmodel) : []
-    var scanIndex = 0;
-    var scanAll = false
-    var fn
-    var dirty = false
-    function cb(i) {
-        scanIndex += i
-        dirty = true
-        setTimeout(function() {
-            if (scanIndex <= 0 && !scanAll) {
-                scanAll = true
-                while (fn = array.shift()) {
-                    fn()
-                }
-            }
-        })
-    }
-    vmodels.cb = cb
     scanTag(elem, vmodels)
-    //html, include, widget
-    if (!dirty) {
-        while (fn = array.shift()) {
-            fn()
-        }
-    }
 }
 
 //http://www.w3.org/TR/html5/syntax.html#void-elements
@@ -1421,9 +1388,6 @@ var getBindingCallback = function(elem, name, vmodels) {
 }
 
 function executeBindings(bindings, vmodels) {
-    if (bindings.length)
-        vmodels.cb(bindings.length)
-
     for (var i = 0, data; data = bindings[i++]; ) {
         data.vmodels = vmodels
         bindingHandlers[data.type](data, vmodels)
@@ -1467,9 +1431,7 @@ function scanTag(elem, vmodels, node) {
             return
         }
         //ms-important不包含父VM，ms-controller相反
-        var cb = vmodels.cb
         vmodels = node === b ? [newVmodel] : [newVmodel].concat(vmodels)
-        vmodels.cb = cb
         elem.removeAttribute(node.name) //removeAttributeNode不会刷新[ms-controller]样式规则
         elem.classList.remove(node.name)
         createSignalTower(elem, newVmodel)
@@ -2303,7 +2265,6 @@ function parseExpr(code, scopes, data) {
 //parseExpr的智能引用代理
 
 function parseExprProxy(code, scopes, data, tokens, noregister) {
-    scopes.cb(-1)
     if (Array.isArray(tokens)) {
         code = tokens.map(function(el) {
             return el.expr ? "(" + el.value + ")" : quote(el.value)
@@ -2422,7 +2383,6 @@ bindingExecutors.attr = function(val, elem, data) {
         var loaded = data.includeLoaded
         var replace = data.includeReplaced
         var target = replace ? elem.parentNode : elem
-        vmodels.cb(1)
         function scanTemplate(text) {
             if (loaded) {
                 text = loaded.apply(target, [text].concat(vmodels))
@@ -2444,7 +2404,6 @@ bindingExecutors.attr = function(val, elem, data) {
             var nodes = avalon.slice(dom.childNodes)
             target.insertBefore(dom, data.endInclude)
             scanNodeArray(nodes, vmodels)
-            vmodels.cb(-1)
         }
         if (data.param === "src") {
             if (cacheTmpls[val]) {
@@ -2794,7 +2753,6 @@ bindingHandlers.widget = function(data, vmodels) {
         id = generateID(widget)
     }
     var optName = args[2] || widget//没有定义，取组件名
-    vmodels.cb(-1)
     var constructor = avalon.ui[widget]
     if (typeof constructor === "function") { //ms-widget="tabs,tabsAAA,optname"
         vmodels = elem.vmodels || vmodels
@@ -2825,9 +2783,7 @@ bindingHandlers.widget = function(data, vmodels) {
             createSignalTower(elem, vmodel)
             if (vmodel.hasOwnProperty("$init")) {
                 vmodel.$init(function() {
-                    var nv = [vmodel].concat(vmodels)
-                    nv.cb = vmodels.cb
-                    avalon.scan(elem, nv)
+                    avalon.scan(elem, [vmodel].concat(vmodels))
                     if (typeof options.onInit === "function") {
                         options.onInit.call(elem, vmodel, options, vmodels)
                     }
@@ -3001,11 +2957,14 @@ function newSetter(value) {
 }
 var watchValueInTimer = noop
 try {//IE9-IE11, safari
-    var inputInst = document.createElement("input")
-    var inputProto = inputInst.constructor.prototype
+    var inputProto = HTMLInputElment.prototype
     Object.getOwnPropertyNames(inputProto) //故意引发IE6-8等浏览器报错
     var onSetter = Object.getOwnPropertyDescriptor(inputProto, "value").set //屏蔽chrome, safari,opera
     Object.defineProperty(inputProto, "value", {
+        set: newSetter
+    })
+    var textProto = HTMLTextAreaElement.prototype
+    Object.defineProperty(textProto, "value", {
         set: newSetter
     })
 } catch (e) {
@@ -3122,6 +3081,7 @@ duplexBinding.INPUT = function(element, evaluator, data) {
     registerSubscriber(data)
     callback.call(element, element.value)
 }
+duplexBinding.TEXTAREA = duplexBinding.INPUT
 duplexBinding.SELECT = function(element, evaluator, data) {
     var $elem = avalon(element)
     function updateVModel() {
@@ -3172,7 +3132,6 @@ bindingHandlers.repeat = function(data, vmodels) {
     parseExprProxy(data.value, vmodels, data, 0, 1)
     data.proxies = []
     var freturn = false
-    vmodels.cb(-1)
     try {
         var $repeat = data.$repeat = data.evaluator.apply(0, data.args || [])
         var xtype = avalon.type($repeat)
@@ -3386,9 +3345,7 @@ function shimController(data, transation, proxy, fragments) {
     var dom = avalon.parseHTML(data.template)
     var nodes = avalon.slice(dom.childNodes)
     transation.appendChild(dom)
-    var ov = data.vmodels
-    var nv = [proxy].concat(ov)
-    nv.cb = ov.cb
+    var nv = [proxy].concat(data.vmodels)
     var fragment = {
         nodes: nodes,
         vmodels: nv
@@ -3579,6 +3536,41 @@ var rsanitize = {
 }
 var rsurrogate = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g
 var rnoalphanumeric = /([^\#-~| |!])/g;
+
+function numberFormat(number, decimals, dec_point, thousands_sep) {
+    //form http://phpjs.org/functions/number_format/
+    //number	必需，要格式化的数字
+    //decimals	可选，规定多少个小数位。
+    //dec_point	可选，规定用作小数点的字符串（默认为 . ）。
+    //thousands_sep	可选，规定用作千位分隔符的字符串（默认为 , ），如果设置了该参数，那么所有其他参数都是必需的。
+    number = (number + '')
+            .replace(/[^0-9+\-Ee.]/g, '')
+    var n = !isFinite(+number) ? 0 : +number,
+            prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+            sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+            dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+            s = '',
+            toFixedFix = function(n, prec) {
+                var k = Math.pow(10, prec)
+                return '' + (Math.round(n * k) / k)
+                        .toFixed(prec)
+            }
+    // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+    s = (prec ? toFixedFix(n, prec) : '' + Math.round(n))
+            .split('.')
+    if (s[0].length > 3) {
+        s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep)
+    }
+    if ((s[1] || '')
+            .length < prec) {
+        s[1] = s[1] || ''
+        s[1] += new Array(prec - s[1].length + 1)
+                .join('0')
+    }
+    return s.join(dec)
+}
+
+
 var filters = avalon.filters = {
     uppercase: function(str) {
         return str.toUpperCase()
@@ -3586,11 +3578,11 @@ var filters = avalon.filters = {
     lowercase: function(str) {
         return str.toLowerCase()
     },
-    truncate: function(target, length, truncation) {
+    truncate: function(str, length, truncation) {
         //length，新字符串长度，truncation，新字符串的结尾的字段,返回新字符串
         length = length || 30
         truncation = truncation === void(0) ? "..." : truncation
-        return target.length > length ? target.slice(0, length - truncation.length) + truncation : String(target)
+        return str.length > length ? str.slice(0, length - truncation.length) + truncation : String(str)
     },
     $filter: function(val) {
         for (var i = 1, n = arguments.length; i < n; i++) {
@@ -3625,9 +3617,9 @@ var filters = avalon.filters = {
             return a.replace(ron, " ").replace(/\s+/g, " ") //移除onXXX事件
         })
     },
-    escape: function(html) {
-        //将字符串经过 html 转义得到适合在页面中显示的内容, 例如替换 < 为 &lt 
-        return String(html).
+    escape: function(str) {
+        //将字符串经过 str 转义得到适合在页面中显示的内容, 例如替换 < 为 &lt 
+        return String(str).
                 replace(/&/g, '&amp;').
                 replace(rsurrogate, function(value) {
                     var hi = value.charCodeAt(0)
@@ -3640,37 +3632,11 @@ var filters = avalon.filters = {
                 replace(/</g, '&lt;').
                 replace(/>/g, '&gt;')
     },
-    currency: function(number, symbol) {
-        symbol = symbol || "\uFFE5"
-        return symbol + avalon.filters.number(number)
+    currency: function(amount, symbol, fractionSize) {
+        return (symbol || "\uFFE5") + numberFormatr(amount, isFinite(fractionSize) ? fractionSize: 2)
     },
-    number: function(number, decimals, dec_point, thousands_sep) {
-        //与PHP的number_format完全兼容
-        //number	必需，要格式化的数字
-        //decimals	可选，规定多少个小数位。
-        //dec_point	可选，规定用作小数点的字符串（默认为 . ）。
-        //thousands_sep	可选，规定用作千位分隔符的字符串（默认为 , ），如果设置了该参数，那么所有其他参数都是必需的。
-        // http://kevin.vanzonneveld.net
-        number = (number + "").replace(/[^0-9+\-Ee.]/g, "")
-        var n = !isFinite(+number) ? 0 : +number,
-                prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
-                sep = thousands_sep || ",",
-                dec = dec_point || ".",
-                s = "",
-                toFixedFix = function(n, prec) {
-                    var k = Math.pow(10, prec)
-                    return "" + Math.round(n * k) / k
-                }
-        // Fix for IE parseFloat(0.55).toFixed(0) = 0 
-        s = (prec ? toFixedFix(n, prec) : "" + Math.round(n)).split('.')
-        if (s[0].length > 3) {
-            s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep)
-        }
-        if ((s[1] || "").length < prec) {
-            s[1] = s[1] || ""
-            s[1] += new Array(prec - s[1].length + 1).join("0")
-        }
-        return s.join(dec)
+    number: function(number, fractionSize) {
+        return  numberFormat(number, isFinite(fractionSize) ? fractionSize: 3 )
     }
 }
 /*
@@ -3889,9 +3855,9 @@ new function() {
         },
         fullDate: "y年M月d日EEEE",
         longDate: "y年M月d日",
-        medium: "yyyy-M-d ah:mm:ss",
+        medium: "yyyy-M-d H:mm:ss",
         mediumDate: "yyyy-M-d",
-        mediumTime: "ah:mm:ss",
+        mediumTime: "H:mm:ss",
         "short": "yy-M-d ah:mm",
         shortDate: "yy-M-d",
         shortTime: "ah:mm"
@@ -4434,8 +4400,6 @@ new function() {
         document.addEventListener(touchNames[3], resetState)
     }
     self["clickHook"] = function(data) {
-
-
         function touchstart(event) {
             var element = data.element
             avalon.mix(touchProxy, getCoordinates(event))
@@ -4460,7 +4424,7 @@ new function() {
         }
 
         function needFixClick(type) {
-            return type === "click" || type === "dblclick"
+            return type === "click" 
         }
         if (needFixClick(data.param) ? touchSupported : true) {
             data.specialBind = function(element, callback) {
