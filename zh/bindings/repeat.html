@@ -327,4 +327,43 @@ for(var i = 0, n = array.length; i < n; i++){  //----> ms-each-el=array
         </tbody>
     </table>
 </div>
-
+<p>监控数组的更新，分两种情况。一种是简单数据类型，它需要用set方法进行更新，另一种是对象类型，直接vm[1].xxx = yyy， vm[1]是你要更新的对象，xxx为此对象已经存在的属性。</p>
+<p>如果大家在想内层循环访问外层循环的变量，可以通过$outer实现，比如$outer.$index, $outer.el, $outer.$outer.$index……</p>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;TODO supply a title&lt;/title&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width"&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script&gt;
+            avalon.define({
+                $id: "test",
+                array: [[1, 2, 3, 4], ["a", "b", "c", "d"], [11, 22, 33, 44]]
+            })
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body ms-controller="test" &gt;
+        &lt;table border="1" width="800"&gt;
+            &lt;tr ms-repeat="array"&gt;
+                &lt;td  ms-repeat-elem="el"&gt;{{$outer.$index}}.{{$index}}.{{elem}}&lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/table&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<script>
+    avalon.define({
+        $id: "repeatouter",
+        array: [[1, 2, 3, 4], ["a", "b", "c", "d"], [11, 22, 33, 44]]
+    })
+</script>
+</head>
+<div ms-controller="repeatouter"  >
+    <table class="shim-table">
+        <tr ms-repeat="array">
+            <td  ms-repeat-elem="el">{{$outer.$index}}.{{$index}}.{{elem}}</td>
+        </tr>
+    </table>
+</div>
