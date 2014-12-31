@@ -122,12 +122,50 @@
                 id: "repeat"
             }
         ].sort(),
+        fitlers: [
+            {
+                name: "html",
+                id: "html"
+            },
+            {
+                name: "uppercase",
+                id: "uppercase"
+            },
+            {
+                name: "lowercase",
+                id: "lowercase"
+            },
+            {
+                name: "currency",
+                id: "currency"
+            },
+            {
+                name: "number",
+                id: "number"
+            },
+            {
+                name: "escape",
+                id: "escape"
+            },
+            {
+                name: "truncate",
+                id: "truncate"
+            },
+            {
+                name: "sanitize",
+                id: "sanitize"
+            },
+            {
+                name: "date",
+                id: "date"
+            }
+        ],
         engineering: [
-             {
+            {
                 name: "跨模块通信",
                 id: "communication"
             },
-              {
+            {
                 name: "与富文本编辑器的整合",
                 id: "integratewithrichtext"
             }
