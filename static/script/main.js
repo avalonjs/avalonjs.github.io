@@ -247,7 +247,7 @@
                     window.scrollTo(0, 0)
                 }
             })
-            if (next.nodeName === "A" && next.nodeName !== "LI") {
+            if (next.nodeName === "A" && next.parentNode.nodeName !== "LI") {
                 while (next = next.nextSibling) {
                     if (next.nodeType === 1) {
                         break
