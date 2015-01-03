@@ -367,3 +367,88 @@ for(var i = 0, n = array.length; i < n; i++){  //----> ms-each-el=array
         </tr>
     </table>
 </div>
+<p>此外，我们还可以通过<strong>data-repeat-rendered, data-each-rendered, data-with-rendered</strong>来指定这些元素都插入DOM被渲染了后执行的回调，this指向元素节点，有一个参数表示为当前的操作，是add、del、 move、 index还是clear。</p>
+
+<p>上面我们说了这么有关数组的东西，我们再来看它是如何操作哈希的。
+    对于哈希，ms-repeat内部只会产生$key、 $val、 $outer三个变量，不存在$index什么的。$key就是属性名，$val就是属性值，
+    $outer与之前的讲解相同。如果你想在对象循环时使用$index，可以这样做：</p>
+
+<pre class="brush:html;gutter:false;toolbar:false">
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;TODO supply a title&lt;/title&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width"&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script&gt;
+            var index = 0
+            var model = avalon.define({
+                $id: "test",
+                data:{
+                    aaa: 1111,
+                    bbb: 2222,
+                    ccc: 3333,
+                    ddd: 4444
+                },
+                getIndex: function(){
+                    return index++
+                }
+            })
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body ms-controller="test"&gt;
+        &lt;ul&gt;
+            &lt;li ms-repeat="data" &gt;{{getIndex()}}、{{$key}}--{{$val}}&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p><img src="zh/bindings/repeat/1409654405940-repeat8.jpg" /></p>
+
+<p>如果我们想控制对象属性的输出顺序，或让某些元素不输出来，那么我们可以使用<strong>data-with-sorted</strong>回调。
+    它用ms-repeat、ms-with绑定，赶对象渲染之前触发，要求输出一个字符串数组，对象的键值对会根据它依次输出；
+    框架默认会输入原对象的所有键名构成的数组作为参数。</p>
+
+<p>我们改一下上面的例子：</p>
+
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;TODO supply a title&lt;/title&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width"&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script&gt;
+            var index = 0
+            var model = avalon.define({
+                $id: "test",
+                data:{
+                    aaa: 1111,
+                    bbb: 2222,
+                    ccc: 3333,
+                    ddd: 4444
+                },
+                keys: function(a){
+                    console.log(a)
+                    console.log(this)
+                    return  ["ccc","ddd","aaa"]
+                },
+                getIndex: function(){
+                    return index++
+                }
+            })
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body ms-controller="test"&gt;
+        &lt;ul&gt;
+            &lt;li ms-repeat="data" data-with-sorted="keys" &gt;{{getIndex()}}、{{$key}}--{{$val}}&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p><img src="zh/bindings/repeat/1409654809239-repeat9.jpg"  /></p>
