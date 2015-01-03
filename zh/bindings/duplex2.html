@@ -9,10 +9,84 @@
     <li>IE9-11, document绑定selectionchange， element.oninput, element.ondragend</li>
     <li>其他, element.oninput， element.compositionstart, element.oncompositionend</li>
 </ul>
-<p>然后是第二种情况，由于除了onpropertychange事件，我们无法得知用户是何时改了element.value值，需要使用一些比较的方式</p>
+<p>然后是第二种情况，由于除了onpropertychange事件，我们无法得知用户是何时改了element.value值，需要使用一些比较偏门的方式</p>
 <ul>
     <li>IE6-8, element.onpropertychange，其实不用再设置了。</li>
     <li>IE9-11, firefox， Object.defineProperty(HTMLInputElement, "value", {set, get})</li>
-    <li>chrome, safari8  Object.defineProperty(element, "value", {set, get})</li>
+    <li>chrome, safari8，  Object.defineProperty(element, "value", {set, get})</li>
     <li>其他使用轮询</li>
 </ul>
+<pre class="brush:javascript;gutter:false;">
+var watchValueInTimer = noop
+var watchValueInProp = false
+new function() {
+    try {//IE9-IE11, firefox通过重写HTMLInputElement、HTMLTextAreaElement原型上的value属性实现双向绑定
+        function newSetter(value) {
+            if (avalon.contains(root, this)) {
+                nativeSetter.call(this, value)
+                if (this.avalonSetter) {
+                    this.avalonSetter()
+                }
+            }
+        }
+        var inputProto = HTMLInputElement.prototype
+        Object.getOwnPropertyNames(inputProto) //故意引发IE6-8等浏览器报错
+        var nativeSetter = Object.getOwnPropertyDescriptor(inputProto, "value").set
+        Object.defineProperty(inputProto, "value", {
+            set: newSetter
+        })
+        Object.defineProperty(HTMLTextAreaElement.prototype, "value", {
+            set: newSetter
+        })
+    } catch (e) {
+        try {//chrome safar6+, opera15+通过重写input, textarea实例的value属性实现双向绑定
+            if ("WebkitAppearance" in root.style) {
+                Object.defineProperty(document.createElement("input"), "value", {
+                    set: newSetter
+                })
+                return watchValueInProp = true
+            }
+        } catch (e) {
+        }//通过轮询实现双向绑定
+        watchValueInTimer = avalon.tick
+    }
+}
+
+    element.avalonSetter = updateVModel
+    if (/text|textarea|password/.test(element.type)) {
+        if (watchValueInProp && element.type !== "password") {//chrome safari
+            element.addEventListener("input", function(e) {
+                this.select()
+                var value = window.getSelection().toString()
+                var n = value.length
+                this.setSelectionRange(n, n)
+                this.oldValue = value
+            })
+            Object.defineProperty(element, "value", {
+                set: function(v) {
+                    v = v == null ? "" : String(v)
+                    if (this.oldValue !== v) {
+                        this.oldValue = v
+                        updateVModel()
+                    }
+                },
+                get: function() {
+                    return this.oldValue
+                }
+            })
+        } else {
+            watchValueInTimer(function() {
+                if (root.contains(element)) {
+                    if (element.value !== element.oldValue) {
+                        updateVModel()
+                    }
+                } else if (!element.msRetain) {
+                    return false
+                }
+            })
+        }
+
+    }
+
+
+</pre>
