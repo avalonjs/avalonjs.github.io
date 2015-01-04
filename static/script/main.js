@@ -83,7 +83,9 @@
             "avalon.define(id, factory)": "★★★定义一个ViewModel, <br/>" +
                     "旧风格： avalon.define('test', function(vm){ vm.aaa = 1})<br/>" +
                     "新风格： avalon.define({$id: 'test', aaa: 1})",
-            "scan(el?, vmodels?)": "★★★扫描DOM树，抽取绑定(el默认为DOM,vmodels默认为空数组",
+            "scan(el?, vmodels?)": "★★★扫描DOM树，抽取绑定(el默认为DOM,vmodels默认为空数组<br/>" +
+                    "avalon默认在domReady时，从body开始扫描一次，以后自己动态添加了新内容，需要自己手动scan。<br/>" +
+                    "如果你的VM是定义在某个回调里面，如require回调，也需要自己手动扫描",
             "define(id?, deps?, factory)": "●一个全局方法，用于定义AMD规范的JS模块",
             "require(deps, callback)": "●一个全局方法，用于加载JS模块",
             "css(node, name, value?)": "如果只有两个参数，读取元素的某个样式，三个参数时，设置元素某个样式;<br/>" +
@@ -180,6 +182,10 @@
             {
                 name: "ms-with",
                 id: "repeat"
+            },
+            {
+                name: "ms-widget",
+                id: "widget"
             }
         ].sort(),
         filters: [
