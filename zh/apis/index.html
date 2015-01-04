@@ -33,7 +33,10 @@
     }
 
 </style>
-<table class="prototype-method-table" id="prototype-method">
+<div ms-if="!supportSVG"><img src="zh/apis/api.png"/></div>
+<div ms-if="supportSVG" ms-include-src="'zh/apis/api.svg'"></div>
+<h3>所有原型成员，用法可以参看jQuery</h3>
+<table class="prototype-method-table" id="prototype-method" >
     <tbody><tr>
         <td class="events"><h3>事件</h3>
             <ul>
@@ -71,8 +74,8 @@
         </td> 
     </tr>
 </tbody></table>
-
-<table class="shim-table">
+<h3>所有静态成员</h3>
+<table class="shim-table" >
     <tr>
         <th>方法或属性</th>  <th>描述</th>
     </tr>
