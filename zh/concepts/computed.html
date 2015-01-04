@@ -3,7 +3,7 @@
     意即它的值是根据其他两个或两个以上的监控属性计算出来。 </p>
 <p>它在VM定义时表现为一个拥有set与get(可选)方法的普通对象， 此外不能再有其他属性与方法。
     它里面的<b>this</b>指向VM，不能用avalon.define(di, function(vm){})这里的vm。</p>
-<pre class="brush:html;gutter:false;toolbar:false">
+<pre ms-skip class="brush:html;gutter:false;toolbar:false">
 &lt;!DOCTYPE html&gt;
 &lt;html&gt;
     &lt;head&gt;
@@ -41,7 +41,7 @@
 </pre>
 <script>
     avalon.define({
-        $id: "test",
+        $id: "computedtest",
         firstName: "司徒",
         lastName: "正美",
         fullName: {//一个包含set或get的对象
@@ -56,7 +56,7 @@
         }
     })
 </script>
-<div ms-controller="test">
+<div ms-controller="computedtest">
     <p>First name: <input ms-duplex="firstName" /></p>
     <p>Last name: <input ms-duplex="lastName"  /></p>
     <p>Hello,    <input ms-duplex="fullName"></p>
