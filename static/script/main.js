@@ -236,6 +236,12 @@
                 id: "integratewithrichtext"
             }
         ],
+        components: [
+            {
+                name: "mmRouter",
+                id: "mmRouter"
+            }
+        ],
         mobiles: [
             {
                 name: "触屏事件",
