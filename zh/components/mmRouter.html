@@ -1,1 +1,21 @@
 <h2>mmRouter</h2>
+<p>avalon的三柱臣之一（ 路由，动画，AJAX）</p>
+<h3>mmRouter的使用</h3>
+<p>1、引入依赖(直接依赖于mmRouter, 总共依赖于avalon, mmRouter, mmHistory)</p>
+<p>mmRouter, mmHistory共用一个仓库：
+    <a href="https://github.com/RubyLouvre/mmRouter">https://github.com/RubyLouvre/mmRouter</a>，下载回来与avalon.js放在同一目录。</p>
+<pre class="brush:javascript;gutter:false;"
+  require(["mmRouter"], function() {
+  })
+</pre>
+
+<p>2、定义VM</p>
+<pre class="brush:javascript;gutter:false;"
+    var model = avalon.define({
+        $id:"test",
+        currPath: "",
+        params: {},
+        query: {},
+        args: "[]"
+    })
+</pre>
