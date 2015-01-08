@@ -3,6 +3,7 @@
     意即它的值是根据其他两个或两个以上的监控属性计算出来。 </p>
 <p>它在VM定义时表现为一个拥有set与get(可选)方法的普通对象， 此外不能再有其他属性与方法。
     它里面的<b>this</b>指向VM，不能用avalon.define(di, function(vm){})这里的vm。</p>
+
 <pre ms-skip class="brush:html;gutter:false;toolbar:false">
 &lt;!DOCTYPE html&gt;
 &lt;html&gt;
@@ -62,4 +63,39 @@
     <p>Hello,    <input ms-duplex="fullName"></p>
     <div>{{firstName +" | "+ lastName }}</div>
 </div>
-
+<p>计算属性的get方法应该返回一个简单数据类型，比如下面这样做是错误的</p>
+<pre ms-skip class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head lang="en"&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;&lt;/title&gt;
+    &lt;style type="text/css"&gt;
+        .btn{display: inline-block; background-color: red; padding: 6px 10px;}
+    &lt;/style&gt;
+    &lt;script type="text/javascript" src="common/avalon1.38.1223.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+        var vm = avalon.define({
+            $id: "test",
+            num: 0,
+            cal: {
+                get: function(){
+                    return [this.num - 1, this.num, this.num + 1];
+                }
+            },
+            add: function(){
+                vm.num++;
+            }
+        });
+    &lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div ms-controller="test"&gt;
+        &lt;div&gt;{{ cal.join(",") }}&lt;/div&gt;
+        &lt;div ms-repeat="cal"&gt;{{ el }}&lt;/div&gt;
+        &lt;div class="btn" ms-click="add"&gt;add&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p>ms-repeat只能对应一个子VM或一个监控数组</p>
