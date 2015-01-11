@@ -1,7 +1,7 @@
 <h3 id='c-vmodel'>视图模型</h3>
 <p>视图模型，ViewModel，也经常被略写成VM，是通过avalon.define方法进行定义，利用Object.defineProperties(IE9+及W3C)与VBScript(IE6-8)技术生成的特殊对象。
-   用户定义的VM都会放在avalon.vmodels对象中集中存储，因此VM必须指定$id属性，我们将通地<span>var vm = avalon.vmodels[$id]</span>来获取你的VM。
-   此外，VM还拥有 $watch, $unwatch, $fire, $model等方法。</p>
+    用户定义的VM都会放在avalon.vmodels对象中集中存储，因此VM必须指定$id属性，我们将通地<span>var vm = avalon.vmodels[$id]</span>来获取你的VM。
+    此外，VM还拥有 $watch, $unwatch, $fire, $model等方法。</p>
 
 <center>
     <img src="../static/css/architecture.png" alt="none" >
@@ -80,3 +80,4 @@ assignVM(vm, newObject, {a: 8,h: 9}, {b: 6, j:0})
 </pre>
 
 <p>为了性能起见，请确保你的对象结构足够扁平，套嵌层次不能太深，里面的数组不能太长。</p>
+
