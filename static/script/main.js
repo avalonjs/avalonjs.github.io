@@ -232,6 +232,10 @@
                 id: "communication"
             },
             {
+                name: "与jQuery混用",
+                id: "jquery"
+            },
+            {
                 name: "与富文本编辑器的整合",
                 id: "integratewithrichtext"
             }
