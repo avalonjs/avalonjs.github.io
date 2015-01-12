@@ -236,6 +236,10 @@
                 id: "jquery"
             },
             {
+                name: "SEO策略",
+                id: "seo"
+            },
+            {
                 name: "与富文本编辑器的整合",
                 id: "integratewithrichtext"
             }
