@@ -529,3 +529,69 @@ function fixNull(val) {
     </p>
     <textarea id="ms-duplex-show-json" style="width:60%;height:210px;"></textarea>
 </fieldset>
+
+<fieldset ms-controller="ms-duplex-6">
+    <p>ms-duplex-string, ms-repeat与计算属性的混合使用</p>
+    <script>
+        avalon.define({
+            $id: "ms-duplex-6",
+            selected: [],
+            array: [
+                {name: "小明", id: 132213213},
+                {name: "小三", id: 576576657},
+                {name: "小红", id: 354435435},
+                {name: "小白", id: 354435435}
+            ],
+            textarea: {
+                get: function() {
+                    return  this.selected.join("\n")
+                }
+            }
+        })
+    </script>
+    <pre ms-skip class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head lang="en"&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;title&gt;&lt;/title&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script&gt;
+            avalon.define({
+                $id: "test",
+                selected: [],
+                array: [
+                    {name: "小明", id: 132213213},
+                    {name: "小三", id: 576576657},
+                    {name: "小红", id: 354435435},
+                    {name: "小白", id: 354435435}
+                ],
+                textarea: {
+                    get: function() {
+                        return  this.selected.join("\n")
+                    }
+                }
+            })
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div ms-controller="test"&gt;
+            &lt;ul&gt;
+                &lt;li ms-repeat="array"&gt;&lt;input  ms-duplex-string="selected" ms-attr-value="el.name"  type="checkbox"&gt;{{el.name}}  {{el.id}}&lt;/li&gt;
+            &lt;/ul&gt;
+            &lt;textarea ms-attr-value="textarea" placeholder="这里只能单向同步"&gt;
+                
+            &lt;/textarea&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+    </pre>
+    <div ms-controller="ms-duplex-6">
+        <ul>
+            <li ms-repeat="array"><input  ms-duplex-string="selected" ms-attr-value="el.name"  type="checkbox">{{el.name}}  {{el.id}}</li>
+        </ul>
+        <textarea ms-attr-value="textarea" placeholder="这里只能单向同步">
+                
+        </textarea>
+    </div>
+</fieldset>
