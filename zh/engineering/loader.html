@@ -120,7 +120,103 @@ define(function() {
 </pre>
 <div><img src="zh/engineering/loader/loader1_1.jpg"/></div>
 <p>可以点<a href="zh/engineering/loader/loader2.rar" download="loader2.rar">这里</a>下载此例子</p>
+<h2>baseUrl配置项的使用</h2>
+<p>avalon1.4才完完整整支持此功能</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+requirejs.config({
+    shim: {
+        'backbone': {
+            //指定依赖项,必须为数组, 不写时默认为空数组,它们会先于被依赖者加载
+            deps: ['underscore', 'jquery'],
+            exports: 'Backbone'//指定它的命名空间
+        },
+        'underscore': {
+            exports: '_' //指定它的命名空间
+        },
+        'jquery.selectBoxIt': ['jquery'],//指定它的依赖项
+        'backbone.Validation': ['backbone'],//指定它的依赖项
+        "jquery.placeholder": ["jquery"],//指定它的依赖项
+        'foo': {
+            deps: ['bar'],
+            exports: 'Foo',
+            init: function (bar) {
+                //Using a function allows you to call noConflict for
+                //libraries that support it, and do other cleanup.
+                //However, plugins for those libraries may still want
+                //a global. "this" for the function will be the global
+                //object. The dependencies will be passed in as
+                //function arguments. If this function returns a value,
+                //then that value is used as the module export value
+                //instead of the object found via the 'exports' string.
+                return this.Foo.noConflict();
+            }
+        }
+    }
+</pre>
+<div><img src="zh/engineering/loader/loader2_0.jpg"/></div>
+<p>主页面的index.html如下:</p>
+<pre class="brush:html;gutter:false;toolbar:flase">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head lang="en"&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;title&gt;require shim机制&lt;/title&gt;
+        &lt;script src="js/lib/avalon.js"&gt;&lt;/script&gt;
+        &lt;script src="js/app.js"&gt;&lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;h2&gt;通过shim机制加载那些没有使用AMD风格定义的jquery插件&lt;/h2&gt;
+        &lt;p&gt;如果加载成功一会儿这里下面会多出两行&lt;/p&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+   
+</pre>
+<p>js/app.js</p>
+<pre class="brush:javascript;gutter:false;toolbar:flase">
+// Place third party dependencies in the lib folder
+// Configure loading modules from the lib directory,
+// except 'app' ones, 
+require.config({
+    "baseUrl": "js/lib",
+    "paths": {
+      "app": "../app"
+    },
+    "shim": {
+        "jquery.alpha": {
+           deps: ["jquery"],
+           init: function($){
+               console.log($) //这里只是测试init配置项是否生效
+           }
+        },
+        "jquery.beta": ["jquery"]
+    }
+});
 
-
+// Load the main app module to start the app
+require(["app/main"]);
+</pre>
+<p>js/app/main.js</p>
+<pre class="brush:javascript;gutter:false;toolbar:flase">
+define(["jquery", "jquery.alpha", "jquery.beta"], function($) {
+    //the jquery.alpha.js and jquery.beta.js plugins have been loaded.
+    $(function() {
+        $('body').alpha().beta();
+    });
+});
+</pre>
+<p>js/lib/jquery.alpha.js</p>
+<pre class="brush:javascript;gutter:false;toolbar:flase">
+$.fn.alpha = function() {
+    return this.append('<p>Alpha is Go!</p>');
+};
+</pre>
+<p>js/lib/jquery.beta.js</p>
+<pre class="brush:javascript;gutter:false;toolbar:flase">
+$.fn.beta = function() {
+    return this.append('<p>Beta is Go!</p>');
+};
+</pre>
+<div><img src="zh/engineering/loader/loader2_1.jpg"/></div>
+<p>可以点<a href="zh/engineering/loader/loader3.rar" download="loader2.rar">这里</a>下载此例子</p>
 
 
