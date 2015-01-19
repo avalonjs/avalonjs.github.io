@@ -1,0 +1,82 @@
+<h2>AMD加载器,avalon自带强大的加载器</h2>
+
+<h2>baseUrl的使用</h2>
+<p>avalon1.4的新特性, 有时, javascript文件并不是放在根目录下,我们每个文件就需要写得长, 有了它, 每个可以写很短</p>
+<p>例子, 见下面目录结构</p>
+<div><img src="zh/engineering/loader/loader0_0.png"/></div>
+<p>主页面的index.html如下:</p>
+<pre class="brush:html;gutter:false;toolbar:false;">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head lang="en"&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;title&gt;&lt;/title&gt;
+        &lt;script type="text/javascript" src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script type="text/javascript"&gt;
+            require.config({
+                baseUrl: "./examples/loader/"
+            })
+            require(["./aaa"], function(a){
+                avalon.define({
+                    $id: "test",
+                    title: "加载成功"
+                })
+                avalon.log(a)
+                avalon.scan()
+            })
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div ms-controller="test"&gt;
+            &lt;h1&gt;{{title}}&lt;/h1&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p>由于我们设置baseUrl, 当我们加载./aaa模块时, 它的路径就变成./examples/loader/aaa, 再自动加上.js后缀名</p>
+<p>我们再看一下所有JS文件是如何写的:</p>
+<p><strong>aaa.js</strong></p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+define(["./bbb"], function(){
+     avalon.log("已经加载aaa模块")
+    return "aaa"
+})
+</pre>
+<p><strong>bbb.js</strong></p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+define(["./ccc", "./ddd"], function() {
+    avalon.log("已经加载bbb模块")
+    return "bbb"
+})
+</pre>
+<p><strong>ccc.js</strong></p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+define(function(){
+    avalon.log("已经加载ccc模块")
+    return "ccc"
+})
+</pre>
+<p><strong>ddd.js</strong></p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+define(["./eee"], function() {
+    avalon.log("已经加载ddd模块")
+    return "ddd"
+})
+</pre>
+<p><strong>eee.js</strong></p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+define(function() {
+    avalon.log("已经加载eee模块")
+    return "eee"
+})
+</pre>
+<p>如果你使用了NetBeans IDE, 我们直接点击上方的<strong>运行</strong>菜单，设置要运行浏览器，然后直到你的项目，选中你的html页面运行。</p>
+<div><img src="zh/engineering/loader/NetBeans0.jpg"/></div>
+<div><img src="zh/engineering/loader/NetBeans1.jpg"/></div>
+<p>最后我们如果打开火狐及其firebug,会看到如下日志：</p>
+<div><img src="zh/engineering/loader/loader0_1.jpg"/></div>
+<p>如果你没有NetBeans，也可以点击server.exe(一个小型的.Net服务器)，在IE11下看到的日志与firebug下差不多</p>
+<div><img src="zh/engineering/loader/loader0_2.jpg"/></div>
+
+
+

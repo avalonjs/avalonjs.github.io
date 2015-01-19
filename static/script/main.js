@@ -235,6 +235,10 @@
                 name: "与jQuery混用",
                 id: "jquery"
             },
+             {
+                name: "加载器",
+                id: "loader"
+            },
             {
                 name: "SEO策略",
                 id: "seo"
