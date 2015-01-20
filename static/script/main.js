@@ -82,7 +82,9 @@
             "each(obj,fn)": "★★★功能同jQuery.each， 都是索引值或键名在前，值或元素在后",
             "avalon.define(id, factory)": "★★★定义一个ViewModel, <br/>" +
                     "旧风格： avalon.define('test', function(vm){ vm.aaa = 1})<br/>" +
-                    "新风格： avalon.define({$id: 'test', aaa: 1})",
+                    "新风格： avalon.define({$id: 'test', aaa: 1})<br>" +
+                    "id： 用来定义VM的$id属性<br>" +
+                    "factory: 用来收集vm属性并初始化值,并且规定哪些可监控的，哪是需要计算的，哪些是不可监控的",
             "scan(el?, vmodels?)": "★★★扫描DOM树，抽取绑定(el默认为DOM,vmodels默认为空数组<br/>" +
                     "avalon默认在domReady时，从body开始扫描一次，以后自己动态添加了新内容，需要自己手动scan。<br/>" +
                     "如果你的VM是定义在某个回调里面，如require回调，也需要自己手动扫描",
@@ -235,7 +237,7 @@
                 name: "与jQuery混用",
                 id: "jquery"
             },
-             {
+            {
                 name: "加载器",
                 id: "loader"
             },
