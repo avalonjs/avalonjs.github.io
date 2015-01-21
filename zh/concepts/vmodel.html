@@ -80,7 +80,8 @@ assignVM(vm, newObject, {a: 8,h: 9}, {b: 6, j:0})
 </pre>
 
 <p>为了性能起见，请确保你的对象结构足够扁平，套嵌层次不能太深，里面的数组不能太长。</p>
-<fieldset><legend>VM能监控它的属性被用户改动的秘密</legend>
+<hr/>
+<fieldset><legend><b>VM能监控它的属性被用户改动的秘密</b></legend>
     <p>我们定义VM时，是通过define方法，无论是新风格还是旧风格，你最初添加的属性从这方法出来，已经不是原来的属性了。
         这些能监控的属性在JS里有个一专门的术语叫<strong>访问器属性</strong>    </p>
     <p>javascript一共用三种属性</p>
