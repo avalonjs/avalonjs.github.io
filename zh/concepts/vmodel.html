@@ -80,4 +80,80 @@ assignVM(vm, newObject, {a: 8,h: 9}, {b: 6, j:0})
 </pre>
 
 <p>为了性能起见，请确保你的对象结构足够扁平，套嵌层次不能太深，里面的数组不能太长。</p>
+<fieldset><legend>VM能监控它的属性被用户改动的秘密</legend>
+    <p>我们定义VM时，是通过define方法，无论是新风格还是旧风格，你最初添加的属性从这方法出来，已经不是原来的属性了。
+        这些能监控的属性在JS里有个一专门的术语叫<strong>访问器属性</strong>    </p>
+    <p>javascript一共用三种属性</p>
+    <p><strong>普通属性</strong>， 这种属性是用户赋给它们，它们就返回什么，不会做额外的事情</p>
 
+    <pre class="brush:javascript;gutter:false;toolbar:false">
+        var a = {}
+        a.b = 1
+        alert(a.b) // 1
+    </pre>
+    <p><strong>内部属性</strong>，比如数组的length属性，函数的prototype属性， DOM节点的innerHTML属性，用户对它们进行赋值后，
+        再取值时，它不一定按我们的预期做事，此外还会做一些格外的事情。另外，我们也很难改变它们的行为。
+        比如说某一数组，它的长度为10, 当我们设置它为11时，它就会增加一个undefined元素，再设置为9时，就会从后面删掉两个元素。
+        函数的prototype如果被改变，相当于将其父类改变了，会new不同类型的实例。
+        DOM的innerHTML，我们赋值时是一个字符串，再取出时，这字符串可能会与原来的不一样，
+        并且在原元素上生成了不一样的子节点。
+    </p>
+    <pre class="brush:javascript;gutter:false;toolbar:false">
+        var a = {}
+        a.b = 1
+        alert(a.b) // 1
+    </pre>
+    <p><strong>访问器属性</strong>， IE8+新添加的语言特征，允许用户在赋值或取值都经过预先设定的函数，从而实现<strong>内部属性</strong>
+        的那一种特殊效果。比如说我们能让一个属性无法赋值，取值时都返回1000；让一个属性在赋值时，会执行另一处的方法……
+    </p>
+    <p>现在javascript有三种方式设置<strong>访问器属性</strong></p>
+    <pre class="brush:javascript;gutter:false;toolbar:false">
+HTMLElement.prototype.__defineGetter__("description", function () {
+	return this.desc;
+});
+HTMLElement.prototype.__defineSetter__("description", function (val) {
+	this.desc = val;
+});
+document.body.description = "Beautiful body";
+    </pre>
+    <br/>
+    <pre class="brush:javascript;gutter:false;toolbar:false">
+function Lost () {
+	// Constructor
+}
+			
+Lost.prototype = {
+    get location (){
+        return this.loc;
+    },
+    set location (val){
+        this.loc = val;
+    }
+};
+var lostIsland = new Lost();
+lostIsland.location = "Somewhere in time";
+    </pre>
+    <br/>
+    <pre class="brush:javascript;gutter:false;toolbar:false">
+var bValue = 38;
+Object.defineProperty(o, 'b', {
+  get: function() { return bValue; },
+  set: function(newValue) { bValue = newValue; },
+  enumerable: true,
+  configurable: true
+});
+o.b; // 38
+    </pre>
+
+    <p>这三种定义方式，无法哪一种，都要求我们设置一个读方法getter，一个写方法setter。 getter， setter是用于改写用户访问某属性的行为。</p>
+    <p> 一般来说，我们对某属性的常用操作有如下四种，赋值，取值，遍历，删除。赋值会其内部的set方法， 取值会调用其内部的get方法，
+        遍历关系到其enumerable配置项，删除关系到其configurable配置项。一般地，我们称那些用户赋什么值返回什么值的属性为普通属性，
+        在set, get关键字，或__defineSetter__, __defineGetter__没出来之前，大多数对象的属性都是普通属性。
+        只有像数组的length属性与元素节点的innerHTML， 会在用户取值或赋值做一些额外的操作，它们就是访问器属性。
+        avalon.define生成的VM就是一个包含了是访问器属性的魔术对象。 avalon会在它们的setter,getter方法做依赖收集与同步视图等工作，
+        从来让我们就算不写一行有关DOM操作的代码，也能做jQuery那种灵活操作DOM的效果。
+    </p>
+    <p>值得注意的是，avalon只会转换预先定义好的属性为访问器属性，对后来添加的属性无动于衷。因此大家要养成“先定义后使用”的习惯。</p>
+
+    <p>另，IE6-8是使用VBScript生成的对象，是一种特殊的对象，如果访问没有定义过的属性或方法会报错。这个千万要小心。</p>
+</fieldset>
