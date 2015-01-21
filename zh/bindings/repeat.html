@@ -367,7 +367,9 @@ for(var i = 0, n = array.length; i < n; i++){  //----> ms-each-el=array
         </tr>
     </table>
 </div>
-<p>此外，我们还可以通过<strong>data-repeat-rendered, data-each-rendered, data-with-rendered</strong>来指定这些元素都插入DOM被渲染了后执行的回调，this指向元素节点，有一个参数表示为当前的操作，是add、del、 move、 index还是clear。</p>
+<p>此外，我们还可以通过<strong>data-repeat-rendered, data-each-rendered, data-with-rendered</strong>
+    来指定这些元素都插入DOM被渲染了后执行的回调，
+    this指向元素节点，有一个参数表示为当前的操作，是add、 del、 move、 index。</p>
 
 <p>上面我们说了这么有关数组的东西，我们再来看它是如何操作哈希的。
     对于哈希，ms-repeat内部只会产生$key、 $val、 $outer三个变量，不存在$index什么的。$key就是属性名，$val就是属性值，
