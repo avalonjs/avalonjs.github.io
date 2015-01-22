@@ -121,7 +121,9 @@ define(function() {
 <div><img src="zh/engineering/loader/loader1_1.jpg"/></div>
 <p>可以点<a href="zh/engineering/loader/loader2.rar" download="loader2.rar">这里</a>下载此例子</p>
 <h2>shim配置项的使用</h2>
-<p>avalon1.4才完完整整支持此功能</p>
+<p>shim是用于将加载那些不符合AMD规范的JS文件, 它拥有两种形态, 数组形态(相当于只配置了deps参数), 对象形态(可配置deps, exports, init这三个参数)</p>
+<p>avalon1.4才完完整整支持此功能。</p>
+
 <pre class="brush:javascript;gutter:false;toolbar:false">
 requirejs.config({
     shim: {
@@ -276,4 +278,8 @@ require.config({
 <p>其他与上面的例子一样,运行它在firebug下看到:</p>
 <div><img src="zh/engineering/loader/loader3_1.jpg"/></div>
 <p>可以点<a href="zh/engineering/loader/loader4.rar" download="loader4.rar">这里</a>下载此例子</p>
+
+<h2>map配置项的使用</h2>
+<p>map配置项能让我们在一个工程中使用多个不同的版本的库。比如我们在aaa目录使用jquery1.2，在bbb项目下使用jquery2.2。</p>
+
 
