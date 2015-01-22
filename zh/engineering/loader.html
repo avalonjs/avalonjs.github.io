@@ -120,7 +120,7 @@ define(function() {
 </pre>
 <div><img src="zh/engineering/loader/loader1_1.jpg"/></div>
 <p>可以点<a href="zh/engineering/loader/loader2.rar" download="loader2.rar">这里</a>下载此例子</p>
-<h2>baseUrl配置项的使用</h2>
+<h2>shim配置项的使用</h2>
 <p>avalon1.4才完完整整支持此功能</p>
 <pre class="brush:javascript;gutter:false;toolbar:false">
 requirejs.config({
@@ -218,5 +218,62 @@ $.fn.beta = function() {
 </pre>
 <div><img src="zh/engineering/loader/loader2_1.jpg"/></div>
 <p>可以点<a href="zh/engineering/loader/loader3.rar" download="loader2.rar">这里</a>下载此例子</p>
+<h2>urlArgs配置项的使用</h2>
+<p>拥有两个传参方式,一种是传入一个字符串,那么所有要加载的请求都会加上它们,另一种是传入一个对象,让特殊模块才加上指定参数</p>
+<p>该配置项可以用于处理缓存</p>
+<pre class="brush:javascript;gutter:false;toolbar:flase">
+require.config({
+   urlArgs: "v="+ Math.random() 
+})
+//相当于
+require.config({
+   urlArgs: {
+      "*" :"v="+ Math.random() 
+   }
+})
+require.config({
+   urlArgs: {
+      "jquery" :"username=xxxx&pw=345354" ,
+      "backbone": "username=ewre&pw=356688" ,
+   }
+})
+</pre>
+<div><img src="zh/engineering/loader/loader3_0.jpg"/></div>
+<p>主页面的index.html如下:</p>
+<pre class="brush:html;gutter:false;toolbar:flase">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head lang="en"&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;title&gt;urlArgs&lt;/title&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script&gt;
+            require.config({
+                baseUrl: "./jQuery/",
+                urlArgs: {
+                    "*": "v=" + (new Date - 0),
+                    "jquery": "aaa=333"
+                },
+                "shim": {
+                    "jquery.alpha": ["jquery"],
+                    "jquery.beta": ["jquery"]
+                }
+            })
+            require(["jquery.alpha", "jquery.beta"], function() {
+                $(function() {
+                    $('body').alpha().beta();
+                });
+            })
 
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;h2&gt;使用urlArgs添加参数&lt;/h2&gt;
+        &lt;p&gt;如果加载成功一会儿这里下面会多出两行&lt;/p&gt;
+    &lt;/body&gt;
+&lt;/html&gt
+</pre>
+<p>其他与上面的例子一样,运行它在firebug下看到:</p>
+<div><img src="zh/engineering/loader/loader3_1.jpg"/></div>
+<p>可以点<a href="zh/engineering/loader/loader4.rar" download="loader4.rar">这里</a>下载此例子</p>
 
