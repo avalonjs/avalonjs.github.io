@@ -1,5 +1,26 @@
 <h2>AMD加载器,avalon自带强大的加载器</h2>
-
+<p><strong>AMD(异步模块定义)是什么？</strong></p>
+<p>
+    JavaScript模块只是遵循SRP(Single Responsibility Principle单一职责原则)的代码段，
+    它暴露了一个公开的API。在现今JavaScript开发中，你可以在模块中封装许多功能，
+    而且在大多数项目中，每个模块都有其自己的文件。这使得JavaScript开发者日子有点难过，
+    因为它们需要持续不断的关注模块之间的依赖性，按照一个特定的顺序加载这些模块，否则运行时将会放生错误。
+</p>
+<p>
+    当你要加载JavaScript模块时，就会使用script标签。为了加载依赖的模块，你就要先加载被依赖的，之后再加载依赖的。
+    使用script标签时，你需要按照此特定顺序安排它们的加载，而且脚本的加载是同步的。
+    可以使用async和defer关键字使得加载异步，但可能因此在加载过程中丢失加载的顺序。
+    另一个选择是将所有的脚本捆绑打包在一起，但在打包后你仍然需要把它们按照正确的顺序排序。
+</p>
+<p>AMD就是这样一种对模块的定义，使模块和它的依赖可以被异步的加载，但又按照正确的顺序。</p>
+<div><img src="zh/engineering/loader/amd.png"/></div>
+<p>avalon内置了AMD加载器，用于与其原创者requirejs一模一样，但更轻量。它主要涉及以下三个函数:</p>
+<ul>
+    <li>define(id?, deps?, factory)– 一个全局函数，用于定义模块。</li>
+    <li>require(deps, factory)– 一个全局函数，用于加载N个模块，以后将它们作为参数依次传入第二个参数factory中。</li>
+    <li>require.config(settings)-  用于配置加载器的各种行为</li>
+</ul>
+<p>此外， 我们还可以在define.amd对象查看到所有加载过的模块。</p>
 <h2>baseUrl配置项的使用</h2>
 <p>avalon1.4的新特性, 有时, javascript文件并不是放在根目录下,我们每个文件就需要写得长, 有了它, 每个可以写很短</p>
 <p>在实际使用过程中，如果用户没有配置baseUrl，会默认使用avalon.js的目录当做baseUrl，但绝对不会使用base标签的href当做baseUrl，这是为了与requirejs保持一致。</p>
@@ -281,6 +302,20 @@ require.config({
 <p>可以点<a href="zh/engineering/loader/loader4.rar" download="loader4.rar">这里</a>下载此例子</p>
 
 <h2>map配置项的使用</h2>
-<p>map配置项能让我们在一个工程中使用多个不同的版本的库。比如我们在aaa目录使用jquery1.2，在bbb项目下使用jquery2.2。</p>
 
+<p>map参数用来解决同一个模块的不同版本问题，这一灵感来自于Dojo的packageMap。有这样的场景：
+    开发初期使用了的jquery-1.6.4，后期升级到了1.7.2。但担心有些依赖jquery-1.6.4的代码升级到1.7.2后有问题。
+    因此保守的让这部分代码继续使用1.6.4版本。这时map参数将派上用场。比如我们在new/aaa/目录使用jquery1.6.4，在old/aaa/项目下使用jquery1.7.4。</p>
+<pre class="brush:html;gutter:false;toolbar:flase">
+requirejs.config({
+    map: {
+        "old/aaa": {
+            'jquery': 'jquery-1.6.4'
+        },
+        'new/aaa': {
+            'jquery': 'jquery-1.7.2'
+        }
+    }
+})
+</pre>
 
