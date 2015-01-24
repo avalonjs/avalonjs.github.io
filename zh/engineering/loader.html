@@ -2,6 +2,7 @@
 
 <h2>baseUrl配置项的使用</h2>
 <p>avalon1.4的新特性, 有时, javascript文件并不是放在根目录下,我们每个文件就需要写得长, 有了它, 每个可以写很短</p>
+<p>在实际使用过程中，如果用户没有配置baseUrl，会默认使用avalon.js的目录当做baseUrl，但绝对不会使用base标签的href当做baseUrl，这是为了与requirejs保持一致。</p>
 <p>例子, 见下面目录结构</p>
 <div><img src="zh/engineering/loader/loader0_0.png"/></div>
 <p>主页面的index.html如下:</p>
