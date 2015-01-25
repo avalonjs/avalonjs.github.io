@@ -317,7 +317,7 @@ require.config({
 <p>map参数用来解决同一个模块的不同版本问题，这一灵感来自于Dojo的packageMap。有这样的场景：
     开发初期使用了的jquery-1.6.4，后期升级到了1.7.2。但担心有些依赖jquery-1.6.4的代码升级到1.7.2后有问题。
     因此保守的让这部分代码继续使用1.6.4版本。这时map参数将派上用场。比如我们在new/aaa/目录使用jquery1.6.4，在old/aaa/项目下使用jquery1.7.4。</p>
-<pre class="brush:html;gutter:false;toolbar:flase">
+<pre class="brush:javascript;gutter:false;toolbar:false">
 requirejs.config({
     map: {
        "*": {
@@ -370,37 +370,37 @@ requirejs.config({
 &lt;/html&gt;
 </pre>
 <p>ddd1.0.js:</p>
-<pre class="brush:html;gutter:false;toolbar:flase">
+<pre class="brush:javascript;gutter:false;toolbar:false">
 define(function(){
    return 1000
 })
 </pre>
 <p>ddd1.1.js:</p>
-<pre class="brush:html;gutter:false;toolbar:flase">
+<pre class="brush:javascript;gutter:false;toolbar:false">
 define(function(){
    return 1000
 })
 </pre>
 <p>ddd1.2.js:</p>
-<pre class="brush:html;gutter:false;toolbar:flase">
+<pre class="brush:javascript;gutter:false;toolbar:false">
 define(function(){
    return 1000
 })
 </pre>
 <p>new/aaa.js:</p>
-<pre class="brush:html;gutter:false;toolbar:flase">
+<pre class="brush:javascript;gutter:false;toolbar:false">
 define(["ddd"], function(a){ 
     return 100 + a
 })
 </pre>
 <p>old/aaa.js:</p>
-<pre class="brush:html;gutter:false;toolbar:flase">
+<pre class="brush:javascript;gutter:false;toolbar:false">
 define(["ddd"], function(a){ 
     return 456 + a
 })
 </pre>
 <p>ccc.js:</p>
-<pre class="brush:html;gutter:false;toolbar:flase">
+<pre class="brush:javascript;gutter:false;toolbar:false">
 define(["ddd"], function(a){
     return 7890 + a
 })
