@@ -23,9 +23,9 @@
 <p>此外， 我们还可以在define.amd对象查看到所有加载过的模块。</p>
 <h2>模块ID是什么?</h2>
 <p>require的第一个参数为一个数组，里面就是我们要依赖的模块的ID。模块的ID究竟是一个什么东西来呢？通俗来说，就是这个模块的名字，
-但模块在AMD其实相当于一个独立的JS文件，因此要将名字与文件关联起来，我们就需要做一些手脚。从实现角度来看，加载一个模块，就是加载一个JS文件，
-就是创建一个script标签，然后给它指定一个src属性，从而发出请求，因此这个模块ID越接近一个URL就容易实现。但URL太长了，像后缀名.js可以砍掉，
-当前的HTTP请求的协议名，端口，甚至域名都可以砍掉，模块名就无限接近一个<strong>相对路径</strong>！
+    但模块在AMD其实相当于一个独立的JS文件，因此要将名字与文件关联起来，我们就需要做一些手脚。从实现角度来看，加载一个模块，就是加载一个JS文件，
+    就是创建一个script标签，然后给它指定一个src属性，从而发出请求，因此这个模块ID越接近一个URL就容易实现。但URL太长了，像后缀名.js可以砍掉，
+    当前的HTTP请求的协议名，端口，甚至域名都可以砍掉，模块名就无限接近一个<strong>相对路径</strong>！
 </p>
 <p>因此我们可以简单认为模块ID就是一个相当路径，因此它可以以"./", "../"开头，中间可以放N个"/"来标识其目录结构，方便我们最后能找到此JS文件。</p>
 <p>config方法有一个paths配置项， 让我们还可以对这个模块ID进行再重名，让其更短。
@@ -320,13 +320,92 @@ require.config({
 <pre class="brush:html;gutter:false;toolbar:flase">
 requirejs.config({
     map: {
-        "old/aaa": {
+       "*": {
+            'jquery': 'jquery-1.6' //其他目录或文件使用1.6
+        },
+        "old/aaa": { //old/aaa.js或old/aaa/目录下的所有模块如果依赖jquery，则使用1.6.4版本
             'jquery': 'jquery-1.6.4'
         },
-        'new/aaa': {
+        'new/aaa': { //new/aaa.js或new/aaa/目录下的所有模块如果依赖jquery，则使用1.7.2版本
             'jquery': 'jquery-1.7.2'
         }
     }
 })
 </pre>
+<p>看下面的例子，其目录结构如下：</p>
+<div><img src="zh/engineering/loader/loader5_0.png"/></div>
+<p>主页面的index.html如下:</p>
+<pre class="brush:html;gutter:false;toolbar:flase">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;TODO supply a title&lt;/title&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width"&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script&gt;
+            require.config({
+                baseUrl: "./loader/",
+                map: {
+                    "old/aaa": {
+                        ddd: "ddd1.0"
+                    },
+                    "new/aaa": {
+                        ddd: "ddd1.2"
+                    },
+                    "*": {
+                        ddd: "ddd1.1"
+                    }
+                }
+            })
+            require(["old/aaa", "new/aaa", "ccc"], function(a, b, c) {
+                alert([a, b, c])
+            })
+        &lt;/script&gt;
 
+    &lt;/head&gt;
+    &lt;body&gt;
+
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p>ddd1.0.js:</p>
+<pre class="brush:html;gutter:false;toolbar:flase">
+define(function(){
+   return 1000
+})
+</pre>
+<p>ddd1.1.js:</p>
+<pre class="brush:html;gutter:false;toolbar:flase">
+define(function(){
+   return 1000
+})
+</pre>
+<p>ddd1.2.js:</p>
+<pre class="brush:html;gutter:false;toolbar:flase">
+define(function(){
+   return 1000
+})
+</pre>
+<p>new/aaa.js:</p>
+<pre class="brush:html;gutter:false;toolbar:flase">
+define(["ddd"], function(a){ 
+    return 100 + a
+})
+</pre>
+<p>old/aaa.js:</p>
+<pre class="brush:html;gutter:false;toolbar:flase">
+define(["ddd"], function(a){ 
+    return 456 + a
+})
+</pre>
+<p>ccc.js:</p>
+<pre class="brush:html;gutter:false;toolbar:flase">
+define(["ddd"], function(a){
+    return 7890 + a
+})
+</pre>
+
+<p>其他与上面的例子一样,运行它在firebug下看到:</p>
+<div><img src="zh/engineering/loader/loader5_1.jpg"/></div>
+<p>可以点<a href="zh/engineering/loader/loader5.rar" download="loader5.rar">这里</a>下载此例子</p>
