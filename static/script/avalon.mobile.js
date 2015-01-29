@@ -4715,9 +4715,21 @@ new function() {
         }
     }
     function resetState(event) {
-        avalon(touchProxy.element).removeClass(fastclick.activeClass)
-        if (touchProxy.tapping)
+        var element = touchProxy.element
+        avalon(element).removeClass(fastclick.activeClass)
+        if (touchProxy.tapping && event.type === touchNames[3]) {
+            var diff = event.timeStamp = touchProxy.startTime
+            if (diff > 750) {
+                var e = getCoordinates(event)
+                var totalX = Math.abs(touchProxy.x - e.x)
+                var totalY = Math.abs(touchProxy.y - e.y)
+                if (totalX < 30 && totalY < 30) {
+                    W3CFire(element, "hold")
+                    W3CFire(element, "longtap")
+                }
+            }
             touchProxy.element = null
+        }
     }
     function touchend(event) {
         var element = touchProxy.element
@@ -4794,7 +4806,8 @@ new function() {
             avalon.mix(touchProxy, getCoordinates(event))
             touchProxy.startTime = Date.now()
             touchProxy.event = data.param
-            touchProxy.tapping = /click|tap$/.test(touchProxy.event)
+            touchProxy.tapping = /click|tap|hold$/.test(touchProxy.event)
+            console.log( touchProxy.tapping +" "+ data.param)
             touchProxy.element = element
             //--------------处理双击事件--------------
             if (touchProxy.element !== element) {
@@ -4891,7 +4904,7 @@ new function() {
     };
 
 
-    ["swipe", "swipeleft", "swiperight", "swipeup", "swipedown", "doubletap", "tap", "longtap", "hold"].forEach(function(method) {
+    ["swipe", "swipeleft", "swiperight", "swipeup", "swipedown", "doubletap", "tap","dblclick", "longtap", "hold"].forEach(function(method) {
         self[method + "Hook"] = self["clickHook"]
     })
 

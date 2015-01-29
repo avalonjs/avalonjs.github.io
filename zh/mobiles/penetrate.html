@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>zepto tap 点透测试</title>
+        <script src="http://zeptojs.com/zepto.js"></script>
+        <style type="text/css">
+            #divTapAbove,#divClickUnder{position: absolute;top: 0;left: 0;}
+            #divTapAbove{width: 200px;height: 75px;background: red}
+            #divClickUnder{width: 300px;height: 50px;background: blue}
+            #output{position: absolute;top: 100px;left:0;border: 1px solid #000;width:200px;min-height:100px;}
+        </style>
+    </head>
+    <body>
+        <div><a target="top" href="">新窗口打开</a></div>
+        <div id="divClickUnder"></div>
+        <div id="divTapAbove"></div>
+        <div id="output"></div>
+        <script>
+            $(function() {
+                var $output = $('#output')
+                        , $divTapAbove = $('#divTapAbove')
+                $('#divClickUnder').on('click', function() {
+                    $output.html($output.html() + ' click<br/>')
+                })
+                $divTapAbove.on('tap', function() {
+                    $divTapAbove.hide() // 注意，该div被tap触发后会隐藏自己
+                    $output.html($output.html() + ' tap<br/>')
+                })
+            })
+        </script>
+    </body>
+</html>
