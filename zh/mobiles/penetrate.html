@@ -2,33 +2,54 @@
 <html>
     <head>
         <meta charset="utf-8"/>
-        <title>zepto tap 点透测试</title>
-        <script src="http://zeptojs.com/zepto.js"></script>
+        <title>点击穿透测试</title>
+        <meta name="viewport" content="width=device-width">
+        <script src="../../static/script/avalon.mobile.js"></script>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         <style type="text/css">
             #divTapAbove,#divClickUnder{position: absolute;top: 30px;left: 0;}
-            #divTapAbove{width: 200px;height: 75px;background: red}
-            #divClickUnder{width: 300px;height: 50px;background: blue}
+
+            #divClickUnder{width: 300px;height: 50px;background: blue;  z-index: 90}
+            #divTapAbove{width: 200px;height: 75px;background: red; z-index: 100}
             #output{position: absolute;top: 100px;left:0;border: 1px solid #000;width:200px;min-height:100px;}
         </style>
     </head>
-    <body>
+    <body ms-controller="test">
         <div><a target="top" href="">新窗口打开</a></div>
-        <div id="divClickUnder"></div>
-        <div id="divTapAbove"></div>
-        <div id="output"></div>
+
+        <div id="divTapAbove" ms-on-tap="tap"></div>
+        <div id="divClickUnder" ms-on-click="click"></div>
+        <div id="output" ms-text="text"></div>
         <script>
-            $(function() {
-                var $output = $('#output')
-                        , $divTapAbove = $('#divTapAbove')
-                $('#divClickUnder').on('click', function() {
-                    $output.html($output.html() + ' click<br/>')
-                })
-                $divTapAbove.on('tap', function() {
-                    $divTapAbove.hide() // 注意，该div被tap触发后会隐藏自己
-                    $output.html($output.html() + ' tap<br/>')
-                })
+            var vm = avalon.define({
+                $id: "test",
+                tap: function() {
+                    vm.text = vm.text + " tap "
+                    this.style.display = "none"
+
+                },
+                click: function() {
+
+                    vm.text = vm.text + " click "
+                },
+                text: ""
             })
+
         </script>
-        
+        <!--        <script>
+                    $(function() {
+                        var $output = $('#output')
+                                , $divTapAbove = $('#divTapAbove')
+                        $('#divClickUnder').on('click', function() {
+                            $output.html($output.html() + ' click<br/>')
+                        })
+                        $divTapAbove.on('click', function() {
+                            $divTapAbove.hide() // 注意，该div被tap触发后会隐藏自己
+                            $output.html($output.html() + ' tap<br/>')
+                        })
+                    })
+                </script>-->
+
     </body>
 </html>
