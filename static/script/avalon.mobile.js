@@ -5,7 +5,7 @@
  http://weibo.com/jslouvre/
  
  Released under the MIT license
- avalon.mobile.js(支持触屏事件) 1.391 build in 2015.1.28 
+ avalon.mobile.js(支持触屏事件) 1.391 build in 2015.1.29 
 _________
  support IE6+ and other browsers
  ==================================================*/
@@ -4361,8 +4361,8 @@ new function() {
             res: res
         }
 
-        var urlNoQuery = trimQuery(req.toUrl(url))
-        if (!modules[urlNoQuery]) {
+        var urlNoQuery = url && trimQuery(req.toUrl(url))
+        if (url && !modules[urlNoQuery]) {
             var module = modules[urlNoQuery] = makeModule(urlNoQuery)
             function wrap(obj) {
                 resources[res] = obj
@@ -4732,6 +4732,9 @@ new function() {
         if (touchProxy.doubleIndex === 2) {//如果已经点了两次,就可以触发dblclick 回调
             touchProxy.doubleIndex = 0
             canDoubleClick = true
+            if (avalon.config.stopZoom) {
+                event.preventDefault()
+            }
         }
         if (totalX > 30 || totalY > 30) {
             //如果用户滑动的距离有点大，就认为是swipe事件
