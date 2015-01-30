@@ -417,3 +417,15 @@ define(["ddd"], function(a){
 <p>其他与上面的例子一样,运行它在firebug下看到:</p>
 <div><img src="zh/engineering/loader/loader5_1.png"/></div>
 <p>可以点<a href="zh/engineering/loader/loader5.rar" download="loader5.rar">这里</a>下载此例子</p>
+
+<h2>资源插件的使用</h2>
+<p>我们经常看到text!aaa.txt, css!aaa.css这样模块, 这其实在应用资源插件。</p>
+<p>“!”之前的东西为一个资源插件的名字，它应该与avalon.js放在同一目录下。当它加载了text这个插件后，然后再按插件的加载机制去加载aaa.txt这个模块。</p>
+<p>像“ready!”后面没有东西，也要加“!”，因为需要标识它是一个资源插件。</p>
+<p>avalon内置了4个常用的资源插件:</p>
+<ul>
+    <li>ready!， 判定有没有domReady</li>
+    <li>css!，然后link标签加载css文件，但不管它有没有加载成功</li>
+    <li>text!，然后AJAX同步请求加载资源</li>
+    <li>js!，默认都是用js!，因此不用写</li>
+</ul>
