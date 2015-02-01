@@ -293,4 +293,7 @@
     if (href.indexOf("#zh") !== -1 || href.indexOf("#en") !== -1) {
         vm.currentPath = href.split("#")[1]
     }
+    console.log("==============="+document.documentElement)
+    console.log(vm)
+    avalon.scan(document.documentElement, vm)
 })()
