@@ -9,6 +9,8 @@
 生成于{{ "3 4,2000" | date("yyyy MM dd")}}
 生成于{{ 1373021259229 | date("yyyy MM dd:HH:mm:ss")}}
 生成于{{ "1373021259229" | date("yyyy MM dd:HH:mm:ss")}}
+生成于{{ "2014-12-07T22:50:58+08:00" | date("yyyy MM dd:HH:mm:ss")}} //这是ISO
+生成于{{ "\/Date(1373021259229)\/" | date("yyyy MM dd:HH:mm:ss")}} //这是ASP.NET传出的JSON数据的标准格式
 </pre>
 <p>上面的yyyy, MM, dd其实是一种关键字，用来帮我们格式化日期，详看下表：</p>
 <table class="shim-table">
