@@ -5081,6 +5081,7 @@ new function() {
             eachIndexArray(id, kernel.packages, function(value, key, item) {
                 url = url.replace(item.name, item.location)
             })
+
         }
         //5. 是否命中map配置项
         if (this.mapUrl) {
@@ -5090,6 +5091,9 @@ new function() {
                 })
             })
         }
+         if(res && url.slice(-1 * res.length) ){
+            url = url.slice(0, -1 *res.length)
+         }
         //6. 转换为绝对路径
         if (!isAbsUrl(url)) {
             url = joinPath(/\w/.test(url.charAt(0)) ? getBaseUrl() : this.parentUrl, url)
@@ -5100,6 +5104,7 @@ new function() {
         eachIndexArray(id, kernel.urlArgs, function(value) {
             url += (url.indexOf("?") === -1 ? "?" : "&") + value;
         })
+
         return this.url = url
     }
 
