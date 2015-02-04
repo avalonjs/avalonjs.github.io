@@ -1,5 +1,5 @@
 <h3 id='c-$watch'>$watch方法</h3>
-<p>此方法是位于VM中，与$unwatch, $fire是一套东西，但不建议用户不要在同一个VM中调用$fire,很容易造成死循环。格式为：</p>
+<p>此方法是位于VM中，与$unwatch, $fire是一套东西，建议用户不要在同一个VM中调用$fire,很容易造成死循环。格式为：</p>
 <pre class="brush:js;gutter:false;toolbar:false;">
   vm.$watch(prop, function(value, oldValue){
   })
@@ -12,7 +12,7 @@
 <p>如果你想监听二级或三级对象的属性时，需要跑到avalon.define的外面，定位到目标属性的父对象上添加$watch回调。</p>
 <pre class="brush:js;gutter:false;">
                  var model = avalon.define({
-                      id: "test",
+                      $id: "test",
                       data: {
                             xxx: 222,
                             yyy: 333
@@ -33,7 +33,7 @@
         &lt;script src="avalon.js"&gt;&lt;/script&gt;
         &lt;script&gt;
            var model = avalon.define({
-                id: "$watch1",
+                $id: "$watch1",
                 prop: "xxx",
                 array: ["aaa", "bbb", "ccc", "ddd"],
                 data: {
