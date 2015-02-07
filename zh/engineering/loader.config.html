@@ -8,7 +8,7 @@
 <p>配置当然是在require.config。在avalon中，<strong>require.config</strong> = <strong>avalon.config</strong> </p>
 <p>目前avalon直接兼容requirejs的baseUrl, shim, paths, map, packages, urlArgs这几个配置项。</p>
 
-<h2>baseUrl配置项的使用</h2>
+<h2 style="color:rgb(22,154,128)">baseUrl配置项的使用</h2>
 <p>avalon1.4的新特性, 有时, javascript文件并不是放在根目录下,我们每个文件就需要写得长, 有了它, 每个可以写很短</p>
 <p>在实际使用过程中，如果用户没有配置baseUrl，会默认使用avalon.js的目录当做baseUrl，但绝对不会使用base标签的href当做baseUrl，
     这是为了与requirejs保持一致。</p>
@@ -146,9 +146,11 @@ define(function() {
 <p>如果你没有NetBeans，也可以点击server.exe(一个小型的.Net服务器)，在IE11下看到的日志与firebug下差不多</p>
 <div><img src="zh/engineering/loader/loader0_2.jpg"/></div>
 <p>可以点<a href="zh/engineering/loader/loader1.rar" download="loader1.rar">这里</a>下载此例子</p>
-<h2>paths配置项的使用</h2>
+<br/>
+<h2 style="color:rgb(22,154,128)">paths配置项的使用</h2>
 <p>可以让一些非常长的路径名改成一个单词，然后我们直接在require中引用这些单词就行了。</p>
-<p>看下面例子， 这几个例子内部都使用了amd机制，支持三种引入机制。</p>
+<p style="color:red">注意： paths对应的值如果不是一个完整路径，那么它将根据baseUrl进行查找。</p>
+<p>在此例子中，jquery, backbone, underscore都是根据AMD规范来类库，虽然与标准的不太一样，但我们可以直接用avalon或require直接加载。</p>
 <p>jquery.placeholder可以在这里下，<a href="https://github.com/mathiasbynens/jquery-placeholder">https://github.com/mathiasbynens/jquery-placeholder</a></p>
 <div><img src="zh/engineering/loader/loader1_0.jpg"/></div>
 <p>主页面的index.html如下:</p>
@@ -161,7 +163,7 @@ define(function() {
         &lt;script type="text/javascript" src="avalon.js"&gt;&lt;/script&gt;
         &lt;script type="text/javascript"&gt;
             require.config({
-                baseUrl: "./lib/",
+                baseUrl: "lib",
                 paths: {
                     jquery: "jquery-2.1.3",
                     "jquery.placeholder": "jquery.placeholder",
@@ -188,7 +190,7 @@ define(function() {
 </pre>
 <div><img src="zh/engineering/loader/loader1_1.jpg"/></div>
 <p>可以点<a href="zh/engineering/loader/loader2.rar" download="loader2.rar">这里</a>下载此例子</p>
-<h2>shim配置项的使用</h2>
+<h2 style="color:rgb(22,154,128)">shim配置项的使用</h2>
 <p>shim是用于将加载那些不符合AMD规范的JS文件, 它拥有两种形态, 数组形态(相当于只配置了deps参数), 对象形态(可配置deps, exports, init这三个参数)</p>
 <p>avalon1.4才完完整整支持此功能。</p>
 
@@ -288,7 +290,7 @@ $.fn.beta = function() {
 </pre>
 <div><img src="zh/engineering/loader/loader2_1.jpg"/></div>
 <p>可以点<a href="zh/engineering/loader/loader3.rar" download="loader2.rar">这里</a>下载此例子</p>
-<h2>urlArgs配置项的使用</h2>
+<h2 style="color:rgb(22,154,128)">urlArgs配置项的使用</h2>
 <p>拥有两个传参方式,一种是传入一个字符串,那么所有要加载的请求都会加上它们,另一种是传入一个对象,让特殊模块才加上指定参数</p>
 <p>该配置项可以用于处理缓存</p>
 <pre class="brush:javascript;gutter:false;toolbar:flase">
@@ -347,7 +349,7 @@ require.config({
 <div><img src="zh/engineering/loader/loader3_1.jpg"/></div>
 <p>可以点<a href="zh/engineering/loader/loader4.rar" download="loader4.rar">这里</a>下载此例子</p>
 
-<h2>map配置项的使用</h2>
+<h2 style="color:rgb(22,154,128)">map配置项的使用</h2>
 
 <p>map参数用来解决同一个模块的不同版本问题，这一灵感来自于Dojo的packageMap。有这样的场景：
     开发初期使用了的jquery-1.6.4，后期升级到了1.7.2。但担心有些依赖jquery-1.6.4的代码升级到1.7.2后有问题。
