@@ -1,11 +1,7 @@
 <h2>avalon自带加载器</h2>
-<ul>
-    <li><a href="#zh/engineering/loader.html" ms-click="changePath"  >核心概念</a></li>
-    <li><a href="#zh/engineering/loader.api.html" ms-click="changePath"  >API</a></li>
-    <li><a href="#zh/engineering/loader.config.html" ms-click="changePath"  >配置项</a></li>
-    <li><a href="#zh/engineering/loader.plugin.html" ms-click="changePath"  >插件</a></li>
-</ul>
-
+<div ms-include-src="{{userLanguage}}/engineering/loader.menu.html" data-include-replace="true">
+    
+</div>
 <p>一般而言， 我们只在页面上引入一个JS文件，不用说那个JS文件就是avalon.js。然后在对应的script标签上定义一个data-main属性，
     值为一个入口文件的路径。<strong style="color:red">注意，它不能使用.js扩展名</strong>。</p>
 <pre class="brush:html;gutter:false;toolbar:false;">

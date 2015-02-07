@@ -1,10 +1,7 @@
 <h2>avalon自带加载器</h2>
-<ul>
-    <li><a href="#zh/engineering/loader.html" ms-click="changePath"  >核心概念</a></li>
-    <li><a href="#zh/engineering/loader.api.html" ms-click="changePath"  >API</a></li>
-    <li><a href="#zh/engineering/loader.config.html" ms-click="changePath"  >配置项</a></li>
-    <li><a href="#zh/engineering/loader.plugin.html" ms-click="changePath"  >插件</a></li>
-</ul>
+<div ms-include-src="{{userLanguage}}/engineering/loader.menu.html" data-include-replace="true">
+    
+</div>
 <p>配置当然是在require.config。在avalon中，<strong>require.config</strong> = <strong>avalon.config</strong> </p>
 <p>目前avalon直接兼容requirejs的baseUrl, shim, paths, map, packages, urlArgs这几个配置项。</p>
 
