@@ -82,7 +82,7 @@ define(function(){
         &lt;script type="text/javascript" src="avalon.js"&gt;&lt;/script&gt;
         &lt;script type="text/javascript"&gt;
             require.config({
-                baseUrl: "examples/loader/"
+                baseUrl: "examples/loader"
             })
             require(["./aaa"], function(a){
                 avalon.define({
@@ -106,7 +106,7 @@ define(function(){
 <p><strong>aaa.js</strong></p>
 <pre class="brush:javascript;gutter:false;toolbar:false">
 define(["./bbb"], function(){
-     avalon.log("已经加载aaa模块")
+    avalon.log("已经加载aaa模块")
     return "aaa"
 })
 </pre>
