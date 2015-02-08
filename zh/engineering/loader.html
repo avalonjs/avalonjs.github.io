@@ -51,13 +51,6 @@
     =  <em>http://xxx/yyy/.aaa.js</em>
 </blockquote>
 <p>当然对于一个非内置的资源插件，它会先加载资源插件再加载JS模块。</p>
-<h2>常用的资源插件</h2>
-<ul>
-    <li>js!， avalon已经内置， 用于加载JS文件，通过生成一个script标签进行加载。默认模块ID如果不存在资源插件前缀， 就当成使用了js!资源插件。</li>
-    <li>css!， avalon已经内置， 用于加载css文件，通过生成一个link标签进行加载。css!xxx 相当于css!xxx.css，因此不用特意写.css扩展名。</li>
-    <li>text!， avalon已经内置， 用于加载纯文本文件，返回一个字符串，通过AJAX请求实现，因此有跨域限制。text!xxx.htm，不会添加xxx.htm添加扩展名。</li>
-    <li>domReady!，1.4之前的版本为ready!， avalon已经内置，这其实不算一个资源插件，仅表示一种时机，当文档就绪时，就可以执行回调。</li>
-</ul>
 
 
 

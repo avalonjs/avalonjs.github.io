@@ -443,3 +443,99 @@ define(["ddd"], function(a){
 <p>其他与上面的例子一样,运行它在firebug下看到:</p>
 <div><img src="zh/engineering/loader/loader5_1.png"/></div>
 <p>可以点<a href="zh/engineering/loader/loader5.rar" download="loader5.rar">这里</a>下载此例子</p>
+<br/>
+<h2 style="color:rgb(22,154,128)">packages配置项的使用</h2>
+<p>packages配置项用于帮助我们构建更巨型的工程，方便我们直接引入别人的包。</p>
+<p>packages在config里面是一个数组，其元素可以是字符串，也可以是一个对象。不过一个包的定义，应该是一个对象，因此当用户使用字符串形式时，内部也会转换为对象。</p>
+
+<pre class="brush:javascript;gutter:false;toolbar:false">
+{ 
+      name: 'packagename',
+      location: 'path/to/your/package/root',  // default 'packagename'
+      main: 'scriptfileToLoad'                // default 'main' 
+}
+</pre>
+<p>最后这个包的加载地址为<strong> pkg.location +"/" + pkg.main + ".js"</strong></p>
+<p>当用户只使用字符串，它会转换为如下的包，比如说这个字符串为kkk</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+{ 
+      name: 'kkk',
+      location: 'kkk',  // default 'packagename'
+      main: 'main'                // default 'main' 
+}
+</pre>
+<p>最后这个包的加载地址为<strong> "kkk/main.js" </strong></p>
+<p>我们看下面例子</p>
+<div><img src="zh/engineering/loader/loader6_0.png"/></div>
+<pre class="brush:html;gutter:false;toolbar:false">
+ &lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;TODO supply a title&lt;/title&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width"&gt;
+        &lt;script src="avalon.js" data-main="main"&gt;&lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div&gt;packages配置项&lt;/div&gt;
+        &lt;p&gt;参考自&lt;a href="http://jonathancreamer.com/require-js-packages-for-building-large-scale-angular-applications/"&gt;
+            http://jonathancreamer.com/require-js-packages-for-building-large-scale-angular-applications/
+            &lt;/a&gt;&lt;/p&gt;
+        &lt;ul ms-controller="pkg"&gt;
+            &lt;li&gt;{{a}}&lt;/li&gt;
+            &lt;li&gt;{{b}}&lt;/li&gt;
+            &lt;li&gt;{{c}}&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p>main.js</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+require.config({
+    packages: ["cat"]
+})
+
+require(["./dog/aaa", "./dog/bbb", "cat", "domReady!"], function(a, b, c) {
+    avalon.define({
+        $id: "pkg",
+        a: a,
+        b: b,
+        c: c
+    })
+    avalon.scan()
+})
+</pre>
+<p>dog/aaa.js</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+define(function(){
+    return "dog1"
+})
+</pre>
+<p>dog/bbb.js</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+define(function(){
+    return "dog2"
+})
+</pre>
+
+<p>cat/main.js</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+define(["./aaa","./bbb"], function (a, b) {  
+   return a + b
+})
+</pre>
+<p>cat/aaa.js</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+define(function() {
+    return 7
+})
+</pre>
+<p>cat/bbb.js</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+define(function() {
+    return 8
+})
+</pre>
+<p>效果图</p>
+<div><img src="zh/engineering/loader/loader6_1.png"/></div>
+<p>可以点<a href="zh/engineering/loader/loader6.rar" download="loader6.rar">这里</a>下载此例子</p>
