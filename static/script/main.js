@@ -8,7 +8,8 @@
     var menuNodes = []
     var vm = avalon.define({
         $id: "main",
-        userLanguage: browserLanguage() === "zh" ? "zh" : "en",
+        // userLanguage: browserLanguage() === "zh" ? "zh" : "en",
+        userLanguage: "zh",
         currentPath: "zh/introduction.html",
         concepts: [
             {
