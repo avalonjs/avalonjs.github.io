@@ -1,10 +1,14 @@
-<h2>AMD加载器,avalon自带强大的加载器</h2>
+<h2>avalon自带加载器</h2>
+<div ms-include-src="{{userLanguage}}/engineering/loader.menu.html" data-include-replace="true">
+    
+</div>
+
 <p><strong>AMD(异步模块定义)是什么？</strong></p>
 <p>
     JavaScript模块只是遵循SRP(Single Responsibility Principle单一职责原则)的代码段，
     它暴露了一个公开的API。在现今JavaScript开发中，你可以在模块中封装许多功能，
     而且在大多数项目中，每个模块都有其自己的文件。这使得JavaScript开发者日子有点难过，
-    因为它们需要持续不断的关注模块之间的依赖性，按照一个特定的顺序加载这些模块，否则运行时将会放生错误。
+    因为它们需要持续不断的关注模块之间的依赖性，按照一个特定的顺序加载这些模块，否则运行时将会发生错误。
 </p>
 <p>
     当你要加载JavaScript模块时，就会使用script标签。为了加载依赖的模块，你就要先加载被依赖的，之后再加载依赖的。
@@ -22,7 +26,7 @@
 </ul>
 <p>此外， 我们还可以在define.amd对象查看到所有加载过的模块。</p>
 <h2>模块ID是什么?</h2>
-<p>require的第一个参数为一个数组，里面就是我们要依赖的模块的ID。模块的ID究竟是一个什么东西来呢？通俗来说，就是这个模块的名字，
+<p>require的第一个参数为一个数组，里面就是我们要依赖的模块的ID。模块的ID究竟是一个什么东西呢？通俗来说，就是这个模块的名字，
     但模块在AMD其实相当于一个独立的JS文件，因此要将名字与文件关联起来，我们就需要做一些手脚。从实现角度来看，加载一个模块，就是加载一个JS文件，
     就是创建一个script标签，然后给它指定一个src属性，从而发出请求，因此这个模块ID越接近一个URL就容易实现。但URL太长了，像后缀名.js可以砍掉，
     当前的HTTP请求的协议名，端口，甚至域名都可以砍掉，模块名就无限接近一个<strong>相对路径</strong>！
@@ -33,399 +37,20 @@
     如果它们实现了AMD结构，一旦它们依赖jQuery，那么依赖列表中就有"jquery"这个ID进行标识。</p>
 <h2>模块的寻找规则</h2>
 <ul>
-    <li>如果模块ID不以"./", "../"开头，那么它会优先考虑在baseUrl所在目录下进行查找；
-        如果用户没有设置baseUrl，那么它以加载器所在目录（loaderUrl）下进行寻找。  </li>
+    <li>如果模块ID不以"./", "../"开头，并且不符合/\w+!(\w+)?/的格式， 那么它优先在require.config中进行匹配，否则它就会根据baseUrl进行寻找。  </li>
     <li>如果模块ID以"./"开头，那么它将以其父模块（即其所依赖的模块）所在的目录进行查找； 
-        如果没有父模块，则根据(baseUrl或loaderUrl)进行寻找。  </li>
+        如果没有父模块，则根据baseUrl进行寻找。  </li>
     <li>如果模块ID以"../"开头，那么它将以其父模块（即其所依赖的模块）的上级目录进行查找； 
-        如果没有父模块，则根据(baseUrl或loaderUrl)的上级目录寻找。  </li>
+        如果没有父模块，则根据baseUrl的上级目录寻找。  </li>
 </ul>
-<h2>baseUrl配置项的使用</h2>
-<p>avalon1.4的新特性, 有时, javascript文件并不是放在根目录下,我们每个文件就需要写得长, 有了它, 每个可以写很短</p>
-<p>在实际使用过程中，如果用户没有配置baseUrl，会默认使用avalon.js的目录当做baseUrl，但绝对不会使用base标签的href当做baseUrl，这是为了与requirejs保持一致。</p>
-<p>例子, 见下面目录结构</p>
-<div><img src="zh/engineering/loader/loader0_0.png"/></div>
-<p>主页面的index.html如下:</p>
-<pre class="brush:html;gutter:false;toolbar:false;">
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-    &lt;head lang="en"&gt;
-        &lt;meta charset="UTF-8"&gt;
-        &lt;title&gt;&lt;/title&gt;
-        &lt;script type="text/javascript" src="avalon.js"&gt;&lt;/script&gt;
-        &lt;script type="text/javascript"&gt;
-            require.config({
-                baseUrl: "./examples/loader/"
-            })
-            require(["./aaa"], function(a){
-                avalon.define({
-                    $id: "test",
-                    title: "加载成功"
-                })
-                avalon.log(a)
-                avalon.scan()
-            })
-        &lt;/script&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;div ms-controller="test"&gt;
-            &lt;h1&gt;{{title}}&lt;/h1&gt;
-        &lt;/div&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-</pre>
-<p>由于我们设置baseUrl, 当我们加载./aaa模块时, 它的路径就变成./examples/loader/aaa, 再自动加上.js后缀名</p>
-<p>我们再看一下所有JS文件是如何写的:</p>
-<p><strong>aaa.js</strong></p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(["./bbb"], function(){
-     avalon.log("已经加载aaa模块")
-    return "aaa"
-})
-</pre>
-<p><strong>bbb.js</strong></p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(["./ccc", "./ddd"], function() {
-    avalon.log("已经加载bbb模块")
-    return "bbb"
-})
-</pre>
-<p><strong>ccc.js</strong></p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(function(){
-    avalon.log("已经加载ccc模块")
-    return "ccc"
-})
-</pre>
-<p><strong>ddd.js</strong></p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(["./eee"], function() {
-    avalon.log("已经加载ddd模块")
-    return "ddd"
-})
-</pre>
-<p><strong>eee.js</strong></p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(function() {
-    avalon.log("已经加载eee模块")
-    return "eee"
-})
-</pre>
-<p>如果你使用了NetBeans IDE, 我们直接点击上方的<strong>运行</strong>菜单，设置要运行浏览器，然后直到你的项目，选中你的html页面运行。</p>
-<div><img src="zh/engineering/loader/NetBeans0.jpg"/></div>
-<div><img src="zh/engineering/loader/NetBeans1.jpg"/></div>
-<p>最后我们如果打开火狐及其firebug,会看到如下日志：</p>
-<div><img src="zh/engineering/loader/loader0_1.jpg"/></div>
-<p>如果你没有NetBeans，也可以点击server.exe(一个小型的.Net服务器)，在IE11下看到的日志与firebug下差不多</p>
-<div><img src="zh/engineering/loader/loader0_2.jpg"/></div>
-<p>可以点<a href="zh/engineering/loader/loader1.rar" download="loader1.rar">这里</a>下载此例子</p>
-<h2>paths配置项的使用</h2>
-<p>可以让一些非常长的路径名改成一个单词，然后我们直接在require中引用这些单词就行了。</p>
-<p>看下面例子， 这几个例子内部都使用了amd机制，支持三种引入机制。</p>
-<p>jquery.placeholder可以在这里下，<a href="https://github.com/mathiasbynens/jquery-placeholder">https://github.com/mathiasbynens/jquery-placeholder</a></p>
-<div><img src="zh/engineering/loader/loader1_0.jpg"/></div>
-<p>主页面的index.html如下:</p>
-<pre class="brush:html;gutter:false;toolbar:false;">
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-    &lt;head lang="en"&gt;
-        &lt;meta charset="UTF-8"&gt;
-        &lt;title&gt;&lt;/title&gt;
-        &lt;script type="text/javascript" src="avalon.js"&gt;&lt;/script&gt;
-        &lt;script type="text/javascript"&gt;
-            require.config({
-                baseUrl: "./lib/",
-                paths: {
-                    jquery: "jquery-2.1.3",
-                    "jquery.placeholder": "jquery.placeholder",
-                    underscore: "underscore-1.7",
-                    backbone: "backbone"
-                }
-            })
-            require(["backbone", "jquery.placeholder"], function(a) {
-                console.log(a, jQuery.fn.placeholder)
-                avalon.define({
-                    $id: "test",
-                    title: "加载成功"
-                })
-                avalon.scan()
-            })
-        &lt;/script&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;div ms-controller="test"&gt;
-            &lt;h1&gt;{{title}}&lt;/h1&gt;
-        &lt;/div&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-</pre>
-<div><img src="zh/engineering/loader/loader1_1.jpg"/></div>
-<p>可以点<a href="zh/engineering/loader/loader2.rar" download="loader2.rar">这里</a>下载此例子</p>
-<h2>shim配置项的使用</h2>
-<p>shim是用于将加载那些不符合AMD规范的JS文件, 它拥有两种形态, 数组形态(相当于只配置了deps参数), 对象形态(可配置deps, exports, init这三个参数)</p>
-<p>avalon1.4才完完整整支持此功能。</p>
+<p>模块ID也有可能以xxx!yyy的形式存在，xxx为资源插件的名字，为一个JS文件，放在baseUrl目录下。一般情况下，avalon内置了, js!, text!, css!资源插件。
+    比如<strong>aaa</strong>这个模块ID，其实就是<strong>js!aaa</strong>。在明确了对应的资源插件的情况下，我们就不需要写资源对应的扩展名。
+</p>
+<blockquote>
+    <strong>aaa</strong>  =   <strong>js!aaa</strong>  = <strong>js!aaa.js </strong> = <strong> joinPath( baseUrl, aaa.js ) </strong>
+    =  <em>http://xxx/yyy/.aaa.js</em>
+</blockquote>
+<p>当然对于一个非内置的资源插件，它会先加载资源插件再加载JS模块。</p>
 
-<pre class="brush:javascript;gutter:false;toolbar:false">
-requirejs.config({
-    shim: {
-        'backbone': {
-            //指定依赖项,必须为数组, 不写时默认为空数组,它们会先于被依赖者加载
-            deps: ['underscore', 'jquery'],
-            exports: 'Backbone'//指定它的命名空间
-        },
-        'underscore': {
-            exports: '_' //指定它的命名空间
-        },
-        'jquery.selectBoxIt': ['jquery'],//指定它的依赖项
-        'backbone.Validation': ['backbone'],//指定它的依赖项
-        "jquery.placeholder": ["jquery"],//指定它的依赖项
-        'foo': {
-            deps: ['bar'],
-            exports: 'Foo',
-            init: function (bar) {
-                //Using a function allows you to call noConflict for
-                //libraries that support it, and do other cleanup.
-                //However, plugins for those libraries may still want
-                //a global. "this" for the function will be the global
-                //object. The dependencies will be passed in as
-                //function arguments. If this function returns a value,
-                //then that value is used as the module export value
-                //instead of the object found via the 'exports' string.
-                return this.Foo.noConflict();
-            }
-        }
-    }
-</pre>
-<div><img src="zh/engineering/loader/loader2_0.jpg"/></div>
-<p>主页面的index.html如下:</p>
-<pre class="brush:html;gutter:false;toolbar:flase">
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-    &lt;head lang="en"&gt;
-        &lt;meta charset="UTF-8"&gt;
-        &lt;title&gt;require shim机制&lt;/title&gt;
-        &lt;script src="js/lib/avalon.js"&gt;&lt;/script&gt;
-        &lt;script src="js/app.js"&gt;&lt;/script&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;h2&gt;通过shim机制加载那些没有使用AMD风格定义的jquery插件&lt;/h2&gt;
-        &lt;p&gt;如果加载成功一会儿这里下面会多出两行&lt;/p&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-   
-</pre>
-<p>js/app.js</p>
-<pre class="brush:javascript;gutter:false;toolbar:flase">
-// Place third party dependencies in the lib folder
-// Configure loading modules from the lib directory,
-// except 'app' ones, 
-require.config({
-    "baseUrl": "js/lib",
-    "paths": {
-      "app": "../app"
-    },
-    "shim": {
-        "jquery.alpha": {
-           deps: ["jquery"],
-           init: function($){
-               console.log($) //这里只是测试init配置项是否生效
-           }
-        },
-        "jquery.beta": ["jquery"]
-    }
-});
 
-// Load the main app module to start the app
-require(["app/main"]);
-</pre>
-<p>js/app/main.js</p>
-<pre class="brush:javascript;gutter:false;toolbar:flase">
-define(["jquery", "jquery.alpha", "jquery.beta"], function($) {
-    //the jquery.alpha.js and jquery.beta.js plugins have been loaded.
-    $(function() {
-        $('body').alpha().beta();
-    });
-});
-</pre>
-<p>js/lib/jquery.alpha.js</p>
-<pre class="brush:javascript;gutter:false;toolbar:flase">
-$.fn.alpha = function() {
-    return this.append('<p>Alpha is Go!</p>');
-};
-</pre>
-<p>js/lib/jquery.beta.js</p>
-<pre class="brush:javascript;gutter:false;toolbar:flase">
-$.fn.beta = function() {
-    return this.append('<p>Beta is Go!</p>');
-};
-</pre>
-<div><img src="zh/engineering/loader/loader2_1.jpg"/></div>
-<p>可以点<a href="zh/engineering/loader/loader3.rar" download="loader2.rar">这里</a>下载此例子</p>
-<h2>urlArgs配置项的使用</h2>
-<p>拥有两个传参方式,一种是传入一个字符串,那么所有要加载的请求都会加上它们,另一种是传入一个对象,让特殊模块才加上指定参数</p>
-<p>该配置项可以用于处理缓存</p>
-<pre class="brush:javascript;gutter:false;toolbar:flase">
-require.config({
-   urlArgs: "v="+ Math.random() 
-})
-//相当于
-require.config({
-   urlArgs: {
-      "*" :"v="+ Math.random() 
-   }
-})
-require.config({
-   urlArgs: {
-      "jquery" :"username=xxxx&pw=345354" ,
-      "backbone": "username=ewre&pw=356688" ,
-   }
-})
-</pre>
-<div><img src="zh/engineering/loader/loader3_0.jpg"/></div>
-<p>主页面的index.html如下:</p>
-<pre class="brush:html;gutter:false;toolbar:flase">
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-    &lt;head lang="en"&gt;
-        &lt;meta charset="UTF-8"&gt;
-        &lt;title&gt;urlArgs&lt;/title&gt;
-        &lt;script src="avalon.js"&gt;&lt;/script&gt;
-        &lt;script&gt;
-            require.config({
-                baseUrl: "./jQuery/",
-                urlArgs: {
-                    "*": "v=" + (new Date - 0),
-                    "jquery": "aaa=333"
-                },
-                "shim": {
-                    "jquery.alpha": ["jquery"],
-                    "jquery.beta": ["jquery"]
-                }
-            })
-            require(["jquery.alpha", "jquery.beta"], function() {
-                $(function() {
-                    $('body').alpha().beta();
-                });
-            })
 
-        &lt;/script&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;h2&gt;使用urlArgs添加参数&lt;/h2&gt;
-        &lt;p&gt;如果加载成功一会儿这里下面会多出两行&lt;/p&gt;
-    &lt;/body&gt;
-&lt;/html&gt
-</pre>
-<p>其他与上面的例子一样,运行它在firebug下看到:</p>
-<div><img src="zh/engineering/loader/loader3_1.jpg"/></div>
-<p>可以点<a href="zh/engineering/loader/loader4.rar" download="loader4.rar">这里</a>下载此例子</p>
-
-<h2>map配置项的使用</h2>
-
-<p>map参数用来解决同一个模块的不同版本问题，这一灵感来自于Dojo的packageMap。有这样的场景：
-    开发初期使用了的jquery-1.6.4，后期升级到了1.7.2。但担心有些依赖jquery-1.6.4的代码升级到1.7.2后有问题。
-    因此保守的让这部分代码继续使用1.6.4版本。这时map参数将派上用场。比如我们在new/aaa/目录使用jquery1.6.4，在old/aaa/项目下使用jquery1.7.4。</p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-requirejs.config({
-    map: {
-       "*": {
-            'jquery': 'jquery-1.6' //其他目录或文件使用1.6
-        },
-        "old/aaa": { //old/aaa.js或old/aaa/目录下的所有模块如果依赖jquery，则使用1.6.4版本
-            'jquery': 'jquery-1.6.4'
-        },
-        'new/aaa': { //new/aaa.js或new/aaa/目录下的所有模块如果依赖jquery，则使用1.7.2版本
-            'jquery': 'jquery-1.7.2'
-        }
-    }
-})
-</pre>
-<p>看下面的例子，其目录结构如下：</p>
-<div><img src="zh/engineering/loader/loader5_0.png"/></div>
-<p>主页面的index.html如下:</p>
-<pre class="brush:html;gutter:false;toolbar:flase">
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-    &lt;head&gt;
-        &lt;title&gt;TODO supply a title&lt;/title&gt;
-        &lt;meta charset="UTF-8"&gt;
-        &lt;meta name="viewport" content="width=device-width"&gt;
-        &lt;script src="avalon.js"&gt;&lt;/script&gt;
-        &lt;script&gt;
-            require.config({
-                baseUrl: "./loader/",
-                map: {
-                    "old/aaa": {
-                        ddd: "ddd1.0"
-                    },
-                    "new/aaa": {
-                        ddd: "ddd1.2"
-                    },
-                    "*": {
-                        ddd: "ddd1.1"
-                    }
-                }
-            })
-            require(["old/aaa", "new/aaa", "ccc"], function(a, b, c) {
-                alert([a, b, c])
-            })
-        &lt;/script&gt;
-
-    &lt;/head&gt;
-    &lt;body&gt;
-
-    &lt;/body&gt;
-&lt;/html&gt;
-</pre>
-<p>ddd1.0.js:</p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(function(){
-   return 1000
-})
-</pre>
-<p>ddd1.1.js:</p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(function(){
-   return 1000
-})
-</pre>
-<p>ddd1.2.js:</p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(function(){
-   return 1000
-})
-</pre>
-<p>new/aaa.js:</p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(["ddd"], function(a){ 
-    return 100 + a
-})
-</pre>
-<p>old/aaa.js:</p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(["ddd"], function(a){ 
-    return 456 + a
-})
-</pre>
-<p>ccc.js:</p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(["ddd"], function(a){
-    return 7890 + a
-})
-</pre>
-
-<p>其他与上面的例子一样,运行它在firebug下看到:</p>
-<div><img src="zh/engineering/loader/loader5_1.png"/></div>
-<p>可以点<a href="zh/engineering/loader/loader5.rar" download="loader5.rar">这里</a>下载此例子</p>
-
-<h2>资源插件的使用</h2>
-<p>我们经常看到text!aaa.txt, css!aaa.css这样模块, 这其实在应用资源插件。</p>
-<p>“!”之前的东西为一个资源插件的名字，它应该与avalon.js放在同一目录下。当它加载了text这个插件后，然后再按插件的加载机制去加载aaa.txt这个模块。</p>
-<p>像“ready!”后面没有东西，也要加“!”，因为需要标识它是一个资源插件。</p>
-<p>avalon内置了4个常用的资源插件:</p>
-<ul>
-    <li>ready!， 判定有没有domReady</li>
-    <li>css!，然后link标签加载css文件，但不管它有没有加载成功</li>
-    <li>text!，然后AJAX同步请求加载资源</li>
-    <li>js!，默认都是用js!，因此不用写</li>
-</ul>
