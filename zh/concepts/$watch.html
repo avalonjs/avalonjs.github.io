@@ -4,7 +4,7 @@
   vm.$watch(prop, function(value, oldValue){
   })
 </pre>
-<p>prop为VM中的第一层属性，类型是string,boolean,number这些简单类型或是数组，当它们发生改变时，就会执行预先绑定的回调。
+<p>prop为VM中的第一层属性，类型是string,boolean,number这些简单类型或是数组长度，当它们发生改变时，就会执行预先绑定的回调。
     一般地，回调里有<span style="color:red">两个参数</span>，第一个是新值<b>value</b>，第2个是旧值<b>oldValue</b>。
     但prop为<span style="color:orange">$all</span>这个特殊的属性，它会在你修改VM中的任何第一层属性时，触发回调，
     这时回调拥有<span style="color:red">三个参数</span>，第一个是发生变动的属性的名字，第二个是新值，第三个是旧值。</p>

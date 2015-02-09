@@ -454,3 +454,54 @@ for(var i = 0, n = array.length; i < n; i++){  //----> ms-each-el=array
 </pre>
 
 <p><img src="zh/bindings/repeat/1409654809239-repeat9.jpg"  /></p>
+
+<h2>在删除本地数组的元素的同时也远程同步删除后台数组的元素</h2>
+<p>方法1</p>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;ul&gt;
+  &lt;li ms-repeat="array"&gt;内容&lt;button type="button" ms-click="removeRemote($index, $remove)"&gt;x&lt;button&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</pre>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+    avalon.define({
+        $id: "test",
+        array: [1,2,3,4],
+        removeRemote: function($index, $remove){
+           $.ajax({
+                url: url,
+                data: { offset: $index, size: 1},
+                success: function(){
+                    $remove()
+                }
+          })
+      }
+   })
+</pre>
+
+<p>方法2</p>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;ul&gt;
+  &lt;li ms-repeat="array" data-repeat-rendered="handle"&gt;内容&lt;button type="button" ms-click="$remove"&gt;x&lt;button&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</pre>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+    avalon.define({
+        $id: "test",
+        array: [1,2,3,4],
+        handle: function(action, offset, length){
+           switch(action){
+               case "del":
+                 $.ajax({
+                        url: url,
+                        data: { offset: $index, size: 1},
+                        success: callback
+                 }) 
+                 break;
+                 //....
+           
+      }
+   })
+</pre>
+
+
+
