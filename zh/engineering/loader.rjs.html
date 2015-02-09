@@ -3,3 +3,102 @@
     
 </div>
 <h2>Coming soon!</h2>
+<p>我们是使用requirejs自带的r.js进行合并的，因为r.js已经足够健壮强大，我们不需要重复造轮子。 不过除了r.js，我们还需要其原来的text.js, css.js等插件, 
+    这些我已经合并放到avalon仓库下的combo目录下了。</p>
+<p>我们先来一个简单的例子：</p>
+<div><img src="zh/engineering/loader/build0_0.jpg"/></div>
+<p>可以看到，我们分两个文件放置我们的代码， combo目录是放合并用到的JS模块及一些基础库(avalon.js)， 
+    另一个modules是放置业务代码, 按模块划分, 目前只有aaa模块,里面是它用到JS,模板,样式与图片.</p>
+<p>先看主页面</p>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;TODO supply a title&lt;/title&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width"&gt;
+        &lt;script src="combo/avalon.js" id="aaa" data-main="modules/aaa/main"&gt;&lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+     
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p>main.js的内容:</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+require.config({
+    baseUrl: "modules/aaa",
+    paths: {
+        text: "../../combo/text",
+        css: "../../combo/css",
+        domReady: "../../combo/domReady"
+    }
+})
+
+require(["aaa", "text!aaa.html", "css!aaa", "domReady!"], function(a, b) {
+    document.body.appendChild(a(b))
+})
+</pre>
+<p>aaa.html的内容:</p>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;div id="news"&gt;
+    &lt;div class="Q-tpList"&gt;
+        &lt;a target="_blank" class="pic" href="/a/20150209/003871.htm"&gt;
+            &lt;img class="picto" src="modules/aaa/116337024.jpg"&gt;&lt;/a&gt;
+        &lt;em class="f14 l24"&gt;&lt;a target="_blank" class="linkto" href="/a/20150209/003871.htm"&gt;南昌一小学仅2名老师8名学生 靠杂草生火取暖&lt;/a&gt;&lt;/em&gt;
+        &lt;p class="l22"&gt;招贤镇牛岭小学距湾里城区22公里，是湾里区最偏远、落后的小学之一，
+            现在拥有8个学生，2个老师。学生居住分散，上学路途遥远，
+            离校最远的学生要走上2个多小时的山路。&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+<p>aaa.css的内容:</p>
+<pre class="brush:css;gutter:false;toolbar:false">
+#news .Q-tpList {
+    border: 1px solid #f0f0f0;
+    position: relative;
+    width:800px;
+    padding-bottom: 14px;
+}
+#news a{
+    color:black;
+    text-decoration: none;
+}
+#news .Q-tpList .pic {
+    margin: 13px 19px 0 0;
+    width: 120px;
+    height: 80px;
+    position: relative;
+}
+#news .Q-tpList em {
+    font: 20px/35px "微软雅黑","simhei";
+    margin: 8px 0 0;
+    display: inline-block;
+}
+</pre>
+<p>运行如下:</p>
+<div><img src="zh/engineering/loader/build0_1.jpg"/></div>
+<p>好了，我们看一下如何合并吧。在combo目录下建立一个build.js。里面的内容有点类似JSON, 需要两边用小括号括起来,里面还可以写注释.</p>
+
+<pre class="brush:javascript;gutter:false;toolbar:false">
+({
+    baseUrl: "../modules/aaa",//找到main.js文件的目录
+    paths: {
+        text: "../../combo/text", //由于分居两个目录，因此路径都需要处理一下
+        css: "../../combo/css",
+        "css-builder": "../../combo/css-builder",
+        "normalize": "../../combo/normalize",
+        domReady: "../../combo/domReady"
+    },
+    name: "main",  //如果从哪一个文件开始合并
+    out: "../modules/aaa/main-built.js" //确定要生成的文件路径及名字
+})
+</pre>
+<p>接着执行命令:</p>
+<div><img src="zh/engineering/loader/build0_2.jpg"/></div>
+<p>看，合并成功。然后到首页改一下路径， modules/aaa/main改成modules/aaa/main-built就行了</p>
+<div><img src="zh/engineering/loader/build0_3.jpg"/></div>
+<p>可以点<a href="zh/engineering/loader/build0.rar" download="build0.rar">这里</a>下载此例子</p>
+
+
+
