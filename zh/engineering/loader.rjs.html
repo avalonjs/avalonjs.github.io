@@ -1,10 +1,16 @@
 <h2>avalon自带加载器</h2>
 <div ms-include-src="{{userLanguage}}/engineering/loader.menu.html" data-include-replace="true">
-    
+
 </div>
 <h2>Coming soon!</h2>
 <p>我们是使用requirejs自带的r.js进行合并的，因为r.js已经足够健壮强大，我们不需要重复造轮子。 不过除了r.js，我们还需要其原来的text.js, css.js等插件, 
     这些我已经合并放到avalon仓库下的combo目录下了。</p>
+<ul>
+    <li><a href="https://github.com/jrburke/r.js/tree/master/dist">r.js</a>, 打包用的主程序</li>
+    <li><a href="https://github.com/guybedford/require-css">css.js css-builder.js normalize.js </a>css!资源插件及其打包用程序</li>
+    <li><a href="https://github.com/requirejs/text">text.js </a>text!资源插件,它本身就整合打包逻辑</li>
+    <li><a href="https://github.com/requirejs/domReady">domReady.js </a>domReady!资源插件,判定是否domReady</li>
+</ul>
 <p>我们先来一个简单的例子：</p>
 <div><img src="zh/engineering/loader/build0_0.jpg"/></div>
 <p>可以看到，我们分两个文件放置我们的代码， combo目录是放合并用到的JS模块及一些基础库(avalon.js)， 
