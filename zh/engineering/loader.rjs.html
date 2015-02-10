@@ -172,6 +172,72 @@ require(["aaa", "text!aaa.html", "css!aaa", "domReady!"], function(a, b) {
 <p>接着执行命令，然后将data-main的属性改一下， <b>modules/aaa/main</b> --&lt; <b>modules/aaa/main-built</b></p>
 <div><img src="zh/engineering/loader/build1_3.jpg"/></div>
 <p>可以点<a href="zh/engineering/loader/build1.rar" download="build1.rar">这里</a>下载此例子</p>
+<br>
+<p><strong>例3</strong></p>
+<p>通常把我们自己工作的环境叫做发展环境， 上线的环境叫生产坏境，将它们分开是非常有好处的。看下面目录</p>
+<div><img src="zh/engineering/loader/build2_0.png"/></div>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset="utf-8"/&gt;
+        &lt;title&gt;My App&lt;/title&gt;
+        &lt;link rel="stylesheet" type="text/css" href="css/main.css"&gt;
+        &lt;script data-main="develop/main" src="develop/avalon.js"&gt;&lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;h1&gt;My App&lt;/h1&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p>one.js</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+define(["two"], function(a){
+    return "<h2>合并示例</h2>" + a
+})
+</pre>
+<p>two.js</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+define(function(){
+    return "<p>built by avalon.js  + r.js</p>"
+})
+</pre>
+
+<p>sub/three.js</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+define(function(){
+    return "<p>另外一行</p>"
+})
+</pre>
+<p>main.js</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+require.config({
+    paths: {
+        jquery: "jquery/jquery-1.11.2"
+    }
+})
+require(["one", "sub/three","jquery"], function(one, three, $) {
+    $("body").append(one+three)
+});
+</pre>
+<div><img src="zh/engineering/loader/build2_1.jpg"/></div>
+<p>我们再看如何编写构建脚本, build.js如下, 用了一个dir配置项:</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+({
+    baseUrl: ".",
+    paths: {
+        jquery: "jquery/jquery-1.11.2"
+    },
+    dir: "../production",
+    name: "main"
+})
+</pre>
+<div><img src="zh/engineering/loader/build2_2.jpg"/></div>
+<p>发现production目录生成出来了， 里面的文件好像一模一样，但其中main.js体积增大不少，已经将其依赖全部合并进去。上线时使用production目录，我们有两个办法，
+    1自己修改或通过脚本修改index.html引用脚本的路径，2后端配置一下，对请求进行重定向，我们通常是使用后面一种。</p>
+<div><img src="zh/engineering/loader/build2_3.jpg"/></div>
+<p>可以点<a href="zh/engineering/loader/build2.rar" download="build2.rar">这里</a>下载此例子</p>
+
 
 
 
