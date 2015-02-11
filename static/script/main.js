@@ -3,16 +3,16 @@
 
     function browserLanguage() {
         var nav = navigator;
-        return (nav.browserLanguage || nav.language || nav.userLanguage || "").substr(0, 2);
+        var lang =  (nav.browserLanguage || nav.language || nav.userLanguage || "").substr(0, 2);
+        return lang === "zh" ? "zh" : "en"
     }
-
-    require([browserLanguage()], function(langBag) {
+    var currentLang = browserLanguage()
+    require([currentLang], function(langBag) {
         var menuNodes = []
         var vm = avalon.define(avalon.mix(langBag, {
             $id: "main",
-            // userLanguage: browserLanguage() === "zh" ? "zh" : "en",
-            userLanguage: "zh",
-            currentPath: "zh/introduction.html",
+            userLanguage: currentLang,
+            currentPath: currentLang + "/introduction.html",
             collectMenu: function() {
                 avalon.Array.ensure(menuNodes, this)
             },
