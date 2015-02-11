@@ -4,7 +4,7 @@
     function browserLanguage() {
         var nav = navigator;
         var lang =  (nav.browserLanguage || nav.language || nav.userLanguage || "").substr(0, 2);
-        return "en"//lang === "zh" ? "zh" : "en"
+        return lang === "zh" ? "zh" : "en"
     }
     var currentLang = browserLanguage()
     require([currentLang], function(langBag) {
