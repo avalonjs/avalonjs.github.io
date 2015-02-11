@@ -13,6 +13,7 @@ define(function() {
         $callbacks: "各种回调",
         $mobiles: "移动支持",
         $components: "组件",
+        $configuration:"配置",
         concepts: [
             {
                 name: "视图模型",
