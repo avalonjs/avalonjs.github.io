@@ -1,8 +1,8 @@
 <p>本章节，主要是介绍<a href="https://github.com/RubyLouvre/avalon">avalon.config</a>方法，通过它来制定一些更贴心的功能。</p>
 
 <p>一般情况下，我们在使用ms-controller绑定时，需要添加一个ms-controller类名，目的是为了防止网速慢时将花括号暴露出来。</p>
-
-<pre><code class='language-javascript'>&lt;!DOCTYPE html&gt;
+<pre class='brush:html;gutter:false;toolbar:false'>
+&lt;!DOCTYPE html&gt;
 &lt;html&gt;
     &lt;head&gt;
         &lt;title&gt;avalon入门&lt;/title&gt;
@@ -30,12 +30,13 @@
         &lt;/div&gt;
     &lt;/body&gt;
 &lt;/html&gt;
-</code></pre>
+</pre>
 
 <p><img src="zh/configuration/images/config01.jpg" alt="enter image description here" title />
     双花括号也默认是python一些著名模板的界定符，为了防止冲突，我们有更换界定符的需求。这时我们可以这样做</p>
 
-<pre><code class='language-javascript'>&lt;!DOCTYPE html&gt;
+<pre class='brush:html;gutter:false;toolbar:false'>
+&lt;!DOCTYPE html&gt;
 &lt;html&gt;
     &lt;head&gt;
         &lt;title&gt;avalon入门&lt;/title&gt;
@@ -61,7 +62,7 @@
         &lt;/div&gt;
     &lt;/body&gt;
 &lt;/html&gt;
-</code></pre>
+</pre>
 
 <p>&lt;!&#8211;与&#8211;&gt;会生成一个注释节点，这样用户在网速慢时就看不到乱七八糟的内容了。当然这个也有风险，如果用户在页面上定义了许多注释，可以有搞混的问题。</p>
 
@@ -75,15 +76,17 @@
 
 <p><a href="https://github.com/RubyLouvre/avalon">avalon</a>拥有自己的AMD加载器，如果你想用requirejs或seajs，那你得禁用自带的加载器，或像<a href="http://www.html-js.com/article/Avalon-tutorial-1-the-introduction-of-Avalon">第一节</a>建议的那样，直接在源码里面把它整个删掉。</p>
 
-<pre><code class='language-javascript'>  avalon.config({loader: false})
-</code></pre>
+<pre class='brush:javascript;gutter:false;toolbar:false'>
+avalon.config({loader: false})
+</pre>
 
 <p>此外，avalon还有两个隐秘的配置项。</p>
 
 <p>maxRepeatSize是用来配置ms-repeat循环绑定生成的代理节点所在的池子大小，目的是重复利用这些VM对象。默认是100。手机上对内存比较严重，可以将此阀值调少点。</p>
 
-<pre><code class='language-javascript'> avalon.config({lmaxRepeatSize: 40})
-</code></pre>
+<pre class='brush:javascript;gutter:false;toolbar:false'>
+avalon.config({lmaxRepeatSize: 40})
+</pre>
 
 <p>dettachVModels是决定在事件绑定的this对象上添加$vmodels、 $vmodel属性。以前是默认添加的，现在是默认不添加，这是出于CG回收的考虑。并且在IE6-8下，为元素添加$vmodels属性不知为何会抛异常。看源码：
     <img src="zh/configuration/images/config05.jpg" alt="enter image description here" title /></p>
