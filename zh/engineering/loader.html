@@ -1,6 +1,6 @@
 <h2>avalon自带加载器</h2>
 <div ms-include-src="{{userLanguage}}/engineering/loader.menu.html" data-include-replace="true">
-    
+
 </div>
 
 <p><strong>AMD(异步模块定义)是什么？</strong></p>
@@ -36,12 +36,42 @@
     毕竟有的网站目录结构太深了，砍掉上面那些还是很长，有了paths，我们的模块ID可以用一个单词来代替。在所有主流的框架或库中，
     如果它们实现了AMD结构，一旦它们依赖jQuery，那么依赖列表中就有"jquery"这个ID进行标识。</p>
 <h2>模块的寻找规则</h2>
+<p>首先要确定baseUrl，如果引入avalon/requirejs的script标签存在data-main属性，那么就使用它作为baseUrl，如js/main， 前面会补上
+    当前的location.protocol， location.hostname与location.port。如果没有data-main属性，就使用当前标签的src去掉文件名与后缀名作为baseUrl。
+    如果main.js里面使用require.config来配置baseUrl，那就使用baseUrl。在配置baseUrl时，我们不需要在前面加上"./"，或在后面放上"/"。
+</p>
 <ul>
-    <li>如果模块ID不以"./", "../"开头，并且不符合/\w+!(\w+)?/的格式， 那么它优先在require.config中进行匹配，否则它就会根据baseUrl进行寻找。  </li>
-    <li>如果模块ID以"./"开头，那么它将以其父模块（即其所依赖的模块）所在的目录进行查找； 
+    <li>如果模块ID不以"./", "../"开头，并且不符合/\w+!(\w+)?/的格式(这又叫<b>顶级标识</b>)， 那么它优先在require.config中进行匹配，否则它就会根据baseUrl进行寻找。  </li>
+    <li>如果模块ID以"./"开头(<b>相对标识</b>的一种)，那么它将以其父模块（即其所依赖的模块）所在的目录进行查找； 
         如果没有父模块，则根据baseUrl进行寻找。  </li>
-    <li>如果模块ID以"../"开头，那么它将以其父模块（即其所依赖的模块）的上级目录进行查找； 
+    <li>如果模块ID以"../"开头(<b>相对标识</b>的一种)，那么它将以其父模块（即其所依赖的模块）的上级目录进行查找； 
         如果没有父模块，则根据baseUrl的上级目录寻找。  </li>
+    <li>如果模块ID在paths配置项里配置了，如果它的值是绝对路径，那么就直接用这个没有什么好说的。
+        如果是相对路径，那么先找父模块的路径，没有父模块使用baseUrl。</li>
+    <li>如果模块ID在map配置项里配置了，那么它会在当前父模块的URL加文件名进行替换，前面加上<b>baseUrl</b>，注意不是跟parentUrl
+        <pre class="brush:javascript;gutter:false;toolbar:false">
+requirejs.config({
+    map: {
+        "old/aaa": { //old/aaa.js或old/aaa/目录下的所有模块如果依赖jquery，则使用1.6.4版本
+            'jquery': 'jquery-1.6.4'
+        },
+        'new/aaa': { //new/aaa.js或new/aaa/目录下的所有模块如果依赖jquery，则使用1.7.2版本
+            'jquery': 'jquery-1.7.2'
+        }
+    }
+})
+        </pre>
+        <p>相当于</p>
+        <pre class="brush:javascript;gutter:false;toolbar:false">
+               String(parentUrl + parentName).replace("old/aaa/jquery",function(){
+                        curUrl = baseUrl + "/jquery-1.6.4"
+               })
+               String(parentUrl + parentName).replace("new/aaa/jquery", function(){
+                        curUrl = baseUrl + "/jquery-1.7.2"
+                })
+        </pre>
+
+    </li>
 </ul>
 <p>模块ID也有可能以xxx!yyy的形式存在，xxx为资源插件的名字，为一个JS文件，放在baseUrl目录下。一般情况下，avalon内置了, js!, text!, css!资源插件。
     比如<strong>aaa</strong>这个模块ID，其实就是<strong>js!aaa</strong>。在明确了对应的资源插件的情况下，我们就不需要写资源对应的扩展名。
