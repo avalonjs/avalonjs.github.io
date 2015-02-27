@@ -1,16 +1,49 @@
 <h2>date</h2>
 <p>对日期进行格式化，date(formats), 目标可能是符合一定格式的字符串，数值，或Date对象。</p>
-<pre ms-skip class="brush:javascript;gutter:false;toolbar:false">
- 生成于{{ new Date | date("yyyy MM dd:HH:mm:ss")}}
-生成于{{ "2011/07/08" | date("yyyy MM dd:HH:mm:ss")}}
-生成于{{ "2011-07-08" | date("yyyy MM dd:HH:mm:ss")}}
-生成于{{ "01-01-2000" | date("yyyy MM dd:HH:mm:ss")}}
-生成于{{ "03 04,2000" | date("yyyy MM dd:HH:mm:ss")}}
-生成于{{ "3 4,2000" | date("yyyy MM dd")}}
-生成于{{ 1373021259229 | date("yyyy MM dd:HH:mm:ss")}}
-生成于{{ "1373021259229" | date("yyyy MM dd:HH:mm:ss")}}
-生成于{{ "2014-12-07T22:50:58+08:00" | date("yyyy MM dd:HH:mm:ss")}} //这是ISO8601的日期格式
-生成于{{ "\/Date(1373021259229)\/" | date("yyyy MM dd:HH:mm:ss")}} //这是ASP.NET输出的JSON数据的日期格式
+<pre ms-skip class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;TODO supply a title&lt;/title&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width"&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script&gt;
+            avalon.define({
+                $id: 'testtest',
+                name: "大跃进右",
+                d1: new Date,
+                d2: "2011/07/08",
+                d3: "2011-07-08",
+                d4: "01-01-2000",
+                d5: "03 04,2000",
+                d6: "3 4,2000",
+                d7: 1373021259229,
+                d8: "1373021259229",
+                d9: "2014-12-07T22:50:58+08:00",
+                d10: "\/Date(1373021259229)\/"
+
+            })
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+
+        &lt;div ms-controller="testtest"&gt;
+            &lt;p&gt;生成于{{ d1 | date("yyyy MM dd:HH:mm:ss")}}&lt;/p&gt;
+            &lt;p&gt;生成于{{ d2 | date("yyyy MM dd:HH:mm:ss")}}&lt;/p&gt;
+            &lt;p&gt;生成于{{ d3 | date("yyyy MM dd:HH:mm:ss")}}&lt;/p&gt;
+            &lt;p&gt;生成于{{ d4 | date("yyyy MM dd:HH:mm:ss")}}&lt;/p&gt;
+            &lt;p&gt;生成于{{ d5 | date("yyyy MM dd:HH:mm:ss")}}&lt;/p&gt;
+            &lt;p&gt;生成于{{ d6 | date("yyyy MM dd")}}&lt;/p&gt;
+            &lt;p&gt;生成于{{ d7 | date("yyyy MM dd:HH:mm:ss")}}&lt;/p&gt;
+            &lt;p&gt;生成于{{ d8 | date("yyyy MM dd:HH:mm:ss")}}&lt;/p&gt;
+            &lt;p&gt;生成于{{ d9 | date("yyyy MM dd:HH:mm:ss")}} //这是ISO8601的日期格式&lt;/p&gt;
+            &lt;p&gt;生成于{{ d10| date("yyyy MM dd:HH:mm:ss")}} //这是ASP.NET输出的JSON数据的日期格式&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+
 </pre>
 <p>上面的yyyy, MM, dd其实是一种关键字，用来帮我们格式化日期，详看下表：</p>
 <table class="shim-table">
