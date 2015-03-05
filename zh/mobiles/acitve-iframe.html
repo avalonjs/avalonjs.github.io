@@ -1,0 +1,19 @@
+<html>
+<head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="../../static/script/avalon.mobile.js"></script>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+</head>
+<body ms-controller='test'>
+    <div ms-on-tap='$tap'></div>
+    <script>
+        avalon.define('test',function(vm){
+            vm.$tap = function(e){
+                this.innerHTML = e.timeStamp;
+            };
+        });
+    </script>
+</body>
