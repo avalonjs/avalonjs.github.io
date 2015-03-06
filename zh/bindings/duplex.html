@@ -343,6 +343,30 @@ function fixNull(val) {
         return val
     }
 </pre>
+<p>有了拦截器，我们做数字计算就简单多了。</p>
+
+<pre ms-skip class="brush:javascript;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;test avalon&lt;/title&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+        &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt; 
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script&gt;
+            avalon.define({
+                $id:"test",
+                a: 10,
+                b: 20
+            })
+        &lt;/script&gt;
+    &lt;/head&gt;
+
+    &lt;body ms-controller="test"&gt;
+        &lt;input ms-duplex-number="a"&gt; +   &lt;input ms-duplex-number="b"&gt;  = {{a + b}}
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
 
 <p>ms-duplex是默认使用oniput事件监听text，textearea，password元素的value变动，
     换言之，每改动一下字符串，都会进行同步，同步时会进入对应的拦截器，ms-duplex其实等同于ms-duplex-string。
