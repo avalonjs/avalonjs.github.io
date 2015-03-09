@@ -95,7 +95,7 @@
     })
 &lt;/script&gt;
 &lt;form method="post" action="somepage" ms-controller="tinymce"&gt;
-    &lt;textarea name="content" style="width:100%"  ms-duplex="text"&gt;&lt;/textarea&gt;
+    &lt;textarea name="content" style="width:100%" class="only_tinymce" ms-duplex="text"&gt;&lt;/textarea&gt;
     &lt;fieldset&gt;&lt;legend&gt;输出内容&lt;/legend&gt;
         {{text}}
     &lt;/fieldset&gt;
@@ -121,9 +121,10 @@
     })
 
     //http://kindeditor.net/docs/usage.html
-    require(["kindeditor", "ready!"], function(K) {
+    require(["kindeditor"], function(K) {
         require(["kindezh"], function() {//加载中文语言包，必须等到上面的加载回来
             var editor = K.create("#kindeditor")
+            console.log(editor)
             var iframe = editor.container[0].getElementsByTagName("iframe")[0]
 
             var iframeWindow = iframe.contentWindow || iframe.contentDocument.parentWindow
