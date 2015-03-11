@@ -1,2 +1,70 @@
-<h2>Coming Soon!</h2>
-<p><a href="http://avalonjs.github.io/#zh/introduction.html">go back to chinese pages</a></p>
+<table>
+    <tr>
+        <td>
+            <img style="width:200px; height:200px;" src="static/css/logo_avalon.png"/>
+        </td>
+        <td>
+            <p style="max-width:590px;margin:0px;"><strong style="font-size:18px">Avalon</strong>
+            is a easy to use micro MVVM framework which developed for presenting different views of the same business logic since 09/15/2012.
+            In fact, we could solve this problem by using generally front-end templates and jQuery event handler. But It will be hard to maintain the code with the business expansion, which would have dozens selectors and event callback functions.
+            So it is very necessary to use framework to divide business and logic. I tried to use MVC framework in the beginning, like backbone, unfortunately the result went opposite direction of decreasing code working. Finally I was inspired when I found Microsoft’s WPF by accidentally, that elegant MVVM architecture totally attracted me, I thought this is should be the way I was looking for.</p>
+        </td>
+    </tr>
+</table>
+<p style="margin-top:0px;">Avalon divides all front-end code into two parts: View (UI) will be handled by binding (which called Directives in Angular.JS), and business logic will be handled in each VM(View-Model)  object. Every data operation in VM would be magically synchronized to UI.</p>
+What’s this black magic inside? In C#, this magic called accessor property, whereas in Javascript it is called Object.defineProperty that firstly introduced in Internet Explorer 8. But IE8 could not support it well until IE9 and later version while other modern browsers were able to fully support it soon. For IE7 and older version IE, it is hard to implement by native function, so I had to use VBScript for hacking to support it. 
+<p>How dose Object.defineProperty or VBS work? It could convert certain property of one object to getter/setter method, and only need to hijack these two methods to Pub/Sub pattern and then it could implicit update UI. 
+I named this framework Avalon to just thank and in memory of WPF guidance. Avalon could let front end developer freedom from torment of DOM, and focus on enjoyable data.
+</p>
+<h1>Adventage</h1>
+
+<blockquote style="display: inline-block;padding:10px; border: 1px solid rgb(191,199,238);background:rgb(255,255,255)">
+    <p>The absolute advantage of Avalon is loose coupling so that developer doesn’t need to face the detailed business. For example, one statement may related to the sequence event happen or some arguments. Logic would be very complicated and vulnerable if not using MVC (include MVVM). 
+In generally, it is easy to make bugs when you try to maintain some high relevance logic located in different place with high coupling. To use framework could apparently reduce development difficulty and make application stronger and healthier, and avoid repeated work.</p>
+
+    <p ms-skip>For example:
+{{value}} could replace $(selector).text(value) for saving.
+Besides, like directive in Angular.JS, could implement the function which may need complex code without framework before.</p>
+</blockquote>
+<style>
+    .task-list li{
+        max-width: 800px;
+    }
+</style>
+<ul class="task-list">
+    <li>Easy to use, the developer designs the framework by deeply understanding Angular.js, Rivets API. No complex concept. And there are suitable numbers of commands basically cover all jQuery operation. This could make sure not experience front end developer easy to learn.</li>
+
+    <li>High compatibility, support IE6+, Firefox 3.5+, Opera 11+, Safari 5+, Chrome 4+ even copied browsers like 360, QQ, Sougou, Liebao, Maxthon. Kindly compatibility to future version.
+Compare to other MVVM framework, KnockoutJS(IE6), AngularJS1.3(IE9), EmberJS(IE8), WinJS(IE9).</li>
+
+    <li>High performance capacity, Avalon has been testing in thousand columns table for long time. It could support 14k or above bindings. (Angular.js could only support 2k bindings per page)
+And we also provide a high performance version avalon.modern.js for IE 10 or other modern browsers could fully support HTML 5.</li>
+
+    <li>No any dependency lib needed. Less than 5K lines, Less than 50 KB after compressed.</li>
+
+    <li>Completed unit test, and independent to a new repo <a href="https://github.com/RubyLouvre/avalon.test">avalon.test</a> since enormous code.</li>
+        
+
+    <li>We provide about 50 component library<a href="http://ued.qunar.com/oniui/index.html#avalon.accordion.doc.html">OniUI</a>, including 2 Grid component, 1 tree component, 1 captcha component that all components fully supported by Qunar Front End Team.  </li>
+
+    <li>There is a lovely community in QQ Group (QQ:228372837,79641290) since Avalon has been used by some company.</li>
+
+    <li>Support pipe style filter functions, easily get formatted output.</li>
+
+    <li>No more DOM operation code, and 50% coding work less than jQuery for same feature.</li>
+
+    <li>Using CSS like overlap covering mechanism, each View-Model alternately render part of page.</li>
+
+    <li>When node has been removed, Avalon would automatically uninstall the UI refresh function to save memory.</li>
+
+    <li>><strong>Operating data is operating DOM</strong>any actions to ViewModel will be sync to both View and Model.</li>
+    <li>AMD module loader included, no need to be integrated with other loader.</li>
+</ul>
+
+<p>I use ms for prefix in Avalon, means Mass to remember my previous mass Framework.</p>
+<!--
+<p>下面是用jQuery与avalon写代码的比较图：</p>
+<div><img src="zh/avalon&jquery.jpg" width="800" height="287"/></div>
+<div>用了avalon，页面就变成一个模板了：</div>
+<div><img src="zh/avalon&view.jpg"/></div>
+-->
