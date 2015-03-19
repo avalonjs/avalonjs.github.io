@@ -14,6 +14,7 @@ define(function() {
         $mobiles: "移动支持",
         $components: "组件",
         $configuration:"配置",
+        $exhibitions: "案例",
         concepts: [
             {
                 name: "视图模型",

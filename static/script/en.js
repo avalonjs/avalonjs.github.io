@@ -14,6 +14,7 @@ define(function() {
         $mobiles: "mobile suporting",
         $components: "components",
         $configuration:"configuration",
+        $exhibitions: "exhibitions",
         concepts: [
             {
                 name: "vmodel",
