@@ -529,7 +529,7 @@ function fixNull(val) {
             rows: {name: 'a', age: 45},
             text: "OO",
             arr: [{name: "55"}],
-            log: function() {
+            log: function () {
                 if (window.JSON && JSON.stringify) {
                     var value = model.$model
                     document.getElementById("ms-duplex-show-json").value = JSON.stringify(value, 4, "\t")
@@ -567,7 +567,7 @@ function fixNull(val) {
                 {name: "小白", id: 354435435}
             ],
             textarea: {
-                get: function() {
+                get: function () {
                     return  this.selected.join("\n")
                 }
             }
@@ -619,3 +619,11 @@ function fixNull(val) {
         </textarea>
     </div>
 </fieldset>
+<p>在1.4.1中, ms-duplex-number进行增强, 添加data-duplex-number辅助指令</p>
+
+<ul>
+    <li>如果它等于strong时,那么input.value的值为数字时就转换为数字，否则转换为0， 包括什么也不填时也转换为0</li>
+    <li>如果它等于medium时,那么input.value的值为数字时就转换为数字，如果没有填时，就不转换，其他情况转换为0。
+        这也是默认情况，如果你也没有设置data-duplex-number，就默认为medium。</li>
+    <li>如果它等于weak时,那么input.value的值为数字时就转换为数字，否则就不进行转换</li>
+</ul>

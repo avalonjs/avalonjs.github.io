@@ -319,3 +319,52 @@
 
 </pre>
 <p><img src="zh/bindings/include/include2.png"  /></p>
+<p>avalon1.4.2中，添加了data-include-cache="true"辅助指令，它会保存之前的模板被扫描后的DOM节点。</p>
+<pre class="brush:html;gutter:false;toolbar:false;">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;data-include-cache="true"&lt;/title&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width"&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script&gt;
+            var vm = avalon.define({
+                $id: "test",
+                aaa: "",
+                changeA: function () {
+                    vm.aaa = "aaa"
+                },
+                changeB: function () {
+                    vm.aaa = "bbb"
+                },
+                changeC: function () {
+                    vm.aaa = "ccc"
+                }
+            })
+        &lt;/script&gt;
+        &lt;script type="avalon" id="aaa"&gt;
+            &lt;h2&gt;这是模板1&lt;/h2&gt;
+    {{new Date - 0}}
+        &lt;/script&gt;
+        &lt;script type="avalon" id="bbb"&gt;
+          &lt;h2&gt;这是模板2&lt;/h2&gt;
+  {{new Date - 0}}
+        &lt;/script&gt;
+        &lt;script type="avalon" id="ccc"&gt;
+            &lt;h2&gt;这是模板3&lt;/h2&gt;
+    {{new Date - 0}}
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div ms-controller="test"&gt;
+            &lt;div ms-include="aaa" data-include-cache="true"&gt;准备加载模块....&lt;/div&gt;
+            &lt;p&gt;
+                &lt;button type="button" ms-click="changeA"&gt;aaa&lt;/button&gt;
+                &lt;button type="button" ms-click="changeB"&gt;bbb&lt;/button&gt;
+                &lt;button type="button" ms-click="changeC"&gt;ccc&lt;/button&gt;
+            &lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
