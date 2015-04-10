@@ -40,6 +40,10 @@ define(function() {
                 name: "$watch方法",
                 id: "$watch"
             },
+             {
+                name: "$unwatch方法",
+                id: "$unwatch"
+            },
             {
                 name: "$fire方法",
                 id: "$fire"
@@ -109,10 +113,7 @@ define(function() {
             "Array.ensure(array, el)": "只有数组不存在此元素时才添加它"
         },
         engineering: [
-            {
-                name: "跨模块通信",
-                id: "communication"
-            },
+
             {
                 name: "与jQuery混用",
                 id: "jquery"

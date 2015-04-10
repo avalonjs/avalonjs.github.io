@@ -1,4 +1,4 @@
-define(function() {
+define(function () {
     return {
         $repository: "Github",
         $tutorials: "Tutorials",
@@ -13,7 +13,7 @@ define(function() {
         $callbacks: "callbacks",
         $mobiles: "mobile suporting",
         $components: "components",
-        $configuration:"configuration",
+        $configuration: "configuration",
         $exhibitions: "exhibitions",
         concepts: [
             {
@@ -39,6 +39,10 @@ define(function() {
             {
                 name: "$watch",
                 id: "$watch"
+            },
+            {
+                name: "$unwatch",
+                id: "$unwatch"
             },
             {
                 name: "$fire",
@@ -109,10 +113,6 @@ define(function() {
             "Array.ensure(array, el)": "只有数组不存在此元素时才添加它"
         },
         engineering: [
-            {
-                name: "communication",
-                id: "communication"
-            },
             {
                 name: "work with jQuery",
                 id: "jquery"
