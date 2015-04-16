@@ -508,12 +508,14 @@ require(["./dog/aaa", "./dog/bbb", "cat", "domReady!"], function(a, b, c) {
 <p>dog/aaa.js</p>
 <pre class="brush:javascript;gutter:false;toolbar:false">
 define(function(){
+    console.log("dog1")
     return "dog1"
 })
 </pre>
 <p>dog/bbb.js</p>
 <pre class="brush:javascript;gutter:false;toolbar:false">
 define(function(){
+    console.log("dog2")
     return "dog2"
 })
 </pre>
@@ -521,6 +523,7 @@ define(function(){
 <p>cat/main.js</p>
 <pre class="brush:javascript;gutter:false;toolbar:false">
 define(["./aaa","./bbb"], function (a, b) {  
+   console.log(a + b)
    return a + b
 })
 </pre>
