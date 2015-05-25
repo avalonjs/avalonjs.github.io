@@ -192,7 +192,7 @@ define(function() {
 <p>avalon1.4才完完整整支持此功能。</p>
 
 <pre class="brush:javascript;gutter:false;toolbar:false">
-requirejs.config({
+require.config({
     shim: {
         'backbone': {
             //指定依赖项,必须为数组, 不写时默认为空数组,它们会先于被依赖者加载
@@ -352,7 +352,7 @@ require.config({
     开发初期使用了的jquery-1.6.4，后期升级到了1.7.2。但担心有些依赖jquery-1.6.4的代码升级到1.7.2后有问题。
     因此保守的让这部分代码继续使用1.6.4版本。这时map参数将派上用场。比如我们在new/aaa/目录使用jquery1.6.4，在old/aaa/项目下使用jquery1.7.4。</p>
 <pre class="brush:javascript;gutter:false;toolbar:false">
-requirejs.config({
+require.config({
     map: {
        "*": {
             'jquery': 'jquery-1.6' //其他目录或文件使用1.6
