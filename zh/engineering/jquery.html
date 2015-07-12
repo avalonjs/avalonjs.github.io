@@ -1,5 +1,5 @@
 <h2>与jQuery的混用</h2>
-<p>有三种方案，第一种，使用avalon自动的加载器引用，第二种禁用avalon自带加载器，使用requirejs引用，第三种禁用avalon自带加载器，直接引用。</p>
+<p>有三种方案，第一种，使用avalon自带的加载器引用，第二种禁用avalon自带加载器，使用requirejs引用，第三种禁用avalon自带加载器，直接引用。</p>
 <p>第一种，将avalon与jquery放在同一目录下，然后：</p>
 <pre class="brush:javascript;gutter:false;toolbar:false;">
 &lt;!DOCTYPE html&gt;
@@ -35,6 +35,7 @@
 </pre>
 <p>第二种，将avalon与jquery与requirejs放在同一目录下</p>
 <p>修改avalon源码 loader: ture  ---&gt; loader: false，然后</p>
+<p>如果换成使用avalon.shim.js，则不用修改avalon源码</p>
 <pre class="brush:javascript;gutter:false;toolbar:false;">
 &lt;!DOCTYPE html&gt;
 &lt;html&gt;

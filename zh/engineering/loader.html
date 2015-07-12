@@ -18,6 +18,8 @@
 </p>
 <p>AMD就是这样一种对模块的定义，使模块和它的依赖可以被异步的加载，但又按照正确的顺序。</p>
 <div><img src="zh/engineering/loader/amd.png"/></div>
+<h2><strong>选择加载器</strong></h2>
+<p><strong>内置AMD加载器</strong></p>
 <p>avalon内置了AMD加载器，用于与其原创者requirejs一模一样，但更轻量。它主要涉及以下三个函数:</p>
 <ul>
     <li>define(id?, deps?, factory)– 一个全局函数，用于定义模块。</li>
@@ -25,6 +27,8 @@
     <li>require.config(settings)-  用于配置加载器的各种行为</li>
 </ul>
 <p>此外， 我们还可以在define.amd对象查看到所有加载过的模块。</p>
+<p><strong>外部AMD加载器</strong></p>
+<P>当然你也可以使用requirejs等外部AMD加载器，此时你应用选用 shim 版本，如 avalon.shim.js，shim 版本没有包含自带的amd加载器。</p>
 <h2>模块ID是什么?</h2>
 <p>require的第一个参数为一个数组，里面就是我们要依赖的模块的ID。模块的ID究竟是一个什么东西呢？通俗来说，就是这个模块的名字，
     但模块在AMD其实相当于一个独立的JS文件，因此要将名字与文件关联起来，我们就需要做一些手脚。从实现角度来看，加载一个模块，就是加载一个JS文件，
