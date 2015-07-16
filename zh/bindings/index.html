@@ -24,10 +24,16 @@
     </li>
     <li>
         data-xxx-yyy="xxx"，辅助指令，比如ms-duplex的某一个辅助指令为data-duplex-event="change"，ms-repeat的某一个辅助指令为data-repeat-rendered="yyy"
-
     </li>
 </ul>
 <p>灰色代表已被废弃，蓝色是常用，红色是必须，橙色是最新增的</p>
+<p>在1.4.5中新增<b>一次性绑定</b>，就在原来的文本节点的最前面加入::，如<b ms-skip>{{aaa}}</b>改成 <b ms-skip>{{::aaa}}</b>，
+    ms-*属性的值最前面加上::，如<b ms-skip>ms-attr-value="aaa"</b>改成 <b ms-skip>ms-attr-value="::aaa"</b>。
+    一次性绑定只渲染视图一次，下次vm.aaa发生改动，不会再同步视图。这非常适用纯数据展示的表格。如果ms-*属性的值里面有<span ms-skip>{{}}</span>，不能
+    在这些花括号里面加 ::
+</p>
+
+
 <div ms-if="supportSVG"　ms-include-src="'zh/bindings/bindings.svg'">   
 </div>
 <div ms-if="!supportSVG">   
