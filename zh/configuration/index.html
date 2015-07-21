@@ -43,7 +43,7 @@
         &lt;script src="avalon.modern.js" type="text/javascript"&gt;&lt;/script&gt;
         &lt;script&gt;
             avalon.config({
-                interpolate: ["&lt;!--","--&gt;"]
+                interpolate: ["{&","&}"]
             })
             var model = avalon.define({
                 $id: "test",
@@ -63,7 +63,7 @@
 &lt;/html&gt;
 </pre>
 
-<p>&lt;!&#8211;与&#8211;&gt;会生成一个注释节点，这样用户在网速慢时就看不到乱七八糟的内容了。当然这个也有风险，如果用户在页面上定义了许多注释，可能有搞混的问题。</p>
+<p>注意,左右定界符不能一样,不能出现&lt;或&gt;。</p>
 
 <p>我们再看下一个有用的配置项，debug。<a href="https://github.com/RubyLouvre/avalon">avalon</a>默认是在控制台下打印没有调试消息的，上线时我们不愿用户看到它们，可以这样关掉它们。
 </p>
@@ -75,7 +75,7 @@
 avalon.config({debug: false})
 </pre>
 
-<p><a href="https://github.com/RubyLouvre/avalon">avalon</a>拥有自己的AMD加载器，如果你想用requirejs或seajs，那你得禁用自带的加载器，或像<a href="http://www.html-js.com/article/Avalon-tutorial-1-the-introduction-of-Avalon">第一节</a>建议的那样，直接在源码里面把它整个删掉。</p>
+<p><a href="https://github.com/RubyLouvre/avalon">avalon</a>拥有自己的AMD加载器，如果你想用requirejs或seajs，那你可以使用shim版本或禁用自带的加载器，或像<a href="http://www.html-js.com/article/Avalon-tutorial-1-the-introduction-of-Avalon">第一节</a>建议的那样，直接在源码里面把它整个删掉。详细方式参见<a href="/zh/engineering/loader.html">这里</a></p>
 
 <pre class='brush:javascript;gutter:false;toolbar:false'>
 avalon.config({loader: false})

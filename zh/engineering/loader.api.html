@@ -38,6 +38,6 @@ require(["./aaa", "text!../html/aaa.html", "css!../style/aaa","jquery"], functio
 })
 </pre>
 <p>最后是各个JS模块，以define方法进行定义了。注意，define方法有三个参数，第一个参数是模块ID，通常不用写， 在打包时，r.js会根据它与baseUrl的位置
-    算出其可用的模块ID名。第二个参数时依赖列表，./, ../应该是相对于其父模块进行设置。第三个是fatory函数，亦即模块本身。
+    算出其可用的模块ID名。第二个参数是依赖列表，./, ../应该是相对于其父模块进行设置。第三个是fatory函数，亦即模块本身。
 </p>
 <p>总结一下，加载器的三个核心API的定义与使用顺序为 require.config --> require --> define。</p>
