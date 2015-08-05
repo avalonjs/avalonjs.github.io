@@ -100,6 +100,10 @@
                 {
                     name: "ms-widget",
                     id: "widget"
+                },
+                {
+                    name: "ms-l20n",
+                    id: "l20n"
                 }
             ].sort(),
             filters: [

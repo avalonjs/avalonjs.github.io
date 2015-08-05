@@ -20,6 +20,7 @@
     ms-class-1="xxx" ms-class-2="yyy" ms-class-3="xxx" //数字还表示绑定的次序
     ms-css-background-color="xxx" //这个绑定属性有两个参数，但在css绑定里，相当于一个，会内部转换为backgroundColor 
     ms-duplex-aaa-bbb-string="xxx"//这个绑定属性有三个参数，表示三种不同的拦截操作 
+
         </pre>
     </li>
     <li>
@@ -32,6 +33,7 @@
     一次性绑定只渲染视图一次，下次vm.aaa发生改动，不会再同步视图。这非常适用纯数据展示的表格。如果ms-*属性的值里面有<span ms-skip>{{}}</span>，不能
     在这些花括号里面加 ::
 </p>
+<p>有一个第三方绑定指令ms-l20n提供国际化能力。如果需要提供国际化页面可以使用，用法参见<a href="https://pinghe.github.io/avalon.components/l20n/examples/examples.html">这里</a></p>
 <p>灰色代表已被废弃，蓝色是常用，红色是必须，橙色是最新增的</p>
 
 <div ms-if="supportSVG"　ms-include-src="'zh/bindings/bindings.svg'">   
