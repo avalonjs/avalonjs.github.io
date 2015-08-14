@@ -157,3 +157,64 @@ avalon.effect("animate", {
     &lt;/body&gt;
 &lt;/html&gt;
 </pre>
+<p>如果你要使用回调,那就必须在avalon.effect方法的第二个参数对象上添加, 一共有如下回调:</p>
+<ul>
+    <li>beforeEnter: 在动画开始前执行</li>
+    <li>afterEnter: 在动画结束后执行</li>
+    <li>abortEnter: 在动画还没有结束前执行,会立即回到原始状态</li>
+    <li>beforeLeave: 在动画开始前执行</li>
+    <li>afterLeave: 在动画结束后执行</li>
+    <li>abortLeave: 在动画还没有结束前执行,会立即回到原始状态</li>
+</ul>
+<p>我们结合ms-if演示一下效果:</p>
+<pre class="brush:javascript;gutter:false;toolbar:false;">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;style&gt;
+            .box{
+                width:200px;
+                height:200px;
+                background: red;
+            }
+            .toggle{
+                transition: all 0.5s ease;
+            }
+            .toggle-enter{
+                width:0px;
+                height:0px;
+            }
+            .toggle-leave{
+                width:0px;
+                height:0px;
+            }
+        &lt;/style&gt;
+        &lt;script&gt;
+            avalon.effect("toggle", {
+                afterEnter: function (el) {
+                    console.log("enter")
+                },
+                afterLeave: function (el) {
+                    console.log("leave")
+                }
+            })
+            var vm = avalon.define({
+                $id: "test",
+                bool: true,
+                click: function () {
+                    vm.bool = !vm.bool
+                }
+            })
+
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body ms-controller="test"&gt;
+        &lt;div ms-effect="toggle" ms-if="bool" class="box toggle"&gt;&lt;/div&gt;
+        &lt;p&gt;&lt;button ms-click="click" type="button"&gt;button&lt;/button&gt;&lt;/p&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p><img src="zh/bindings/effect/effect02.gif" /></p>
