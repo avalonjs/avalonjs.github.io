@@ -66,6 +66,10 @@
                     id: "class"
                 },
                 {
+                    name: "ms-effect",
+                    id: "effect"
+                },
+                {
                     name: "ms-hover-*",
                     id: "class"
                 },

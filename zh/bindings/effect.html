@@ -114,7 +114,7 @@ avalon.effect("animate", {
 </pre>
 <p><img src="zh/bindings/effect/effect01.gif" /></p>
 <p>如果上面使用CSS3则是这样实现:</p>
-<pre class="brush:javascript;gutter:false;toolbar:false;">
+<pre class="brush:html;gutter:false;toolbar:false;">
 &lt;!DOCTYPE html&gt;
 &lt;html&gt;
     &lt;head&gt;
@@ -167,7 +167,7 @@ avalon.effect("animate", {
     <li>abortLeave: 在动画还没有结束前执行,会立即回到原始状态</li>
 </ul>
 <p>我们结合ms-if演示一下效果:</p>
-<pre class="brush:javascript;gutter:false;toolbar:false;">
+<pre class="brush:html;gutter:false;toolbar:false;">
 &lt;!DOCTYPE html&gt;
 &lt;html&gt;
     &lt;head&gt;
@@ -218,3 +218,101 @@ avalon.effect("animate", {
 &lt;/html&gt;
 </pre>
 <p><img src="zh/bindings/effect/effect02.gif" /></p>
+<h3>ms-include动画效果</h3>
+<p>ms-include的动画效果非常复杂,它的enter动画与leave动画是同时进行.</p>
+
+<p>下例,我们还使用了著名的CSS3动画库<a href="https://daneden.github.io/animate.css/">animate.css</a></p>
+
+<pre class="brush:html;gutter:false;toolbar:false;">
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset="utf-8"&gt;
+        &lt;meta http-equiv="X-UA-Compatible" content="IE=8" /&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;link rel="stylesheet" href="animate.css" type="text/css"&gt;
+        &lt;style&gt;
+
+            .contain{
+                border: 1px solid red;
+                position:relative;
+                width: 200px;
+                top:0px;
+                height:220px;
+            }
+            .aaa {
+                background: #a9ea00;
+                height:200px;
+            }
+            .bbb {
+                background: #e0f2be;
+                height:200px;
+            }
+            .fadeInLeft{
+                position: absolute;
+                width:100%;
+            }
+            .fadeOutRight{
+                position: absolute;
+                width:100%;
+            }
+            .zoomEffect {
+                position: relative;
+            }
+            .zoomInDown, .zoomOutUp {
+                width: 100%;
+                height: 100%;
+                top: 50%;
+                margin-left: -150px;
+                margin-top: -170px;
+                left: 50%;
+                position: absolute;
+            }
+        &lt;/style&gt;
+        &lt;script&gt;
+            avalon.effect("xxx", {
+                leaveClass: "fadeOutRight",
+                enterClass: "fadeInLeft"
+
+            })
+            avalon.effect("yyy", {
+                enterClass: "zoomInDown",
+                leaveClass: "zoomOutUp"
+            })
+            var a = avalon.define({
+                $id: "test",
+                aaa: "aaa.html",
+                change: function () {
+                    a.aaa = a.aaa === "aaa.html" ? "bbb.html" : "aaa.html"
+                }
+            })
+
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body ms-controller="test" style="padding-bottom: 1000px;"&gt;
+        &lt;div ms-include-src="'include2'+aaa"  data-include-cache="true"&gt;&lt;/div&gt;
+        &lt;h5&gt;data-include-repalce="false"&lt;/h5&gt;
+        &lt;div class='contain' style='overflow: hidden'&gt;
+            &lt;div ms-include-src="'include2'+aaa"  class="animated" ms-effect="xxx" data-include-cache="true"&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;button type="button" ms-click="change"&gt;change&lt;/button&gt;
+        &lt;h5&gt;data-include-replace="true"&lt;/h5&gt;
+        &lt;div class='contain zoomEffect' style='overflow: hidden'&gt;
+            &lt;div ms-include-src="'include2'+aaa" class="contain animated" ms-effect="yyy" data-include-replace="true" data-include-cache="true"&gt;哈哈哈&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p>include2aaa.html</p>
+<pre class="brush:html;gutter:false;toolbar:false;">
+&lt;div class="aaa"&gt;
+    第一个面板
+&lt;/div&gt;
+</pre>
+<p>include2bbb.html</p>
+<pre class="brush:html;gutter:false;toolbar:false;">
+&lt;div class="aaa"&gt;
+    第二个面板
+&lt;/div&gt;
+</pre>
+
+<p><img src="zh/bindings/effect/effect03.gif" /></p>
