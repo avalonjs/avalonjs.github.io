@@ -415,3 +415,83 @@ avalon.effect("animate", {
 &lt;/html&gt;
 </pre>
 <p><img src="zh/bindings/effect/effect04.gif" /></p>
+<p>我们再看一下数组重排删除的动画效果吧.</p>
+<pre class="brush:html;gutter:false;toolbar:false;">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;ms-repeat&lt;/title&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script src="random.js"&gt;&lt;/script&gt;
+        &lt;link rel="stylesheet" href="animate.css" type="text/css"&gt;
+
+        &lt;script&gt;
+            avalon.effect("xxx", {
+                enterClass: "lightSpeedIn",
+                leaveClass: "lightSpeedOut"
+            })
+            var vm = avalon.define({
+                $id: "test",
+                array: ["a", "b", "c", "d", "d"],
+                add: function () {
+                    vm.array.push(55, 66, 33, "3", "o", "p")
+                },
+                getBg: function () {
+                   
+                    return '#'+Math.floor(Math.random()*16777215).toString(16)
+                },
+                reverse: function () {
+                    vm.array.reverse()
+                },
+                pop: function () {
+                    vm.array.pop()
+                },
+                remove: function () {
+                    vm.array.splice(1, 5)
+                }
+            })
+
+        &lt;/script&gt;
+        &lt;style&gt;
+            ul{
+                width:400px;
+            }
+            li{
+               height:25px;
+                margin-top: 1px;
+            }
+        &lt;/style&gt;
+    &lt;/head&gt;
+    &lt;body ms-controller="test"&gt;
+        &lt;h1&gt;ms-repeat&lt;/h1&gt;
+        &lt;ul&gt;
+            &lt;li ms-repeat="array" 
+                class="animated" 
+                data-effect-stagger="40" 
+                ms-css-background="getBg()"
+                ms-effect="xxx"&gt;{{el}}*{{$index}}&lt;/li&gt; 
+        &lt;/ul&gt;
+        &lt;div&gt;&lt;button type="button" ms-click="add"&gt;add&lt;/button&gt;&lt;/div&gt;
+        &lt;div&gt;&lt;button type="button" ms-click="reverse"&gt;reverse&lt;/button&gt;&lt;/div&gt;
+        &lt;div&gt;&lt;button type="button" ms-click="remove"&gt;remove&lt;/button&gt;&lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p><img src="zh/bindings/effect/effect05.gif" /></p>
+<h3>底层JS动画函数</h3>
+<p>avalon实现上述效果,其实都是通过avalon.efffect.apply实现,其参数如下: </p>
+<pre class="brush:javascript;gutter:false;toolbar:false;">
+   avalon.efffect.apply = function(el, dir, before, after, opts){}
+//el 元素节点,用于动画
+//dir 0或1, 0表示leave, 1代表enter
+//before 动画执行前的回调,可选
+//after 动画结束后的回调,可选
+//opts 配置对象,可选
+//           effectName 特效的名字,同ms-effect的值
+//           effectDriver 使用何种方式实现动画,值分别为t, a, j ,代表transition, animation, javascript
+//           effectLeaveStagger leave动画的错开时间
+//           effectEnterStagger enter动画的错开时间
+//           effectClass  要添加的类名
+</pre>
