@@ -314,5 +314,104 @@ avalon.effect("animate", {
     第二个面板
 &lt;/div&gt;
 </pre>
-
+ 
 <p><img src="zh/bindings/effect/effect03.gif" /></p>
+<h3>ms-repeat动画效果</h3>
+<p>ms-repeat, ms-each, ms-with支持一个叫data-effect-stagger的辅助指令,对应一个数字,大小应该在10~1000之间,
+有了它,我们就可以做出非常炫目的效果.
+</p>
+<pre class="brush:html;gutter:false;toolbar:false;">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;style&gt;
+            .my-repeat-animation {
+                width:400px;
+                height:30px;
+                -webkit-animation-duration:  1s;
+                animation-duration: 1s;
+            }
+
+            .ng-enter {
+                -webkit-animation-name: enter_animation;
+                animation-name:enter_animation;
+            }
+
+            .ng-leave {
+                -webkit-animation-name:leave_animation ;
+                animation-name:leave_animation;
+            }
+
+            @keyframes enter_animation {
+                0% { opacity:0; }
+                100% { opacity:1; }
+            }
+
+            @keyframes leave_animation {
+                from { opacity:1; }
+                to { opacity:0; }
+            }
+
+            @-webkit-keyframes enter_animation {
+                from { opacity:0; }
+                to { opacity:1; }
+            }
+
+            @-webkit-keyframes leave_animation {
+                from { opacity:1; }
+                to { opacity:0; }
+            }
+        &lt;/style&gt;
+        &lt;script&gt;
+            avalon.effect("my-repeat-animation", {
+                enterClass: "ng-enter",
+                leaveClass: "ng-leave"
+            })
+            var vm = avalon.define({
+                $id: "test",
+                array: [1,2,3,4],
+                getBg: function () {
+                    return '#' + Math.floor(Math.random() * 16777215).toString(16);
+                },
+                add: function () {
+                    vm.array.push(vm.array.length + 1)
+                    vm.array.push(vm.array.length + 1)
+                    vm.array.push(vm.array.length + 1)
+                    vm.array.push(vm.array.length + 1)
+                    vm.array.push(vm.array.length + 1)
+                    vm.array.push(vm.array.length + 1)
+                    vm.array.push(vm.array.length + 1)
+                    vm.array.push(vm.array.length + 1)
+                    vm.array.push(vm.array.length + 1)
+                },
+                value: ""
+            })
+            vm.$watch("value", function (a) {
+                if (a) {
+                    vm.array.removeAll(function (el) {
+                        return  el !== a
+                    })
+                } else {
+                    vm.add()
+                }
+            })
+
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body ms-controller="test"&gt;
+        &lt;button ms-click="add"&gt;Add&lt;/button&gt;
+        &lt;input placeholder="只保留" ms-duplex-number="value" /&gt; 
+        &lt;div class="my-repeat-animation"  
+             data-effect-stagger="100" 
+             ms-repeat-item="array" 
+             ms-css-background="getBg()" 
+             ms-effect="my-repeat-animation"&gt;
+            {{item}}
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p><img src="zh/bindings/effect/effect04.gif" /></p>
