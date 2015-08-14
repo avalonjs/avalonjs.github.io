@@ -67,7 +67,9 @@ avalon.effect("animate", {
     其他流程一样</p>
 
 <h3>JS 动画</h3>
-<p>这只是留给IE6-8使用的, avalon.effect中需要指定两个方法,供你调用jQuery,框架会向这两方法传入当前动画元素</p>
+<p>这只是留给IE6-8使用的, avalon.effect中需要你在enter, leave方法
+    中实现动画.框架会给这两个方法传入两个参数(el:进行动画的元素,done:动画完成的回调),
+    你务必都用上它们.</p>
 <pre class="brush:html;gutter:false;toolbar:false">
 &lt;!DOCTYPE html&gt;
 &lt;html&gt;
@@ -85,11 +87,11 @@ avalon.effect("animate", {
         &lt;/style&gt;
         &lt;script&gt;
             avalon.effect("toggle", {
-                enter: function (elem) {
-                    $(elem).show(500)
+                enter: function (elem, done) {
+                    $(elem).show(500, done)
                 },
-                leave: function (elem) {
-                    $(elem).hide(500)
+                leave: function (elem, done) {
+                    $(elem).hide(500, done)
                 }
 
             })
@@ -112,3 +114,46 @@ avalon.effect("animate", {
 </pre>
 <p><img src="zh/bindings/effect/effect01.gif" /></p>
 <p>如果上面使用CSS3则是这样实现:</p>
+<pre class="brush:javascript;gutter:false;toolbar:false;">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;style&gt;
+            .box{
+                width:200px;
+                height:200px;
+                background: red;
+            }
+            .toggle{
+                transition: all 0.5s ease;
+            }
+            .toggle-enter{
+                width:0px;
+                height:0px;
+            }
+            .toggle-leave{
+                width:0px;
+                height:0px;
+            }
+        &lt;/style&gt;
+        &lt;script&gt;
+
+            var vm = avalon.define({
+                $id: "test",
+                bool: true,
+                click: function () {
+                    vm.bool = !vm.bool
+                }
+            })
+
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body ms-controller="test"&gt;
+        &lt;div ms-effect="toggle" ms-visible="bool" class="box toggle"&gt;&lt;/div&gt;
+        &lt;p&gt;&lt;button ms-click="click" type="button"&gt;button&lt;/button&gt;&lt;/p&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
