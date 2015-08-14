@@ -1,0 +1,114 @@
+<h2>动画(ms-effect)</h2>
+<p>avalon在<strong>1.5</strong>中添加的新指令,是对现有JS动画库或CSS3动画的高级封装。
+    avalon核心库本身不是提供任何动画功能。但凭借巧妙的设计，它能很好实现我们要的一切效果，
+    甚至比jQuery实现的更简单更炫目！</p>
+<p ms-skip=''>avalon 的动画指令 ms-effect="effectName"，当effectName里面不包含{{}}时，属性值 就是我们要的特效名;
+    否则，就会跑进内部的解析器，将{{}}里面的变量分析出来，与其他部分结合成我们要的特效名。</p>
+
+<p>ms-effect其实是包括两种动画操作,即进入这页面时的动画(entter),及离开这页面时的动画(leave).</p>
+
+<p>在avalon中,我们可以轻松使用ms-if, ms-visble, ms-include, ms-repeat, ms-each, ms-with触发动画.具体来说,
+    ms-if在元素插入DOM树时调用enter动画,移出DOM树时调用leave动画;ms-visible在其真值时调用enter动画,其假值时调用leave动画;
+    ms-include有点特别,enter动画与leave动画同时进行,被移出的视图执行leave动画,正在插入的视图执行enter动画;
+    ms-repeat, ms-with, ms-each是对一组元素进行添加删除移动,其中添加与移动操作是执行enter动画,删除是执行leave动画,
+    因此是一组动画同时,会有点乱,于是提供了data-effect-stagger辅助指令错开每个动画,让整体看起来更加賞心悦目!
+</p>
+
+<p>视实现不同,一共分为三种:CSS3 transition动画, CSS3 animation动画, JS动画.</p>
+
+
+<h3>CSS3 transition动画</h3>
+
+<p>首先元素必须添加一个带transition-duration的类名,或者在内联style指定transition-duration
+    (这个可能有厂商前缀,如-webkit,-o-)</p>
+然后定义一组类名, 比如.ani, ani.ani-enter, ani.ani-leave(默认是在动画名后加上"-enter","-leave",
+换言之,你不使用回调什么的,也不用写avalon.effect了); 
+如果你是angular过来的,想重用之前的CSS3,如, xxx, xxx.ng-enter, xxx.ng-leave,再要使用 avalon.effect方法注册一下;
+
+<pre class="brush:javascript;gutter:false;toolbar:false">
+avalon.effect("xxx", {
+    enterClass: "ng-enter",
+    leaveClass: "ng-leave"
+})
+
+avalon.effect("flip", {
+    enterClass: "flip-en xxx",//可以使用多个类名
+    leaveClass: "flip-le yyy"
+})
+
+
+avalon.effect("bounce", {
+    enterClass: "bounce-in",
+    leaveClass: "bounce-out"
+})  
+</pre>
+
+<p>如果你想随机执行各种动画效果, 这两个配置项可以改成函数</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+var ani = ["rotate-in", "flip", "zoom-in", "roll", "speed", "elastic"]
+var lastIndex = NaN
+function getRandomAni() {
+    while (true) {
+        var index = ~~Math.random() * 6
+        if (index != lastIndex) {
+            lastIndex = index
+            return ani[index]
+        }
+    }
+}
+avalon.effect("animate", {
+    enterClass: getRandomAni,
+    leaveClass: getRandomAni
+})
+</pre>
+<h3>CSS3 animation动画</h3>
+
+<p>首先元素必须添加一个带animation-duration的类名,或者在内联style指定animation-duration, 
+    其他流程一样</p>
+
+<h3>JS 动画</h3>
+<p>这只是留给IE6-8使用的, avalon.effect中需要指定两个方法,供你调用jQuery,框架会向这两方法传入当前动画元素</p>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script src="jquery.js"&gt;&lt;/script&gt;
+        &lt;style&gt;
+            .box{
+                width:200px;
+                height:200px;
+                background: red;
+            }
+        &lt;/style&gt;
+        &lt;script&gt;
+            avalon.effect("toggle", {
+                enter: function (elem) {
+                    $(elem).show(500)
+                },
+                leave: function (elem) {
+                    $(elem).hide(500)
+                }
+
+            })
+            var vm = avalon.define({
+                $id: "test",
+                bool: true,
+                click: function () {
+                    vm.bool = !vm.bool
+                }
+            })
+
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body ms-controller="test"&gt;
+        &lt;div ms-effect="toggle" ms-visible="bool" class="box"&gt;&lt;/div&gt;
+        &lt;p&gt;&lt;button ms-click="click" type="button"&gt;button&lt;/button&gt;&lt;/p&gt;
+
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p><img src="zh/bindings/effect/effect01.gif" /></p>
+<p>如果上面使用CSS3则是这样实现:</p>
