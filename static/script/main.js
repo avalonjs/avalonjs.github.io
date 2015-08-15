@@ -25,6 +25,10 @@
                     name: "ms-controller",
                     id: "controller"
                 },
+                  {
+                    name: "one-time",
+                    id: "one-time"
+                },
                 {
                     name: "ms-important",
                     id: "controller"
