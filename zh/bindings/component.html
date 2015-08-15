@@ -16,7 +16,7 @@ avalon.library("oni", {
     <li>$init: Function 该组件开始渲染时调用的回调</li>
     <li>$childReady: Function 该组件的子组件渲染完毕,冒泡上来的回调</li>
     <li>$ready: Function 该组件渲杂完毕时调用的回调，它位于其所有子组件的$ready之后</li>
-    <li>$dispose: Fuction 该组件被移出DOM树，并且元素不存在msRetain属性，才会调用的方法</li>
+    <li>$dispose: Fuction 该组件被移出DOM树，并且元素不存在msRetain属性，才会调用的回调</li>
 </ul>
 <p>我们通过avalon.component 来创建一个组件</p>
 <pre class="brush:javascript;gutter:false;toolbar:false">
@@ -45,9 +45,9 @@ avalon.library("oni", {
     <li>$init: Function 刚开始渲染时调用的回调</li>
     <li>$template: String 组件的模板</li>
     <li>$$template: Function 用于微调组件的模板</li>
-    <li>$ready: Function 当组件的所有子组件都调用其$ready回调后才执行的回调</li>
-    <li>$childReady: Function 当其子组件准备好时, 冒泡得到</li>
-    <li>$dispose: Function 该组件被移出DOM树，并且元素不存在msRetain属性，才会调用的方法</li>
+    <li>$ready: Function 当组件的所有子组件都调用其$ready回调后才触发的回调</li>
+    <li>$childReady: Function 当其子组件$ready完毕后, 会冒泡到当前组件触发的回调</li>
+    <li>$dispose: Function 该组件被移出DOM树，并且元素不存在msRetain属性，才会调用的回调</li>
     <li>$extends: String 指定要继承的组件名</li>
 </ul>
 
