@@ -424,7 +424,6 @@ avalon.effect("animate", {
         &lt;meta charset="UTF-8"&gt;
         &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
         &lt;script src="avalon.js"&gt;&lt;/script&gt;
-        &lt;script src="random.js"&gt;&lt;/script&gt;
         &lt;link rel="stylesheet" href="animate.css" type="text/css"&gt;
 
         &lt;script&gt;
@@ -493,5 +492,75 @@ avalon.effect("animate", {
 //           effectDriver 使用何种方式实现动画,值分别为t, a, j ,代表transition, animation, javascript
 //           effectLeaveStagger leave动画的错开时间
 //           effectEnterStagger enter动画的错开时间
-//           effectClass  要添加的类名
+//           effectClass  动画开始时要添加的类名
+</pre>
+
+<pre class="brush:html;gutter:false;toolbar:false;">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;ms-repeat&lt;/title&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;link rel="stylesheet" href="animate.css" type="text/css"&gt;
+
+        &lt;script&gt;
+            avalon.effect("auto", {
+                leaveClass: function () {
+                    return "bounceOutUp"//动画激活时添加的类名(结束时会移除)
+                }
+            })
+            var vm = avalon.define({
+                $id: "test",
+                click: function () {
+                    avalon.effect.apply(this, 0, function () {
+                    }, function () {
+                        console.log("leave")
+                    }, {
+                        effectName: "auto",
+                        effectClass: "animated", //动画开始时添加的类名
+                        effectDriver: "a"
+                    })
+                }
+            })
+
+        &lt;/script&gt;
+        &lt;style&gt;
+            .box{
+                width:250px;
+                height:250px;
+                background:#f35626;
+            }
+        &lt;/style&gt;
+    &lt;/head&gt;
+    &lt;body ms-controller="test"&gt;
+        &lt;div class="box" ms-click="click"&gt;点我&lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p><img src="zh/bindings/effect/effect06.gif" /></p>
+<p>基于它,还衔生出avalon.effect.append, avalon.effect.before, avalon.effect.remove,它们都是属于非常底层方法,
+    用于帮助你自己做动画时用.但平时,都是ms-effect已经帮你准备avalon.effect.apply的所有参数了.
+</p>
+<pre class="brush:javascript;gutter:false;toolbar:false;">
+avalon.mix(avalon.effect, {
+    apply: applyEffect,
+    append: function (el, parent, after, opts) {
+        return applyEffect(el, 1, function () {
+            parent.appendChild(el)
+        }, after, opts)
+    },
+    before: function (el, target, after, opts) {
+        return applyEffect(el, 1, function () {
+            target.parentNode.insertBefore(el, target)
+        }, after, opts)
+    },
+    remove: function (el, parent, after, opts) {
+        return applyEffect(el, 0, function () {
+            if (el.parentNode === parent)
+                parent.removeChild(el)
+        }, after, opts)
+    }
+})
 </pre>
