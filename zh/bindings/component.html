@@ -1,0 +1,242 @@
+<h2>组件</h2>
+<p>avalon1.5新增的特性, 旨在简化原ms-widget复杂的组件定义方式,使用更直观的自定义标签来创建组件.</p>
+<p>avalon的组件是以UI库为单位设计,换言之,一个组件必须隶属于某一个UI库.默认,avalon已经创建好一个叫ms的UI库.
+    我们可以通过avalon.library方法来创建自己的组件库
+
+</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+avalon.library("oni", {
+      $init: function(){},
+      $childReady: function(){},
+      $ready: function(){},
+      $dispose: function(){}
+})
+</pre>
+<ul>
+    <li>$init: Function 该组件开始渲染时调用的回调</li>
+    <li>$childReady: Function 该组件的子组件渲染完毕,冒泡上来的回调</li>
+    <li>$ready: Function 该组件渲杂完毕时调用的回调，它位于其所有子组件的$ready之后</li>
+    <li>$dispose: Fuction 该组件被移出DOM树，并且元素不存在msRetain属性，才会调用的方法</li>
+</ul>
+<p>我们通过avalon.component 来创建一个组件</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+    avalon.component("ms:button", {
+        a: 1,
+        $replace: 1,
+        $ready: function () {
+            console.log("BUTTON构建完成")
+        },
+        $template: "<button type='button' >{{a}}<ms:text /></button>"
+    })
+    avalon.component("ms:button", {
+        a: 1,
+        $replace: 1,
+        $ready: function () {
+            console.log("BUTTON构建完成")
+        },
+        $template: "<button type='button' >{{a}}<ms:text/></button>"
+    })
+</pre>
+
+
+<p>配置对象有如下几个特殊的配置项：</p>
+<ul>
+    <li>$replace: Boolean, 真值时表示替换其容器</li>
+    <li>$init: Function 刚开始渲染时调用的回调</li>
+    <li>$template: String 组件的模板</li>
+    <li>$$template: Function 用于微调组件的模板</li>
+    <li>$ready: Function 当组件的所有子组件都调用其$ready回调后才执行的回调</li>
+    <li>$childReady: Function 当其子组件准备好时, 冒泡得到</li>
+    <li>$dispose: Function 该组件被移出DOM树，并且元素不存在msRetain属性，才会调用的方法</li>
+    <li>$extends: String 指定要继承的组件名</li>
+</ul>
+
+<p>我们可以在</p>
+<ul>
+    <li>$init中添加各种$watch回调, 为IE6-8的VBscript函数的this指向不正确进行bind fix</li>
+    <li>$ready中重新计算组件的高宽</li>
+    <li>$dispose中将VM中的元素节点置为null，移除各种dom事件，清空元素内部，方便GC</li>
+
+</ul>
+
+<p>此外，每个组件VM，还添加了一个叫 <strong>$refs</strong> 的非监控对象属性，用于存放子组件的VM。</p>
+
+
+<p>所有回调的执行顺序</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+组件自身的$init --> 库的全局$init  --> 
+组件自身的$childReady --> 库的全局$childReady  --> 
+组件自身的$ready --> 库的全局$ready --> 
+组件自身的$dispose--> 库的全局$dispose
+</pre>
+<h3>组件的配置</h3>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+ avalon.component("ms:button", {
+        a: 1,
+        $replace: 1,
+        $ready: function () {
+            console.log("BUTTON构建完成")
+        },
+        $template: "<button type='button' >{{a}}<ms:text /></button>"
+    })
+</pre>
+<p>这里配置&lt;ms:button&gt;这种类型的基本属性与方法，目前，其中a一个属性</p>
+
+<p>然后，我们在页面上调用它时，可以通过<strong>configs</strong>属性指定它在VM中的业务数据</p>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;ms:button configs="buttonOpts"&gt;&lt;/ms:button&gt;
+</pre>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+avalon.define({
+   $id: "test",
+   $skipArray:["butttonOpts"],
+   buttonOpts: {
+       a: 555
+  }
+})
+</pre>
+<p>如果你有多个ms:button组件，每个都有不同的配置对象，你可以使用ms-attr-configs来动态生成configs的值。</p>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;div ms-repeat=array&gt;&lt;ms:button ms-attr-configs="opts{{$index}}"&gt;&lt;/div&gt;
+</pre>
+<p>如果你嫌这样麻烦，不想在VM上加这配置属性，还可以使用ms-data-button-a来生成这个值。</p>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;div ms-repeat=array&gt;&lt;ms:button ms-data-button-a="$index+ 10"&gt;&lt;/div&gt;
+</pre>
+<p>因此通过，在avalon.component定义的共公配置对象，加上 VM上指定的个性化配置对象，
+    加上每个元素上使用ms-data指定的dataset配置对象，能让每个button实例都尽然不同！
+</p>
+<p>此外，我们还可以使用<strong>identifier</strong>属性来指定组件VM的$id， 也可以用ms-attr-identifier来动态生成它。</p>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;script&gt;
+            var vm = avalon.define({
+                $id: "test",
+                array: [1, 2,3],
+
+                $skipArray: ["x0", "x1", "x2"],
+                x0: {
+                    a: "aaa",
+                    "ms:text": {
+                        b: 44
+                    }
+                },
+                x1: {
+                    a: "222",
+                    "ms:text": {
+                        b: 55
+                    }
+                },
+                x2: {
+                    a: "333",
+                    "ms:text": {
+                        b: 66
+                    }
+                }
+            })
+
+            avalon.component("ms:button", {
+                a: 1,
+                $replace: 1,
+                $childReady: function (vm, e) {
+                    var child = e.vm
+                    vm.$refs[child.$id] = vm
+                },
+                $ready: function () {
+                    console.log("BUTTON构建完成")
+                },
+                $template: "&lt;button type='button'&gt;&lt;span&gt;|&lt;ms:text&gt;&lt;/ms:text&gt;|&lt;/span&gt;{{a}}&lt;ms:text/&gt;&lt;/button&gt;"
+            })
+            avalon.component("ms:text", {
+                b: "默认值",
+                $replace: 1,
+                $ready: function () {
+                    console.log("TEXT构建完成")
+                },
+                $template: "&lt;strong&gt;{{b}}&lt;/strong&gt;"
+            })
+        &lt;/script&gt;
+        &lt;div ms-controller="test"&gt;
+
+            &lt;ms:button ms-repeat="array" ms-attr-configs="x{{$index}}" /&gt;
+        &lt;/div&gt;
+
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p><img src="zh/bindings/component/component01.png" /></p>
+<p>注意,$refs只保存其子组件的VM，不保存其子组件的子组件的VM！
+    并且$refs里面的内容是你自己在$childReady回调添加,框架不会帮你做的.</p>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;script&gt;
+            var vm = avalon.define({
+                $id: "test"
+            })
+            avalon.libraries.ms.$childReady = function (vm, e) {
+                var child = e.vm
+                vm.$refs[child.$id] = vm
+            }
+
+            avalon.component("ms:ancestor", {
+                a: 111,
+                $ready: function () {
+                    console.log("ancestor构建完成")
+                },
+                $template: "&lt;div&gt;&lt;ms:parent&gt;&lt;/ms:parent&gt;{{a}}&lt;ms:parent&gt;&lt;/ms:parent&gt;&lt;/div&gt;"
+            })
+            avalon.component("ms:parent", {
+                p: 222,
+                $ready: function () {
+                    console.log("parent构建完成")
+                },
+                $template: "&lt;div&gt;&lt;ms:son&gt;&lt;/ms:son&gt;{{p}}&lt;ms:son&gt;&lt;/ms:son&gt;&lt;/div&gt;"
+            })
+            avalon.component("ms:son", {
+                s: 333,
+                $ready: function () {
+                    console.log("son构建完成")
+                },
+                $template: "&lt;strong&gt;{{s}}&lt;/strong&gt;"
+            })
+        &lt;/script&gt;
+        &lt;div ms-controller="test"&gt;
+            &lt;ms:ancestor identifier="pope"/&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p><img src="zh/bindings/component/component02.png" /></p>
+<h3>IE6-8的特殊处理</h3>
+
+<p>由于IE6－8下VM是一个VBScript对象 ，函数中的this并不是指向VM，而是window，需要我们在库的$init方法统一hack一下！</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+avalon. libraries.ms.$init = function(vm){
+    for(var i in vm){
+        if(vm.hasOwnProperty(i) && typeof vm[i] === "function"){
+             vm[i] = vm[i].bind(vm)
+       }
+   }
+}
+</pre>
+<h3>自定义标签是没有半闭合一说</h3>
+<p>
+    &lt;xx:aaa /&gt;浏览器总是将它解析成&lt;xxx:aaa&gt;&lt;/xxx:aaa&gt;，
+    如果它后跟着一个元素，就悲剧了！&lt;xxx:aaa/&gt;&lt;strong&gt;111&lt;/strong&gt;，
+    本来设想好的平级关系变成父子关系了，
+    &lt;xxx:aaa&gt;&lt;strong&gt;111&lt;/strong&gt;&lt;/xxx:aaa&gt;
+</p>
