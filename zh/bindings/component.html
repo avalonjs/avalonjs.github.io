@@ -26,14 +26,6 @@ avalon.library("oni", {
         $ready: function () {
             console.log("BUTTON构建完成")
         },
-        $template: "<button type='button' >{{a}}<ms:text /></button>"
-    })
-    avalon.component("ms:button", {
-        a: 1,
-        $replace: 1,
-        $ready: function () {
-            console.log("BUTTON构建完成")
-        },
         $template: "<button type='button' >{{a}}<ms:text/></button>"
     })
 </pre>
@@ -73,16 +65,12 @@ avalon.library("oni", {
 </pre>
 <h3>组件的配置</h3>
 <pre class="brush:javascript;gutter:false;toolbar:false">
- avalon.component("ms:button", {
+ avalon.component("ms:arcus", {
         a: 1,
-        $replace: 1,
-        $ready: function () {
-            console.log("BUTTON构建完成")
-        },
-        $template: "<button type='button' >{{a}}<ms:text /></button>"
+        $template: "<button type='button'>{{a}}</button>"
     })
 </pre>
-<p>这里配置&lt;ms:button&gt;这种类型的基本属性与方法，目前，其中a一个属性</p>
+<p>这里配置&lt;ms:arcus&gt;这种类型的基本属性与方法，目前，其中a一个属性</p>
 
 <p>然后，我们在页面上调用它时，可以通过<strong>configs</strong>属性指定它在VM中的业务数据</p>
 <pre class="brush:html;gutter:false;toolbar:false">
@@ -93,7 +81,7 @@ avalon.define({
    $id: "test",
    $skipArray:["butttonOpts"],
    buttonOpts: {
-       a: 555
+     a: 555
   }
 })
 </pre>
