@@ -1,7 +1,7 @@
 <h2>自定义绑定</h2>
 <p>avalon1.5新添加的API,avalon.directive, 用于快速创建一种全新的指令!</p>
 <p>过去avalon自定义绑定比较麻烦,非常影响avalon推广,也不利于业务上各种功能的开发,新的定义方式将变得非常简单</p>
-<pre class="brush:javascript;gutter:false;toobar:false">
+<pre class="brush:javascript;gutter:false;toolbar:false">
 avalon.directive(name, {
   init: function(binding){
      //在这里处理binding.expr属性
@@ -13,7 +13,7 @@ avalon.directive(name, {
 })
 </pre>
 <p>拿最简单的data绑定来说吧:</p>
-<pre class="brush:javascript;gutter:false;toobar:false">
+<pre class="brush:javascript;gutter:false;toolbar:false">
 avalon.directive("data", {
     priority: 100,
     update: function (val) {
@@ -29,7 +29,7 @@ avalon.directive("data", {
 </pre>
 <p>我们发现它没有init回调,init主要是对binding.expr进行加工,或绑定事件的,它这些都不需要,
     就会直接返回原始值.比如说,&lt;div ms-data-xxx="yyy"&lt; 这里的属性会抽取成下面一个对象:</p>
-<pre class="brush:javascript;gutter:false;">
+<pre class="brush:javascript;gutter:false;toolbar:false">
 var binding = {
    name: "ms-data-xxx",
    expr: "yyy",
