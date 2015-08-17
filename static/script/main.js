@@ -54,6 +54,10 @@
                     id: "visible"
                 },
                 {
+                    name: "directive",
+                    id: "directive"
+                },
+                {
                     name: "ms-if",
                     id: "if"
                 },
