@@ -5,7 +5,7 @@
  http://weibo.com/jslouvre/
  
  Released under the MIT license
- avalon.mobile.js 1.46 built in 2015.8.12
+ avalon.mobile.js 1.46 built in 2015.8.18
  support IE10+ and other browsers
  ==================================================*/
 (function(global, factory) {
@@ -129,7 +129,6 @@ avalon.profile = function () {
 avalon.nextTick = new function () {// jshint ignore:line
     var tickImmediate = window.setImmediate
     var tickObserver = window.MutationObserver
-    var tickPost = W3C && window.postMessage
     if (tickImmediate) {//IE10 \11 edage
         return tickImmediate.bind(window)
     }
@@ -152,23 +151,8 @@ avalon.nextTick = new function () {// jshint ignore:line
         }
     }
 
-    if (tickPost) {
-        window.addEventListener("message", function (e) {
-            var source = e.source
-            if ((source === window || source === null) && e.data === "process-tick") {
-                e.stopPropagation()
-                callback()
-            }
-        })
-
-        return function (fn) {
-            queue.push(fn)
-            window.postMessage('process-tick', '*')
-        }
-    }
-
     if (window.VBArray) {
-        return function () {
+        return function (fn) {
             queue.push(fn)
             var node = DOC.createElement("script")
             node.onreadystatechange = function () {
@@ -1345,7 +1329,7 @@ var arrayPrototype = {
         return this
     },
     set: function (index, val) {
-        if (index >= 0) {
+        if (index < this.length && index > -1) {
             var valueType = avalon.type(val)
             if (val && val.$model) {
                 val = val.$model
@@ -1582,8 +1566,10 @@ function rejectDisposeQueue(data) {
     i = n
     if (diff) {
         while (data = disposeQueue[--i]) {
-            if (!data.element)
+            if (data.element === null) {
+                disposeQueue.splice(i, 1)
                 continue
+            }
             if (iffishTypes[data.type] && shouldDispose(data.element)) { //如果它没有在DOM树
                 disposeQueue.splice(i, 1)
                 delete disposeQueue[data.uuid]
@@ -1617,7 +1603,12 @@ function shouldDispose(el) {
     } catch (e) {
         return true
     }
-
+    if (el.ifRemove) {
+        if (!root.contains(el.ifRemove)) {
+            el.parentNode && el.parentNode.removeChild(el)
+            return true
+        }
+    }
     return el.msRetain ? 0 : (el.nodeType === 1 ? !root.contains(el) : !avalon.contains(root, el))
 }
 
@@ -2926,7 +2917,7 @@ bindingHandlers["class"] = function (binding, vmodels) {
         }
         binding.expr = "[" + className + "," + rightExpr + "]"
     } else {
-        binding.expr = '[' + quote(oldStyle) + "," + binding.expr + "]"
+        binding.expr = '[' + quote(oldStyle) + "," + text + "]"
         binding.oldStyle = oldStyle
     }
     var method = binding.type
@@ -3390,6 +3381,7 @@ bindingExecutors["if"] = function(val, elem, data) {
     if (val) { //插回DOM树
         if (elem.nodeType === 8) {
             elem.parentNode.replaceChild(data.template, elem)
+            elem.ifRemove = null
          //   animate.enter(data.template, elem.parentNode)
             elem = data.element = data.template //这时可能为null
         }
@@ -3402,6 +3394,7 @@ bindingExecutors["if"] = function(val, elem, data) {
         if (elem.nodeType === 1) {
             var node = data.element = DOC.createComment("ms-if")
             elem.parentNode.replaceChild(node, elem)
+            elem.ifRemove = node
        //     animate.leave(elem, node.parentNode, node)
             data.template = elem //元素节点
             ifGroup.appendChild(elem)
