@@ -36,6 +36,7 @@ avalon.library("oni", {
     <li>$replace: Boolean, 真值时表示替换其容器</li>
     <li>$init: Function 刚开始渲染时调用的回调</li>
     <li>$template: String 组件的模板</li>
+    <li>$slot: String 默认插入点的名字</li>
     <li>$refine: Function 用于微调组件的模板</li>
     <li>$$template: Function 当组件的所有子组件都调用其$ready回调后才触发的回调</li>
     <li>$childReady: Function 当其子组件$ready完毕后, 会冒泡到当前组件触发的回调</li>
@@ -211,6 +212,65 @@ avalon.define({
 &lt;/html&gt;
 </pre>
 <p><img src="zh/bindings/component/component02.png" /></p>
+<h3>插入点的使用</h3>
+<p>我们可以在代表组件的自定义标签的内部,添加一些带slot属性的标签,它们会自动赋给组件VM的同名属性中.</p>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script&gt;
+            function heredoc(fn) {
+                return fn.toString()
+                        .replace(/^[^\/]+\/\*!?\s?/, '')
+                        .replace(/\*\/[^\/]+$/, '')
+            } 
+            avalon.component("ms:dialog", {
+                header: "",
+                footer: "",
+                content: "",
+                onClick: function () {
+                   console.log(this)
+                },
+                $template: heredoc(function (vm) {
+                    /*
+                     &lt;div class="dialog"&gt;
+                     {{header|html}}
+                     {{content|html}}
+                     {{footer|html}}
+                     &lt;/div&gt;
+                     */
+                })
+            })
+            avalon.define({
+                $id: "test",
+                a: "这是内容"
+            })
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body ms-controller="test"&gt;
+        &lt;ms:dialog&gt;
+            &lt;div slot="header"&gt;弹出层的头部&lt;/div&gt;
+            &lt;div slot="content"&gt;
+                {{a}}
+            &lt;/div&gt;
+            &lt;div slot="footer"&gt;弹出层的底部&lt;/div&gt;
+        &lt;/ms:dialog&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p>这些带solt的元素叫做插入元素,它们在$init回调后进行收集, 收集完毕, 代表组件的自定义标签的innerHTML将会被其$template属性重写,
+    之后,这些插入元素会根据slot值进行分类,放到一个个文档碎片对象上.
+    然后这些文档碎片将插入到$template中的<strong ms-skip>{{xxx|html}}</strong>位置上.
+</p>
+<p><img src="zh/bindings/component/slot01.png" /></p>
+<p><img src="zh/bindings/component/slot02.png" /></p>
+<p><img src="zh/bindings/component/slot03.png" /></p>
+
+
+
 <h3>IE6-8的特殊处理</h3>
 
 <p>由于IE6－8下VM是一个VBScript对象 ，函数中的this并不是指向VM，而是window，需要我们在库的$init方法统一hack一下！</p>
