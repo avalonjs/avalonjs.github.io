@@ -136,11 +136,10 @@ avalon.define({
             avalon.component("ms:button", {
                 a: 1,
                 $replace: 1,
-                $childReady: function (vm, e) {
-                    var child = e.vm
-                    vm.$refs[child.$id] = vm
+                $childReady: function (vm, elem, e) {
+
                 },
-                $ready: function () {
+                $ready: function (vm, elem) {
                     console.log("BUTTON构建完成")
                 },
                 $template: "&lt;button type='button'&gt;&lt;span&gt;|&lt;ms:text&gt;&lt;/ms:text&gt;|&lt;/span&gt;{{a}}&lt;ms:text/&gt;&lt;/button&gt;"
