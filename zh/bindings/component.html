@@ -269,7 +269,9 @@ avalon.define({
 <p><img src="zh/bindings/component/slot02.png" width="50%" height="50%" /></p>
 <p><img src="zh/bindings/component/slot03.png" width="50%" height="50%"/></p>
 
-
+<p>插入元素的定义有严格的要求,它必须是自定义元素的直接子节点. 如果这些节点中没有 slot 属性,并且你没有指定$slot的值 ,那么就没有插入点,
+如果你指定了slot属性,并且也指定了$slot,那么除了那些指定了slot属性的节点,其他子节点都是$slot的
+</p>
 
 <h3>IE6-8的特殊处理</h3>
 
