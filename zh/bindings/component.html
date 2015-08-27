@@ -277,34 +277,37 @@ avalon.define({
 <p>如果没有msResolved属性,就把此元素的相关信息放到一个叫componentQueue列队中.</p>
 <p>待到该组件的JS文件加载下来,执行avalon.component方法时,componentQueue就会被重新检测,如果符合条件,就执行它的构建过程</p>
 <p>构建过程以下:</p>
-<ol>
-    <li>设置一变量dependencies,其值为1</li>
-    <li>读取其所有data- "widgetName" - *属性, 构成一个叫elemOpts的对象</li>
-    <li>读取其config属性, 从上层的VM中查找与其值同名的对象, 称之为vmOpts对象</li>
-    <li>将上面的对象与组件的定义对象,合并成一个对象, 这个合并过程可以通过$construct方法进行微调.
-        否则默认的$construct方法就相当于avalon.mix .</li>
-    <li>去掉合并对象中$replace, $slot, $template, $container,$construct属性, 然后放进avaon.define中转换一个VM, 称之为组件VM</li>
-    <li>将当前自定义元素的msResolved属性设置为1 </li>
-    <li>遍历其子节点,读取它们slot属性,然后 分类,并且一个个文档碎片对象,重赋对应的VM属性</li>
-    <li>将原$tempate属性放进行$$template方法中进行微调,然后用innerHTML改写自定义标签的内部 </li>
-    <li>如果用户设置了$replace属性,那么用该元素的第一个子元素代替它自身</li>
-    <li>如果用户设置了$container属性,那么将该元素移动到新容器之下</li>
-    <li>然后触发一个datasetchanged事件, 通知上层组件将dependencies减1</li>
-    <li>为自己绑定一个datasetchanged事件,用于接收下层组件发出来的datasetchanged事件.</li>
-    <li>开始扫描此元素及其下级 </li>
-    <li>如果此元素没有孩子,立即触发datasetchanged事件,为自己的dependencies减1,否则将
-        dependencies减1的逻辑放到一个renderCallbacks的列队中,此列队会在其子节点扫描后执行.
-    </li>    
-    <li>
-        datasetchanged事件的逻辑为: 当该组件的子组件初始化时,它们就会为dependencies加1,
-        ready时就会减1, 并将子组件的VM储放到其$refs对象中,  并且触发一个叫$childReady的回调.
-        当dependencies为0时,触发自身的ready回调,并移除datasetchanged事件,将此元素放进销毁检测列队
-    </li>
-    <li>销毁检测列队是当元素被移出DOM树,并其msRetain属性没指定时,就进行销毁. 这个销毁的检测时机有两利,一是全局的定时轮询,
-        如果浏览器支持DOMNodeRemovedFromDocument事件,那么也为此元素添加此事件.
-    </li>
-    <li>销毁时,会调用$dispose回调,并从avalon.vmodels中将其ID删掉.</li>
-</ol>
+<fieldset>
+    <ol>
+        <li>设置一变量dependencies,其值为1</li>
+        <li>读取其所有data- "widgetName" - *属性, 构成一个叫elemOpts的对象</li>
+        <li>读取其config属性, 从上层的VM中查找与其值同名的对象, 称之为vmOpts对象</li>
+        <li>将上面的对象与组件的定义对象,合并成一个对象, 这个合并过程可以通过$construct方法进行微调.
+            否则默认的$construct方法就相当于avalon.mix .</li>
+        <li>去掉合并对象中$replace, $slot, $template, $container,$construct属性, 然后放进avaon.define中转换一个VM, 称之为组件VM</li>
+        <li>将当前自定义元素的msResolved属性设置为1 </li>
+        <li>遍历其子节点,读取它们slot属性,然后 分类,并且一个个文档碎片对象,重赋对应的VM属性</li>
+        <li>将原$tempate属性放进行$$template方法中进行微调,然后用innerHTML改写自定义标签的内部 </li>
+        <li>如果用户设置了$replace属性,那么用该元素的第一个子元素代替它自身</li>
+        <li>如果用户设置了$container属性,那么将该元素移动到新容器之下</li>
+        <li>然后触发一个datasetchanged事件, 通知上层组件将dependencies减1</li>
+        <li>为自己绑定一个datasetchanged事件,用于接收下层组件发出来的datasetchanged事件.</li>
+        <li>开始扫描此元素及其下级 </li>
+        <li>如果此元素没有孩子,立即触发datasetchanged事件,为自己的dependencies减1,否则将
+            dependencies减1的逻辑放到一个renderCallbacks的列队中,此列队会在其子节点扫描后执行.
+        </li>    
+        <li>
+            datasetchanged事件的逻辑为: 当该组件的子组件初始化时,它们就会为dependencies加1,
+            ready时就会减1, 并将子组件的VM储放到其$refs对象中,  并且触发一个叫$childReady的回调.
+            当dependencies为0时,触发自身的ready回调,并移除datasetchanged事件,将此元素放进销毁检测列队
+        </li>
+        <li>销毁检测列队是当元素被移出DOM树,并其msRetain属性没指定时,就进行销毁. 这个销毁的检测时机有两利,一是全局的定时轮询,
+            如果浏览器支持DOMNodeRemovedFromDocument事件,那么也为此元素添加此事件.
+        </li>
+        <li>销毁时,会调用$dispose回调,并从avalon.vmodels中将其ID删掉.</li>
+    </ol>
+</fieldset>
+
 <h3>IE6-8的特殊处理</h3>
 
 <p>由于IE6－8下VM是一个VBScript对象 ，函数中的this并不是指向VM，而是window，需要我们在库的$init方法统一hack一下！</p>
