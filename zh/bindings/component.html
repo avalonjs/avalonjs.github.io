@@ -97,7 +97,7 @@ avalon.define({
 <p>因此通过，在avalon.component定义的共公配置对象，加上 VM上指定的个性化配置对象，
     加上每个元素上使用ms-data指定的dataset配置对象，能让每个button实例都尽然不同！
 </p>
-<p>此外，我们还可以使用<strong>identifier</strong>属性来指定组件VM的$id， 也可以用ms-attr-identifier来动态生成它。</p>
+<p>此外，我们还可以使用<strong>$id</strong>属性来指定组件VM的$id， 也可以用ms-attr-$id来动态生成它。</p>
 <pre class="brush:html;gutter:false;toolbar:false">
 &lt;!DOCTYPE html&gt;
 &lt;html&gt;
@@ -281,7 +281,7 @@ avalon.define({
 <fieldset>
     <ol>
         <li>设置一变量dependencies,其值为1</li>
-        <li>读取其所有data- "widgetName" - *属性, 构成一个叫elemOpts的对象</li>
+        <li>读取其所有属性,去掉其中的$id, configs, id, class, tabindex, style, 构成一个叫elemOpts的对象</li>
         <li>读取其config属性, 从上层的VM中查找与其值同名的对象, 称之为vmOpts对象</li>
         <li>将上面的对象与组件的定义对象,合并成一个对象, 这个合并过程可以通过$construct方法进行微调.
             否则默认的$construct方法就相当于avalon.mix .</li>
