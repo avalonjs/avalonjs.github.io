@@ -73,9 +73,9 @@ avalon.library("oni", {
 </pre>
 <p>这里配置&lt;ms:arcus&gt;这种类型的基本属性与方法，目前，其中a一个属性</p>
 
-<p>然后，我们在页面上调用它时，可以通过<strong>configs</strong>属性指定它在VM中的业务数据</p>
+<p>然后，我们在页面上调用它时，可以通过<strong>config</strong>属性指定它在VM中的业务数据</p>
 <pre class="brush:html;gutter:false;toolbar:false">
-&lt;ms:button configs="buttonOpts"&gt;&lt;/ms:button&gt;
+&lt;ms:button config="buttonOpts"&gt;&lt;/ms:button&gt;
 </pre>
 <pre class="brush:javascript;gutter:false;toolbar:false">
 avalon.define({
@@ -86,9 +86,9 @@ avalon.define({
   }
 })
 </pre>
-<p>如果你有多个ms:button组件，每个都有不同的配置对象，你可以使用ms-attr-configs来动态生成configs的值。</p>
+<p>如果你有多个ms:button组件，每个都有不同的配置对象，你可以使用ms-attr-config来动态生成config的值。</p>
 <pre class="brush:html;gutter:false;toolbar:false">
-&lt;div ms-repeat=array&gt;&lt;ms:button ms-attr-configs="opts{{$index}}"&gt;&lt;/div&gt;
+&lt;div ms-repeat=array&gt;&lt;ms:button ms-attr-config="opts{{$index}}"&gt;&lt;/div&gt;
 </pre>
 <p>如果你嫌这样麻烦，不想在VM上加这配置属性，还可以使用ms-data-button-a来生成这个值。</p>
 <pre class="brush:html;gutter:false;toolbar:false">
@@ -155,7 +155,7 @@ avalon.define({
         &lt;/script&gt;
         &lt;div ms-controller="test"&gt;
 
-            &lt;ms:button ms-repeat="array" ms-attr-configs="x{{$index}}" /&gt;
+            &lt;ms:button ms-repeat="array" ms-attr-config="x{{$index}}" /&gt;
         &lt;/div&gt;
 
     &lt;/body&gt;
@@ -281,7 +281,8 @@ avalon.define({
 <fieldset>
     <ol>
         <li>设置一变量dependencies,其值为1</li>
-        <li>读取其所有属性,去掉其中的$id, configs, id, class, tabindex, style, 构成一个叫elemOpts的对象</li>
+        <li>读取其所有属性,去掉其中的$id, config, id, class, tabindex, style, 
+            ms-*属性,data-*属性,构成一个叫elemOpts的对象</li>
         <li>读取其config属性, 从上层的VM中查找与其值同名的对象, 称之为vmOpts对象</li>
         <li>将上面的对象与组件的定义对象,合并成一个对象, 这个合并过程可以通过$construct方法进行微调.
             否则默认的$construct方法就相当于avalon.mix .</li>
