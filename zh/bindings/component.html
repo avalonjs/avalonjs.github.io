@@ -34,17 +34,18 @@ avalon.library("oni", {
 <p>配置对象有如下几个特殊的配置项：</p>
 <ul>
     <li>$replace: Boolean, 真值时表示替换其容器</li>
-    <li>$init: Function 刚开始渲染时调用的回调</li>
-    <li>$template: String 组件的模板</li>
     <li>$slot: String 默认插入点的名字</li>
-    <li>$refine: Function 用于微调组件的模板</li>
-    <li>$$template: Function 当组件的所有子组件都调用其$ready回调后才触发的回调</li>
-    <li>$childReady: Function 当其子组件$ready完毕后, 会冒泡到当前组件触发的回调</li>
-    <li>$dispose: Function 该组件被移出DOM树，并且元素不存在msRetain属性，才会调用的回调</li>
+    <li>$template: String 组件的模板</li>
     <li>$extends: String 指定要继承的组件名</li>
     <li>$container: DOM 插入元素的位置,比如dialog就不一定在使用它的位置插入,通常放在body中</li>
-
+    <li>$construct: Function 用于调整三个配置项的合并,默认是function:(a, b,c ){return avalon.mix(a, b,c)}</li>
+    <li>$$template Function 用于微调组件的模板,传入$template与当前元素</li>
+    <li>$init: Function 刚开始渲染时调用的回调, 传入vm与当前元素</li>
+    <li>$childReady: Function 当其子组件$ready完毕后, 会冒泡到当前组件触发的回调, 传入vm与当前元素</li>
+    <li>$ready: Function 当组件的所有子组件都调用其$ready回调后才触发的回调, 传入vm与当前元素</li>
+    <li>$dispose: Function 该组件被移出DOM树，并且元素不存在msRetain属性时的销毁回调, 传入vm与当前元素</li>
 </ul>
+<p>当vm构建好时, $replace, $slot, $template,$container, $construct会消失</p>
 
 <p>我们可以在</p>
 <ul>
@@ -59,6 +60,7 @@ avalon.library("oni", {
 
 <p>所有回调的执行顺序</p>
 <pre class="brush:javascript;gutter:false;toolbar:false">
+组件自身的$$template --> 
 组件自身的$init --> 库的全局$init  --> 
 组件自身的$childReady --> 库的全局$childReady  --> 
 组件自身的$ready --> 库的全局$ready --> 
@@ -214,7 +216,7 @@ avalon.define({
 <h3>插入点的使用</h3>
 <p>我们可以在代表组件的自定义标签的内部,添加一些带slot属性的标签,它们会自动赋给组件VM的同名属性中.</p>
 <div ms-skip>
-<pre class="brush:html;gutter:false;toolbar:false">
+    <pre class="brush:html;gutter:false;toolbar:false">
 &lt;!DOCTYPE html&gt;
 &lt;html&gt;
     &lt;head&gt;
@@ -260,7 +262,7 @@ avalon.define({
         &lt;/ms:dialog&gt;
     &lt;/body&gt;
 &lt;/html&gt;
-</pre>
+    </pre>
 </div>
 <p>这些带solt的元素叫做插入元素,它们在$init回调后进行收集, 收集完毕, 代表组件的自定义标签的innerHTML将会被其$template属性重写,
     之后,这些插入元素会根据slot值进行分类,放到一个个文档碎片对象上.
