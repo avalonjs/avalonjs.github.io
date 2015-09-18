@@ -324,6 +324,22 @@ avalon. libraries.ms.$init = function(vm){
    }
 }
 </pre>
+<p>如果你的组件是以ms为命名空间的话, 不需要使用avalon.librarys("ms"), 否则就要像下面这样做</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+&lt;script src="avalon.js"&gt;&lt;/script&gt;
+&lt;script"&gt;
+avalon.library("oni") //这个东西必须跟挨着avalon库,并且放到head标签中
+&lt;/script&gt;
+</pre>
+<p>如果你是使用requirejs加载avalon库, 那你需要在head标签中插入以下脚本</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+&lt;script src="avalon.js"&gt;&lt;/script&gt;
+&lt;script"&gt;
+if(document.namespaces){
+    document.namespaces.add("oni",'http://www.w3.org/1999/xhtml')
+}
+&lt;/script&gt;
+</pre>
 <h3>自定义标签是没有半闭合一说</h3>
 <p>
     &lt;xx:aaa /&gt;浏览器总是将它解析成&lt;xxx:aaa&gt;&lt;/xxx:aaa&gt;，
