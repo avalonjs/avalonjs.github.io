@@ -1,7 +1,7 @@
 <h2>插入移除处理(ms-if)</h2>
 <p>ms-if与ms-each,ms-with,ms-repeat归类为流程绑定，如果表达式为真值那么就将当前元素输出页面，不是就将它移离原位置。
     它的效果与上一章节的ms-visible效果看起来相似的，
-    但它会影响到:empty伪类，并能更节约性能。ms-if还有一个分支，叫ms-if-loop，它是配合ms-repeat绑定使用，因此以后再说。</p>
+    但它会影响到:empty伪类，并能更节约性能。ms-if还有一个分支，叫ms-if-loop，它是配合ms-repeat绑定使用，见本文末尾。</p>
 
 <p>我们可以通过以下例子比较一下两者：</p>
 
@@ -134,3 +134,11 @@ bindingExecutors["if"] = function(val, elem, data) {
 &lt;/html&gt;
 </pre>
 <p><img src="zh/bindings/if/1409283405578-if2.gif" alt="enter image description here" title /></p><script src="http://htmljs.b0.upaiyun.com//js/tuiku.js"></script>
+<p>在一个元素中, ms-if与ms-repeat是可以同时存在于某一元素, 但ms-if优先级比ms-repeat高;
+
+如果ms-if的表达式为false,那么就会导致所有东西循环不出来.当我们只想循环出数组或对象的某一部分符合元素的项时,
+
+我们需要一个优先及比ms-if,ms-repeat都低的特殊绑定,这时ms-if-loop就被发明出来了.它要来它必须与ms-repeat位于同一元素上.
+
+用法与ms-if相同.
+</p>
