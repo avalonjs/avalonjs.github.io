@@ -24,6 +24,7 @@ var filters = avalon.filters = {
   }
 </pre>
 <p>换言之， 我们只要在avalon.filters这个对象添加多一个函数，第一个参数为|之前的表达式得到的值，不能省略，最后要返回一个字符串就行了。</p>
+<p>过滤器中的传参必须是字符串,布尔或数字, 不能是变量或VM中的属性.所有可变动的东西只能出现在|的左边.</p>
 <pre class="brush:javascript;gutter:false;toolbar:false">
 avalon.filters.haha =  function(str) { //用法： {{aaa|haha}}
    return str + "哈哈"
