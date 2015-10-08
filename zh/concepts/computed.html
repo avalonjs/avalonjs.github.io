@@ -3,7 +3,7 @@
     意即它的值是根据其他两个或两个以上的监控属性计算出来。 </p>
 <p>在1.5+ 中,所有计算属性应该写在$computed对象中,计算属性为一个拥有get/set(set可选)的对象.
     它里面的<b>this</b>指向VM，不能用avalon.define(di, function(vm){})这里的vm。</p>
-
+<p>不能用计算属性生成对象及数组,换言之它就不能用在ms-repeat中.</p>
 <pre ms-skip class="brush:html;gutter:false;toolbar:false">
 &lt;!DOCTYPE html&gt;
 &lt;html&gt;
