@@ -36,7 +36,7 @@ avalon.library("oni", {
     <li>$replace: Boolean, 真值时表示替换其容器</li>
     <li>$slot: String 默认插入点的名字</li>
     <li>$template: String 组件的模板</li>
-    <li>$extends: String 指定要继承的组件名</li>
+    <li>$extend: String 指定要继承的组件名</li>
     <li>$container: DOM 插入元素的位置,比如dialog就不一定在使用它的位置插入,通常放在body中</li>
     <li>$construct: Function 用于调整三个配置项的合并,默认是function:(a, b,c ){return avalon.mix(a, b,c)}</li>
     <li>$$template Function 用于微调组件的模板,传入$template与当前元素</li>
@@ -207,7 +207,7 @@ avalon.define({
             })
         &lt;/script&gt;
         &lt;div ms-controller="test"&gt;
-            &lt;ms:ancestor identifier="pope"/&gt;
+            &lt;ms:ancestor $id="pope"/&gt;
         &lt;/div&gt;
     &lt;/body&gt;
 &lt;/html&gt;
