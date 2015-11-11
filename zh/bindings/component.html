@@ -99,7 +99,8 @@ avalon.define({
 <p>因此通过，在avalon.component定义的共公配置对象，加上 VM上指定的个性化配置对象，
     加上每个元素上使用ms-data指定的dataset配置对象，能让每个button实例都尽然不同！
 </p>
-<p>此外，我们还可以使用<strong>$id</strong>属性来指定组件VM的$id， 也可以用ms-attr-$id来动态生成它。</p>
+<p>此外，我们还可以使用<strong>$id或identifier</strong>属性来指定组件VM的$id，不过当我们用ms-attr-$id动态生成$id可能有问题,
+    因为$是DOM属性中不是一个合法字符,我们只能用ms-attr-identifier来动态生成它。</p>
 <pre class="brush:html;gutter:false;toolbar:false">
 &lt;!DOCTYPE html&gt;
 &lt;html&gt;
@@ -164,6 +165,40 @@ avalon.define({
 &lt;/html&gt;
 </pre>
 <p><img src="zh/bindings/component/component01.png" /></p>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset="utf-8"&gt;
+        &lt;title&gt;&lt;/title&gt;
+        &lt;style&gt;
+            div {height:50px;width:200px;background:green;margin:5px;}
+        &lt;/style&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script&gt;
+            avalon.component('ms:abc',{
+                $template:'&lt;div&gt;&lt;/div&gt;',
+                onClick:function(){},
+                $ready:function(vm,el){
+                  console.log(vm.$id)
+                }
+            });
+            var vm = avalon.define({
+                $id:'test',
+                arr:[1,2,3]
+            })
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body ms-controller="test"&gt;
+        &lt;header&gt;
+            &lt;ms:abc ms-repeat="arr" ms-attr-identifier="abc{{$index}}" &gt;&lt;/ms:abc&gt;
+        &lt;/header&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p><img src="zh/bindings/component/component03.png" /></p>
+
+
 <p>注意,$refs只保存其子组件的VM，不保存其子组件的子组件的VM！
     并且$refs里面的内容是你自己在$childReady回调添加,框架不会帮你做的.</p>
 <pre class="brush:html;gutter:false;toolbar:false">
