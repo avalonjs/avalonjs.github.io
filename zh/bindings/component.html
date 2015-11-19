@@ -96,6 +96,12 @@ avalon.define({
 <pre class="brush:html;gutter:false;toolbar:false">
 &lt;div ms-repeat=array&gt;&lt;ms:button ms-data-button-a="$index+ 10"&gt;&lt;/div&gt;
 </pre>
+<p>如果你连这个也不想，那么框架就会在已有的VM链上寻找<b>默认配置对象</b>。比如你的自定义签标的tagName为&lt;ms:dropdown&gt;，
+    那你在已有VM上定义一个叫ms:dropdown的对象就行了。如果你的自定义标签存在横线，比如ms:color-picker,那么它的默认配置对象
+    应为ms:colorPicker。
+
+</p>
+
 <p>因此通过，在avalon.component定义的共公配置对象，加上 VM上指定的个性化配置对象，
     加上每个元素上使用ms-data指定的dataset配置对象，能让每个button实例都尽然不同！
 </p>
@@ -114,11 +120,10 @@ avalon.define({
             var vm = avalon.define({
                 $id: "test",
                 array: [1, 2,3],
-
                 $skipArray: ["x0", "x1", "x2"],
-                x0: {
+                x0: {//x0, x1, x2为ms:button的配置对象
                     a: "aaa",
-                    "ms:text": {
+                    "ms:text": {//这个为ms:button的ms:text的默认配置对象
                         b: 44
                     }
                 },
@@ -139,9 +144,6 @@ avalon.define({
             avalon.component("ms:button", {
                 a: 1,
                 $replace: 1,
-                $childReady: function (vm, elem, e) {
-
-                },
                 $ready: function (vm, elem) {
                     console.log("BUTTON构建完成")
                 },
@@ -157,8 +159,7 @@ avalon.define({
             })
         &lt;/script&gt;
         &lt;div ms-controller="test"&gt;
-
-            &lt;ms:button ms-repeat="array" ms-attr-config="x{{$index}}" /&gt;
+            &lt;ms:button ms-repeat="array" ms-attr-config="x{{$index}}" &gt;&lt;/ms:button&gt;
         &lt;/div&gt;
 
     &lt;/body&gt;
@@ -180,7 +181,7 @@ avalon.define({
                 $template:'&lt;div&gt;&lt;/div&gt;',
                 onClick:function(){},
                 $ready:function(vm,el){
-                  console.log(vm.$id)
+                   console.log(vm.$id)
                 }
             });
             var vm = avalon.define({
