@@ -28,33 +28,34 @@
 
             avalon.ready(function() {
 
-                avalon.define("touch", function(vm) {
-                    vm.tap = function(e) {
+                avalon.define({
+                    $id: "touch",
+                    tap:function(e) {
                         this.innerHTML = "轻触" + Date.now() + e.type
-                    }
-                   
-                    vm.doubletap = function(e) {
+                    },
+              
+                    doubletap: function(e) {
                         this.innerHTML = "双触 " + Date.now() + e.type
-                    }
+                    },
             
-                    vm.longtap = function(e) {
+                    longtap: function(e) {
                         this.innerHTML = "长摁" + Date.now() + e.type
-                    }
-                    vm.swipeleft = function(e) {
+                    },
+                    swipeleft: function(e) {
                         this.innerHTML = "向左划← " + Date.now() + e.type
-                    }
-                    vm.swiperight = function(e) {
+                    },
+                    swiperight: function(e) {
                         this.innerHTML = "向右划→ " + Date.now() + e.type
-                    }
-                    vm.swipeup = function(e) {
+                    },
+                    swipeup: function(e) {
                         this.innerHTML = "向上划↑ " + Date.now() + e.type
-                    }
-                    vm.swipedown = function(e) {
+                    },
+                    swipedown: function(e) {
                         this.innerHTML = "向下划↓ " + Date.now() + e.type
-                    }
+                    },
 
 
-                    vm.array = avalon.range(0, 400)
+                    array: avalon.range(0, 400)
 
                 })
                 avalon.scan()

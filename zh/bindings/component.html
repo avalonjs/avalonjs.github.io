@@ -310,6 +310,120 @@ avalon.define({
 <p>插入元素的定义有严格的要求,它必须是自定义元素的直接子节点. 如果这些节点中没有 slot 属性,并且你没有指定$slot的值 ,那么就没有插入点,
     如果你指定了slot属性,并且也指定了$slot,那么除了那些指定了slot属性的节点,其他子节点都是$slot的
 </p>
+
+
+<p>在<b>avalon1.5.5</b>中,自定义标签支持由取其on-xxx属性,框架会将它转换为onXXX,属性值为一个函数名,框架会在之前的vmodels中查找,
+最后将它合并到组件VM中.
+</p>
+<h3 style="color:red">获取组件VM</h3>
+<div ms-skip>
+    <pre class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head lang="en"&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;&lt;/title&gt;
+    &lt;script type="text/javascript" src="avalon.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+        var tabVM
+        avalon.library("test",{
+            $ready: function(vm){
+                if(vm.$id === "tab1"){
+                    //在这里操作
+                    tabVM = vm
+                    console.log(vm.$id)
+                    console.log(vm)
+                }
+            }
+        })
+        avalon.component("test:tab", {
+            $template: '&lt;h1&gt;{{content|html}}&lt;/h1&gt;',
+            content: "", //插入点机制
+            $slot: "content",//插入点机制
+            $init: function(vm, el){},
+            $ready: function(vm, el){},
+            $dispose: function(vm, el){
+                el.innerHTML = "";
+            }
+        });
+    &lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+        avalon.ready(function(){
+            var vm = avalon.define({
+                $id: "test",
+                onClick: function(){
+                    if(tabVM){
+                       alert("onClick "+ tabVM.$id)
+                    }
+                }
+            });
+            avalon.scan(document.body, vm);
+
+        });
+    &lt;/script&gt;
+&lt;/head&gt;
+&lt;body ms-controller="test"&gt;
+    &lt;div ms-click="onClick"&gt;点我&lt;/div&gt;
+    &lt;test:tab $id="tab1" &gt;这是tabs中的内容&lt;/test:tab&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+    </pre>
+</div>
+<p>缺点是需要预先指定组件VM的$id</p>
+<div ms-skip>
+    <pre class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head lang="en"&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;&lt;/title&gt;
+    &lt;script type="text/javascript" src="avalon.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+        var tabVM
+        avalon.component("test:tab", {
+            $template: '&lt;h1&gt;{{content|html}}&lt;/h1&gt;',
+            content: "", //插入点机制
+            $slot: "content",//插入点机制
+            onInit:function(){},//必须定义此接口
+            $init: function(vm, el){},
+            $ready: function(vm, el){
+                vm.onInit(vm)
+            },
+            $dispose: function(vm, el){
+                el.innerHTML = "";
+            }
+        });
+    &lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+        avalon.ready(function(){
+            var vm = avalon.define({
+                $id: "test",
+                getVM: function(vm){//用来重写onInit
+                     tabVM = vm
+                    //这里继续做其他事
+                },
+                onClick: function(){
+                    if(tabVM){
+                       alert("onClick "+ tabVM.$id)
+                    }
+                }
+            });
+            avalon.scan(document.body, vm);
+
+        });
+    &lt;/script&gt;
+&lt;/head&gt;
+&lt;body ms-controller="test"&gt;
+    &lt;div ms-click="onClick"&gt;点我&lt;/div&gt;
+    &lt;test:tab on-init="getVM" &gt;这是tabs中的内容&lt;/test:tab&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+    </pre>
+</div>
+<p>此例则不需要指定VM,有点麻烦,但通用性更好</p>
+
+
+
 <h3 style="color:red">组件的构建全过程</h3>
 <p>avalon的扫描器从上往下扫描, 如果遇到带<b>:</b>号的自定义标签,就默认为是组件,如果它上面存在一个叫msResolved属性,那么立即开始构建过程.</p>
 <p>如果没有msResolved属性,就把此元素的相关信息放到一个叫componentQueue列队中.</p>

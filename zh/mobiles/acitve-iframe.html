@@ -15,10 +15,11 @@
     <body ms-controller='test'>
         <div ms-on-tap='$tap'></div>
         <script>
-            avalon.define('test', function(vm) {
-                vm.$tap = function(e) {
+            avalon.define({
+                $id: "test",
+                $tap: function(e) {
                     this.innerHTML = e.timeStamp;
-                };
+                }
             });
         </script>
     </body>
