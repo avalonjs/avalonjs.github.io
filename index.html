@@ -43,7 +43,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand hidden-sm" data-toggle="iframe" href="tutorial/home/index.html" >avalon</a>
+                    <a class="navbar-brand hidden-sm" data-toggle="iframe" href="home.html" >avalon</a>
                 </div>
                 <div class="navbar-collapse collapse" role="navigation">
                     <ul class="nav navbar-nav">
@@ -63,7 +63,7 @@
         </div>
 
 
-        <iframe src="tutorial/home/index.html" frameborder=0 style="width:100%;height:100%;border:0 none" seamless="seamless"></iframe>
+        <iframe src="home.html" frameborder=0 style="width:100%;height:100%;border:0 none" seamless="seamless"></iframe>
         <!-- /.container -->
         <div class="bs-docs-sidebar" ms-controller="nav">
             <ul class="nav bs-docs-sidenav">
@@ -110,7 +110,7 @@
                     var hash = this.getAttribute("href", 2)
                     $("iframe").prop("src", hash)
                     location.hash = hash
-                    if (hash !== "tutorial/home/index.html") {
+                    if (hash !== "home.html") {
                         $(".bs-docs-sidebar").show().height($(document).height() - bannerHeight - 10)
 
                     } else {
