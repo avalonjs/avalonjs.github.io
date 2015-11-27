@@ -1,19 +1,22 @@
 ;
 (function () {
-    var bannerHeight = $(".navbar .container").height()
+    var bannerHeight = $(".navbar .container").height() - 10
+    window.activeArray = []
     var vm = avalon.define({
         $id: "nav",
         aname: "",
         bname: "",
         aclick: function (href) {
             vm.aname = href
+            console.log(href)
+            $('html,body').animate({scrollTop: 0}, 500)
+
         },
         bclick: function (href) {
             vm.bname = href
-            window.array.forEach(function (el) {
+            window.activeArray.forEach(function (el) {
                 if (el.id === href) {
-                    $('html,body').animate({scrollTop: el.top - bannerHeight}, 500)
-                   // window.scrollTo(0, el.top - bannerHeight)
+                    $('html,body').animate({scrollTop: Math.max(0, el.top - bannerHeight)}, 500)
                 }
             })
         },
@@ -28,15 +31,15 @@
                     },
                     {
                         href: "home-cdn",
-                        name: "数据模型"
+                        name: "CDN"
                     },
                     {
                         href: "home-10",
-                        name: "监控属性"
+                        name: "10秒看懂avalon"
                     },
                     {
                         href: "home-origin",
-                        name: "监控数组"
+                        name: "avalon的起源"
                     }
 
                 ]
@@ -209,6 +212,10 @@
             }
         ]
     })
+    vm.$watch("bname", function (href) {
+        console.log("watch ", href)
+
+    })
     avalon.scan(0, vm)
     $(".navbar-nav a").click(function () {
         var hash = this.getAttribute("href", 2)
@@ -221,19 +228,19 @@
 
     $(window).scroll(function () {
         var then = new Date
-        if (then - now > 60) {
+        if (then - now > 30) {
             now = then
             var height = $(window).scrollTop()
             var name = ""
-            console.log(window.array)
-            window.array.forEach(function (el) {
-                if (el.top < height) {
+            window.activeArray.forEach(function (el) {
+                if (el.top + bannerHeight < height) {
                     name = el.id
                 }
             })
-            console.log(name, "!")
-            if (name != bname) {
-                vm.bname = bname
+
+            if (name != bname && name) {
+                console.log(name, "!")
+                bname = vm.bname = name
             }
         }
 

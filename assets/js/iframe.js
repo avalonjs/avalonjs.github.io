@@ -20,7 +20,7 @@ $(function () {
                     })
                 }
             })
-            parent.array = array
+            parent.activeArray = array
 
         }
     }
