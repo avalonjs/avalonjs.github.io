@@ -1,9 +1,22 @@
 ;
 (function () {
+    var bannerHeight = $(".navbar .container").height()
     var vm = avalon.define({
         $id: "nav",
         aname: "",
         bname: "",
+        aclick: function (href) {
+            vm.aname = href
+        },
+        bclick: function (href) {
+            vm.bname = href
+            window.array.forEach(function (el) {
+                if (el.id === href) {
+                    $('html,body').animate({scrollTop: el.top - bannerHeight}, 500)
+                   // window.scrollTo(0, el.top - bannerHeight)
+                }
+            })
+        },
         array: [
             {
                 href: "tutorial/home/index.html",
@@ -197,14 +210,15 @@
         ]
     })
     avalon.scan(0, vm)
-    $(".navbar-nav a").click(function(){
+    $(".navbar-nav a").click(function () {
         var hash = this.getAttribute("href", 2)
-        if(hash.indexOf("/") > 0){
-            vm.aname = hash.replace(/^#/,"")
+        if (hash.indexOf("/") > 0) {
+            vm.aname = hash.replace(/^#/, "")
         }
     })
     var bname = ""
     var now = new Date - 0
+
     $(window).scroll(function () {
         var then = new Date
         if (then - now > 60) {

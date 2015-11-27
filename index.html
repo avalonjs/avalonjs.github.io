@@ -68,10 +68,10 @@
         <div class="bs-docs-sidebar" ms-controller="nav">
             <ul class="nav bs-docs-sidenav">
                 <li ms-repeat="array" ms-class="active: aname === el.href">
-                    <a ms-attr-href="#{{el.href}}" ms-text="el.name"></a>
+                    <a ms-attr-href="#{{el.href}}" ms-text="el.name" ms-click="aclick(el.href)"></a>
                     <ul class="nav">
                         <li ms-repeat-elem="el.sub" ms-class="active: bname == elem.href">
-                            <a ms-attr-href="'#'+elem.href" ms-text="elem.name"></a>
+                            <a ms-attr-href="'#'+elem.href" ms-text="elem.name" ms-click="bclick(elem.href)"></a>
                         </li>
                     </ul>
                 </li>
@@ -85,7 +85,7 @@
                 display: none;
                 width:300px;
                 position: fixed;
-                right:50px;
+                right:40px;
                 height:200px;
                 top:52px;
             }
@@ -98,17 +98,18 @@
 
         <script>
             $(function () {
-                var bannerHeight = $(".navbar .container").height()
+                
                 parent.array = []
                 $(window).on("hashchange", function () {
-                    var hash = location.hash
+                    var hash = location.hash.replace(/^#/, "")
+                    console.log("hash "+hash)
                     if (!hash || hash == "home.html") {
                         $(".bs-docs-sidebar").hide()
                         $("iframe").prop("src", "home.html")
                     } else {
                         $(".bs-docs-sidebar").show()
                         if (/\.html/.test(hash)) {
-                            $("iframe").prop("src", hash.replace(/^#/, ""))
+                            $("iframe").prop("src", hash)
                         }
                     }
 
@@ -120,15 +121,7 @@
                 $(window).on("resize", function () {
                     $("iframe").css("width", "100%")
                 })
-                $(document).on("click", ".bs-docs-sidenav li a", function () {
-                    var hash = this.getAttribute("href", 2)
-                   // $(".bs-docs-sidenav .active").removeClass("active")
-
-                  //  $(this).parents("li").addClass("active")
-                    //$("iframe").prop("src", hash.replace(/^#/, ""))
-
-
-                })
+                
 
             })
         </script>
