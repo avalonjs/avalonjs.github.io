@@ -1,165 +1,163 @@
-<div class="bs-docs-section">
 
-    <h2 id='tutorial/concepts/vmodel.html'>视图模型</h2>
-    <p>视图模型，ViewModel，也经常被略写成VM，是通过avalon.define方法进行定义，利用Object.defineProperties(IE9+及W3C)与VBScript(IE6-8)技术生成的特殊对象。
-        用户定义的VM都会放在avalon.vmodels对象中集中存储，因此VM必须指定$id属性，我们将通地<span>var vm = avalon.vmodels[$id]</span>来获取你的VM。
-        此外，VM还拥有 $watch, $unwatch, $fire, $model等方法。</p>
+<h2 id='tutorial/concepts/vmodel.html'>视图模型</h2>
+<p>视图模型，ViewModel，也经常被略写成VM，是通过avalon.define方法进行定义，利用Object.defineProperties(IE9+及W3C)与VBScript(IE6-8)技术生成的特殊对象。
+    用户定义的VM都会放在avalon.vmodels对象中集中存储，因此VM必须指定$id属性，我们将通地<span>var vm = avalon.vmodels[$id]</span>来获取你的VM。
+    此外，VM还拥有 $watch, $unwatch, $fire, $model等方法。</p>
 
-    <center>
-        <img src="../../assets/css/architecture.png" alt="none" >
-    </center>
-    <p>视图里面，我们可以使用ms-controller, ms-important指定一个VM的作用域。</p>
+<center>
+    <img src="../../assets/css/architecture.png" alt="none" >
+</center>
+<p>视图里面，我们可以使用ms-controller, ms-important指定一个VM的作用域。</p>
 
-    <p>此外，在ms-each, ms-with，ms-repeat绑定属性中，它们会创建一个临时的VM，我们称之为代理VM， 
-        用于放置$key, $val, $index, $last, $first, $remove等变量或方法。</p>
+<p>此外，在ms-each, ms-with，ms-repeat绑定属性中，它们会创建一个临时的VM，我们称之为代理VM， 
+    用于放置$key, $val, $index, $last, $first, $remove等变量或方法。</p>
 
-    <p>另外，avalon不允许在VM定义之后，再追加新属性与方法，比如下面的方式是错误的：</p>
+<p>另外，avalon不允许在VM定义之后，再追加新属性与方法，比如下面的方式是错误的：</p>
+<xmp class="javascript">
+    var vm = avalon.define({
+    $id: "test",
+    test1: "点击测试按钮没反应 绑定失败"
+    })
+    vm.one = function () {//不能再追加此方法
+    vm.test1 = "绑定成功"
+    }
+</xmp>
+<p>但我们可以通过以下方式，实现添加子属性。</p>
+<xmp class="javascript">
+    var vm = avalon.define({
+    $id: "test",
+    placehoder: {}
+    });
+    setTimeout(function () {
+    vm.placehoder = {//我们必须要通过 = ，直接添加一个对象来添加子属性， 不能
+    aaa: 1, //vm.placehoder.aaa =1; vm.placehoder.bbb = 2这样分散地添加子属性
+    bbb: 2
+    }
+    }, 1000)
+</xmp>
+<p>VM中的数据更新，只能通过 = 赋值方式实现。但要注意在IE6-8，由于VM是一个VBScript对象，为VM添加新属性会抛错，
+    因此我们想批量更新属性要时格外小心了，需要用hasOwnProperty进行过滤。</p>
+<p style="color:red">注意在IE6-8 下，err是VBscript的关键字，VM中存在这个字段，就会将VM中的其他数组变成字符串，详见
+    <a href="https://github.com/RubyLouvre/avalon/issues/627">这里</a></p>
+<xmp class="javascript">
+    var vm = avalon.define({
+    $id: "test",
+    a: 1,
+    b: 2,
+    c: {}
+    });
+    var newObject = {
+    a: 5,
+    b: 6,
+    c: {
+    k: 4
+    },
+    f: 9 //f原来是在vm中不存在，在IE6-8会报错
+    }
+
+    //方式1：IE9+及其他现代浏览器
+    avalon.mix(vm, newObject)
+
+    //方式2：IE6-8
+    for (var i in vm) {
+    if (vm.hasOwnProperty(i) && newObject.hasOwnProperty(i)) {
+    vm[i] = newObject[i]
+    }
+    }
+    //方式3, 设计一个assignVM方法，方便mixin N个对象
+    function assignVM(vm, firstSource) {
+    for (var i = 1; i < arguments.length; i++) {
+    var nextSource = arguments[i];
+    if (nextSource && typeof nextSource !== "object")
+    continue;
+    for (var i in vm) {
+    if (vm.hasOwnProperty(i) && nextSource.hasOwnProperty(i)) {
+    vm[i] = nextSource[i]
+    }
+    }
+    }
+    return vm
+    }
+
+    assignVM(vm, newObject, {a: 8, h: 9}, {b: 6, j: 0})
+</xmp>
+
+<p>为了性能起见，请确保你的对象结构足够扁平，套嵌层次不能太深，里面的数组不能太长。</p>
+<hr/>
+<fieldset><legend><b>VM能监控它的属性被用户改动的秘密</b></legend>
+    <p>我们定义VM时，是通过define方法，无论是新风格还是旧风格，你最初添加的属性从这方法出来，已经不是原来的属性了。
+        这些能监控的属性在JS里有个一专门的术语叫<strong>访问器属性</strong>    </p>
+    <p>javascript一共用三种属性</p>
+    <p><strong>普通属性</strong>， 这种属性是用户赋给它们，它们就返回什么，不会做额外的事情</p>
+
     <xmp class="javascript">
-        var vm = avalon.define({
-        $id: "test",
-        test1: "点击测试按钮没反应 绑定失败"
+        var a = {}
+        a.b = 1
+        alert(a.b) // 1
+    </xmp>
+    <p><strong>内部属性</strong>，比如数组的length属性，函数的prototype属性， DOM节点的innerHTML属性，用户对它们进行赋值后，
+        再取值时，它不一定按我们的预期做事，此外还会做一些格外的事情。另外，我们也很难改变它们的行为。
+        比如说某一数组，它的长度为10, 当我们设置它为11时，它就会增加一个undefined元素，再设置为9时，就会从后面删掉两个元素。
+        函数的prototype如果被改变，相当于将其父类改变了，会new不同类型的实例。
+        DOM的innerHTML，我们赋值时是一个字符串，再取出时，这字符串可能会与原来的不一样，
+        并且在原元素上生成了不一样的子节点。
+    </p>
+    <xmp class="javascript">
+        var a = {}
+        a.b = 1
+        alert(a.b) // 1
+    </xmp>
+    <p><strong>访问器属性</strong>， IE8+新添加的语言特征，允许用户在赋值或取值都经过预先设定的函数，从而实现<strong>内部属性</strong>
+        的那一种特殊效果。比如说我们能让一个属性无法赋值，取值时都返回1000；让一个属性在赋值时，会执行另一处的方法……
+    </p>
+    <p>现在javascript有三种方式设置<strong>访问器属性</strong></p>
+    <xmp class="javascript">
+        HTMLElement.prototype.__defineGetter__("description", function () {
+        return this.desc
         })
-        vm.one = function () {//不能再追加此方法
-        vm.test1 = "绑定成功"
-        }
+        HTMLElement.prototype.__defineSetter__("description", function (val) {
+        this.desc = val
+        })
+        document.body.description = "Beautiful body"
     </xmp>
-    <p>但我们可以通过以下方式，实现添加子属性。</p>
+    <br/>
     <xmp class="javascript">
-        var vm = avalon.define({
-        $id: "test",
-        placehoder: {}
-        });
-        setTimeout(function () {
-        vm.placehoder = {//我们必须要通过 = ，直接添加一个对象来添加子属性， 不能
-        aaa: 1, //vm.placehoder.aaa =1; vm.placehoder.bbb = 2这样分散地添加子属性
-        bbb: 2
+        function Lost () {
+        // Constructor
         }
-        }, 1000)
-    </xmp>
-    <p>VM中的数据更新，只能通过 = 赋值方式实现。但要注意在IE6-8，由于VM是一个VBScript对象，为VM添加新属性会抛错，
-        因此我们想批量更新属性要时格外小心了，需要用hasOwnProperty进行过滤。</p>
-    <p style="color:red">注意在IE6-8 下，err是VBscript的关键字，VM中存在这个字段，就会将VM中的其他数组变成字符串，详见
-        <a href="https://github.com/RubyLouvre/avalon/issues/627">这里</a></p>
-    <xmp class="javascript">
-        var vm = avalon.define({
-        $id: "test",
-        a: 1,
-        b: 2,
-        c: {}
-        });
-        var newObject = {
-        a: 5,
-        b: 6,
-        c: {
-        k: 4
+
+        Lost.prototype = {
+        get location (){
+        return this.loc;
         },
-        f: 9 //f原来是在vm中不存在，在IE6-8会报错
+        set location (val){
+        this.loc = val;
         }
-
-        //方式1：IE9+及其他现代浏览器
-        avalon.mix(vm, newObject)
-
-        //方式2：IE6-8
-        for (var i in vm) {
-        if (vm.hasOwnProperty(i) && newObject.hasOwnProperty(i)) {
-        vm[i] = newObject[i]
-        }
-        }
-        //方式3, 设计一个assignVM方法，方便mixin N个对象
-        function assignVM(vm, firstSource) {
-        for (var i = 1; i < arguments.length; i++) {
-        var nextSource = arguments[i];
-        if (nextSource && typeof nextSource !== "object")
-        continue;
-        for (var i in vm) {
-        if (vm.hasOwnProperty(i) && nextSource.hasOwnProperty(i)) {
-        vm[i] = nextSource[i]
-        }
-        }
-        }
-        return vm
-        }
-
-        assignVM(vm, newObject, {a: 8, h: 9}, {b: 6, j: 0})
+        };
+        var lostIsland = new Lost();
+        lostIsland.location = "Somewhere in time";
+    </xmp>
+    <br/>
+    <xmp class="javascript">
+        var bValue = 38;
+        Object.defineProperty(o, 'b', {
+        get: function() { return bValue; },
+        set: function(newValue) { bValue = newValue; },
+        enumerable: true,
+        configurable: true
+        });
+        o.b; // 38
     </xmp>
 
-    <p>为了性能起见，请确保你的对象结构足够扁平，套嵌层次不能太深，里面的数组不能太长。</p>
-    <hr/>
-    <fieldset><legend><b>VM能监控它的属性被用户改动的秘密</b></legend>
-        <p>我们定义VM时，是通过define方法，无论是新风格还是旧风格，你最初添加的属性从这方法出来，已经不是原来的属性了。
-            这些能监控的属性在JS里有个一专门的术语叫<strong>访问器属性</strong>    </p>
-        <p>javascript一共用三种属性</p>
-        <p><strong>普通属性</strong>， 这种属性是用户赋给它们，它们就返回什么，不会做额外的事情</p>
+    <p>这三种定义方式，无法哪一种，都要求我们设置一个读方法getter，一个写方法setter。 getter， setter是用于改写用户访问某属性的行为。</p>
+    <p> 一般来说，我们对某属性的常用操作有如下四种，赋值，取值，遍历，删除。赋值会其内部的set方法， 取值会调用其内部的get方法，
+        遍历关系到其enumerable配置项，删除关系到其configurable配置项。一般地，我们称那些用户赋什么值返回什么值的属性为普通属性，
+        在set, get关键字，或__defineSetter__, __defineGetter__没出来之前，大多数对象的属性都是普通属性。
+        只有像数组的length属性与元素节点的innerHTML， 会在用户取值或赋值做一些额外的操作，它们就是访问器属性。
+        avalon.define生成的VM就是一个包含了是访问器属性的魔术对象。 avalon会在它们的setter,getter方法做依赖收集与同步视图等工作，
+        从来让我们就算不写一行有关DOM操作的代码，也能做jQuery那种灵活操作DOM的效果。
+    </p>
+    <p>值得注意的是，avalon只会转换预先定义好的属性为访问器属性，对后来添加的属性无动于衷。因此大家要养成“先定义后使用”的习惯。</p>
 
-        <xmp class="javascript">
-            var a = {}
-            a.b = 1
-            alert(a.b) // 1
-        </xmp>
-        <p><strong>内部属性</strong>，比如数组的length属性，函数的prototype属性， DOM节点的innerHTML属性，用户对它们进行赋值后，
-            再取值时，它不一定按我们的预期做事，此外还会做一些格外的事情。另外，我们也很难改变它们的行为。
-            比如说某一数组，它的长度为10, 当我们设置它为11时，它就会增加一个undefined元素，再设置为9时，就会从后面删掉两个元素。
-            函数的prototype如果被改变，相当于将其父类改变了，会new不同类型的实例。
-            DOM的innerHTML，我们赋值时是一个字符串，再取出时，这字符串可能会与原来的不一样，
-            并且在原元素上生成了不一样的子节点。
-        </p>
-        <xmp class="javascript">
-            var a = {}
-            a.b = 1
-            alert(a.b) // 1
-        </xmp>
-        <p><strong>访问器属性</strong>， IE8+新添加的语言特征，允许用户在赋值或取值都经过预先设定的函数，从而实现<strong>内部属性</strong>
-            的那一种特殊效果。比如说我们能让一个属性无法赋值，取值时都返回1000；让一个属性在赋值时，会执行另一处的方法……
-        </p>
-        <p>现在javascript有三种方式设置<strong>访问器属性</strong></p>
-        <xmp class="javascript">
-            HTMLElement.prototype.__defineGetter__("description", function () {
-            return this.desc
-            })
-            HTMLElement.prototype.__defineSetter__("description", function (val) {
-            this.desc = val
-            })
-            document.body.description = "Beautiful body"
-        </xmp>
-        <br/>
-        <xmp class="javascript">
-            function Lost () {
-            // Constructor
-            }
-
-            Lost.prototype = {
-            get location (){
-            return this.loc;
-            },
-            set location (val){
-            this.loc = val;
-            }
-            };
-            var lostIsland = new Lost();
-            lostIsland.location = "Somewhere in time";
-        </xmp>
-        <br/>
-        <xmp class="javascript">
-            var bValue = 38;
-            Object.defineProperty(o, 'b', {
-            get: function() { return bValue; },
-            set: function(newValue) { bValue = newValue; },
-            enumerable: true,
-            configurable: true
-            });
-            o.b; // 38
-        </xmp>
-
-        <p>这三种定义方式，无法哪一种，都要求我们设置一个读方法getter，一个写方法setter。 getter， setter是用于改写用户访问某属性的行为。</p>
-        <p> 一般来说，我们对某属性的常用操作有如下四种，赋值，取值，遍历，删除。赋值会其内部的set方法， 取值会调用其内部的get方法，
-            遍历关系到其enumerable配置项，删除关系到其configurable配置项。一般地，我们称那些用户赋什么值返回什么值的属性为普通属性，
-            在set, get关键字，或__defineSetter__, __defineGetter__没出来之前，大多数对象的属性都是普通属性。
-            只有像数组的length属性与元素节点的innerHTML， 会在用户取值或赋值做一些额外的操作，它们就是访问器属性。
-            avalon.define生成的VM就是一个包含了是访问器属性的魔术对象。 avalon会在它们的setter,getter方法做依赖收集与同步视图等工作，
-            从来让我们就算不写一行有关DOM操作的代码，也能做jQuery那种灵活操作DOM的效果。
-        </p>
-        <p>值得注意的是，avalon只会转换预先定义好的属性为访问器属性，对后来添加的属性无动于衷。因此大家要养成“先定义后使用”的习惯。</p>
-
-        <p>另，IE6-8是使用VBScript生成的对象，是一种特殊的对象，如果访问没有定义过的属性或方法会报错。这个千万要小心。</p>
-    </fieldset>
-</div>
+    <p>另，IE6-8是使用VBScript生成的对象，是一种特殊的对象，如果访问没有定义过的属性或方法会报错。这个千万要小心。</p>
+</fieldset>

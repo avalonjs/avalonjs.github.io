@@ -78,7 +78,7 @@
                     },
                     {
                         href: "tutorial/concepts/unobservable.html",
-                        name: "监控数组"
+                        name: "非监控属性"
                     }
                 ]
             },

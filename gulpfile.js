@@ -30,7 +30,7 @@ gulp.task('combo', function () {
                                 d = css_beautify(d)
                                 break
                             case "html":
-                                d = html_beautify(d)
+                                d = html_beautify(d).replace(rlt,"&lt;").replace(rgt,"&gt;")
                                 break
                             default:
                                 var lines = d.split(/[\r\n]/)

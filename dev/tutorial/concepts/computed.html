@@ -1,0 +1,106 @@
+<h3 id="c-computed">计算属性</h3>
+<p>计算属性，监控属性的一种，名字取自emberjs，相当于WPF的DependencyProperty（依赖属性），
+    意即它的值是根据其他两个或两个以上的监控属性计算出来。 </p>
+<p>在1.5+ 中,所有计算属性应该写在$computed对象中,计算属性为一个拥有get/set(set可选)的对象.
+    它里面的<b>this</b>指向VM，不能用avalon.define(di, function(vm){})这里的vm。</p>
+<p>不能用计算属性生成对象及数组,换言之它就不能用在ms-repeat中.</p>
+<pre ms-skip class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;计算属性&lt;/title&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+        &lt;script src="avalon.js" &gt;&lt;/script&gt;
+ 
+        &lt;script&gt;
+    avalon.define({
+        $id: "test",
+        firstName: "司徒",
+        lastName: "正美",
+        $computed:{
+           fullName: {//一个包含set或get的对象
+                set: function(val) {//里面必须用this指向vm，但不能使用vm
+                    var array = (val || "").split(" ");
+                    this.firstName = array[0] || "";
+                    this.lastName = array[1] || "";
+                },
+                get: function() {
+                    return this.firstName + " " + this.lastName;
+                }
+            }
+        }
+    })
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div ms-controller="test"&gt;
+            &lt;p&gt;First name: &lt;input ms-duplex="firstName" /&gt;&lt;/p&gt;
+            &lt;p&gt;Last name: &lt;input ms-duplex="lastName"  /&gt;&lt;/p&gt;
+            &lt;p&gt;Hello,    &lt;input ms-duplex="fullName"&gt;&lt;/p&gt;
+            &lt;div&gt;{{firstName +"  "+ lastName }}&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<script>
+    avalon.define({
+        $id: "computedtest",
+        firstName: "司徒",
+        lastName: "正美",
+        fullName: {//一个包含set或get的对象
+            set: function(val) {//里面必须用this指向vm，但不能使用vm
+                var array = (val || "").split(" ");
+                this.firstName = array[0] || "";
+                this.lastName = array[1] || "";
+            },
+            get: function() {
+                return this.firstName + " " + this.lastName;
+            }
+        }
+    })
+</script>
+<div ms-important="computedtest">
+    <p>First name: <input ms-duplex="firstName" /></p>
+    <p>Last name: <input ms-duplex="lastName"  /></p>
+    <p>Hello,    <input ms-duplex="fullName"></p>
+    <div>{{firstName +"  "+ lastName }}</div>
+</div>
+<p>计算属性的get方法应该返回一个简单数据类型，比如下面这样做是错误的</p>
+<pre ms-skip class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head lang="en"&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;&lt;/title&gt;
+    &lt;style type="text/css"&gt;
+        .btn{display: inline-block; background-color: red; padding: 6px 10px;}
+    &lt;/style&gt;
+    &lt;script type="text/javascript" src="common/avalon1.38.1223.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+        var vm = avalon.define({
+            $id: "test",
+            num: 0,
+            $computed: {
+                cal: {
+                    get: function(){
+                      return [this.num - 1, this.num, this.num + 1];
+                    }
+                },
+            },
+           
+            add: function(){
+                vm.num++;
+            }
+        });
+    &lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div ms-controller="test"&gt;
+        &lt;div&gt;{{ cal.join(",") }}&lt;/div&gt;
+        &lt;div ms-repeat="cal"&gt;{{ el }}&lt;/div&gt;
+        &lt;div class="btn" ms-click="add"&gt;add&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p>ms-repeat只能对应一个子VM或一个监控数组</p>
