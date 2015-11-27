@@ -6,19 +6,22 @@
         $id: "nav",
         aname: "",
         bname: "",
-        aclick: function (href) {
+        aclick: function (href, e) {
             vm.aname = href
-            console.log(href)
             $('html,body').animate({scrollTop: 0}, 500)
-
         },
-        bclick: function (href) {
+        bclick: function (href, e) {
+           // e.preventDefault()
             vm.bname = href
-            window.activeArray.forEach(function (el) {
+           
+            window.activeArray.some(function (el) {
                 if (el.id === href) {
-                    $('html,body').animate({scrollTop: Math.max(0, el.top - bannerHeight)}, 500)
+                    $('html,body').animate({
+                        scrollTop: Math.max(0, el.top - bannerHeight)
+                    }, 500)
                 }
             })
+        
         },
         array: [
             {
@@ -212,13 +215,12 @@
             }
         ]
     })
-    vm.$watch("bname", function (href) {
-        console.log("watch ", href)
 
-    })
     avalon.scan(0, vm)
-    $(".navbar-nav a").click(function () {
+    $(".navbar-nav a").click(function (e) {
+        e.preventDefault()
         var hash = this.getAttribute("href", 2)
+        location.hash = hash
         if (hash.indexOf("/") > 0) {
             vm.aname = hash.replace(/^#/, "")
         }
@@ -239,7 +241,6 @@
             })
 
             if (name != bname && name) {
-                console.log(name, "!")
                 bname = vm.bname = name
             }
         }

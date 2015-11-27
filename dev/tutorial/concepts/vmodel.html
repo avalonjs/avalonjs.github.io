@@ -37,8 +37,11 @@
 </xmp>
 <p>VM中的数据更新，只能通过 = 赋值方式实现。但要注意在IE6-8，由于VM是一个VBScript对象，为VM添加新属性会抛错，
     因此我们想批量更新属性要时格外小心了，需要用hasOwnProperty进行过滤。</p>
-<p style="color:red">注意在IE6-8 下，err是VBscript的关键字，VM中存在这个字段，就会将VM中的其他数组变成字符串，详见
-    <a href="https://github.com/RubyLouvre/avalon/issues/627">这里</a></p>
+<div class="bs-callout bs-callout-danger">
+    <p style="color:red">注意在IE6-8 下，err是VBscript的关键字，VM中存在这个字段，就会将VM中的其他数组变成字符串，详见
+        <a href="https://github.com/RubyLouvre/avalon/issues/627">这里</a></p>
+</div>
+
 <xmp class="javascript">
     var vm = avalon.define({
     $id: "test",
@@ -81,9 +84,9 @@
 
     assignVM(vm, newObject, {a: 8, h: 9}, {b: 6, j: 0})
 </xmp>
-
-<p>为了性能起见，请确保你的对象结构足够扁平，套嵌层次不能太深，里面的数组不能太长。</p>
-<hr/>
+<div class="bs-callout bs-callout-info">
+    <p>为了性能起见，请确保你的对象结构足够扁平，套嵌层次不能太深，里面的数组不能太长。</p>
+</div>
 <fieldset><legend><b>VM能监控它的属性被用户改动的秘密</b></legend>
     <p>我们定义VM时，是通过define方法，无论是新风格还是旧风格，你最初添加的属性从这方法出来，已经不是原来的属性了。
         这些能监控的属性在JS里有个一专门的术语叫<strong>访问器属性</strong>    </p>
@@ -157,7 +160,14 @@
         avalon.define生成的VM就是一个包含了是访问器属性的魔术对象。 avalon会在它们的setter,getter方法做依赖收集与同步视图等工作，
         从来让我们就算不写一行有关DOM操作的代码，也能做jQuery那种灵活操作DOM的效果。
     </p>
-    <p>值得注意的是，avalon只会转换预先定义好的属性为访问器属性，对后来添加的属性无动于衷。因此大家要养成“先定义后使用”的习惯。</p>
+    <div class="bs-callout bs-callout-warning">
+        <p>值得注意的是，avalon只会转换预先定义好的属性为访问器属性，对后来添加的属性无动于衷。
+            因此大家要养成“先定义后使用”的习惯。</p>
+    </div>
 
-    <p>另，IE6-8是使用VBScript生成的对象，是一种特殊的对象，如果访问没有定义过的属性或方法会报错。这个千万要小心。</p>
+    <div class="bs-callout bs-callout-danger">
+        <p>注意，IE6-8是使用VBScript生成的对象，是一种特殊的对象，
+            如果访问没有定义过的属性或方法会报错。
+            这个千万要小心。</p>
+    </div>
 </fieldset>

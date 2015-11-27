@@ -106,10 +106,10 @@
                 })
 
                 //在avalon.define外面绑定$watch回调
-                model.array.$watch("length", function (a) {
+                model.$watch("array.length", function (a) {
                     model.arrayWatch = a + " $watch"
                 })
-                model.data.$watch("aaa", function (a) {
+                model.$watch("data.aaa", function (a) {
                     model.dataAAAWatch = a + " $watch"
                 })
             </script>
@@ -241,110 +241,111 @@
         </html>
 
     </xmp>
-    <fieldset>
-        <legend>例子三</legend>
-        <div ms-controller="$watch3">
-            <input ms-duplex="phone" />
-        </div>
-    </fieldset>
+</fieldset>
+<fieldset>
+    <legend>例子三</legend>
+    <div ms-controller="mobile">
+        <input ms-duplex="phone" />
+    </div>
+</fieldset>
 
-    <style>
-        .msform{
-            width:500px;
-            padding:5px;
-            border: 3px solid #666;
-        }
-        .msform div{
-            padding:2px;
-        }
-        .msform input{
-            width:200px;
-        }
+<style>
+    .msform{
+        width:500px;
+        padding:5px;
+        border: 3px solid #666;
+    }
+    .msform div{
+        padding:2px;
+    }
+    .msform input{
+        width:200px;
+    }
 
-        .msform .error{
-            color: red;
-        }
-        .msform input.error{
-            border: 1px solid red;
-        }
-        .msform .ok{
-            color: green;
-        }
-    </style>
+    .msform .error{
+        color: red;
+    }
+    .msform input.error{
+        border: 1px solid red;
+    }
+    .msform .ok{
+        color: green;
+    }
+</style>
 
-    <script type="text/javascript">
+<script type="text/javascript">
+    var model = avalon.define({
+        $id: "$watch1",
+        prop: "xxx",
+        array: ["aaa", "bbb", "ccc", "ddd"],
+        data: {
+            aaa: "lll"
+        },
+        propWatch: "",
+        arrayWatch: 4,
+        dataAAAWatch: "",
+        click: function () {
+            model.prop = new Date - 1
+            model.data.aaa = new Date - 2
+            model.array.push(new Date - 3)
+        }
+    })
+    model.$watch("prop", function (a) {
+        model.propWatch = a + " $watch"
+    })
+
+    //在avalon.define外面绑定$watch回调
+    model.$watch("array.length", function (a) {
+        model.arrayWatch = a + " $watch"
+    })
+    model.$watch("data.aaa", function (a) {
+        model.dataAAAWatch = a + " $watch"
+    })
+            ;
+    (function () {
+        var props = ["aaa", "bbb", "ccc", "ddd"]
+        var backup = props.concat()
         var model = avalon.define({
-            $id: "$watch1",
-            prop: "xxx",
-            array: ["aaa", "bbb", "ccc", "ddd"],
-            data: {
-                aaa: "lll"
-            },
+            $id: "$watch2",
+            aaa: "xxx",
+            bbb: "yyy",
+            ccc: "zzz",
+            ddd: "uuu",
             propWatch: "",
-            arrayWatch: 4,
-            dataAAAWatch: "",
             click: function () {
-                model.prop = new Date - 1
-                model.data.aaa = new Date - 2
-                model.array.push(new Date - 3)
+                var index = Math.floor(Math.random() * props.length)
+                var prop = props.splice(index, 1)[0]
+                if (!props.length) {
+                    props = backup.concat()
+                }
+                model[prop] = new Date - 1
             }
         })
-        model.$watch("prop", function (a) {
-            model.propWatch = a + " $watch"
-        })
-
-        //在avalon.define外面绑定$watch回调
-        model.$watch("array.length", function (a) {
-            model.arrayWatch = a + " $watch"
-        })
-        model.$watch("data.aaa", function (a) {
-            model.dataAAAWatch = a + " $watch"
-        })
-                ;
-        (function () {
-            var props = ["aaa", "bbb", "ccc", "ddd"]
-            var backup = props.concat()
-            var model = avalon.define({
-                $id: "$watch2",
-                aaa: "xxx",
-                bbb: "yyy",
-                ccc: "zzz",
-                ddd: "uuu",
-                propWatch: "",
-                click: function () {
-                    var index = Math.floor(Math.random() * props.length)
-                    var prop = props.splice(index, 1)[0]
-                    if (!props.length) {
-                        props = backup.concat()
-                    }
-                    model[prop] = new Date - 1
-                }
-            })
-            model.$watch("$all", function (name) {
-                if (name !== "propWatch") {
-                    model.propWatch = name + "  属性发生改变"
-                }
-            })
-        })();
-        var model3 = avalon.define({
-            $id: "mobile",
-            phone: ""
-        })
-        model3.$watch("phone", function (a) {
-            var b = a.replace(/\s+/g, "")
-            var array = b.split("")
-            var ret = ""
-            for (var i = 0, n = array.length; i < n; i++) {
-                if (i > 10)//不能超过11位
-                    break
-                if (i == 3) {
-                    ret += " "
-                }
-                if (i == 7) {
-                    ret += " "
-                }
-                ret += array[i]
+        model.$watch("$all", function (name) {
+            if (name !== "propWatch") {
+                model.propWatch = name + "  属性发生改变"
             }
-            model3.phone = ret
         })
-    </script>
+    })();
+    var model3 = avalon.define({
+        $id: "mobile",
+        phone: ""
+    })
+    model3.$watch("phone", function (a) {
+        var b = a.replace(/\s+/g, "")
+        var array = b.split("")
+        var ret = ""
+        for (var i = 0, n = array.length; i < n; i++) {
+            if (i > 10)//不能超过11位
+                break
+            if (i == 3) {
+                ret += " "
+            }
+            if (i == 7) {
+                ret += " "
+            }
+            ret += array[i]
+        }
+        model3.phone = ret
+    })
+</script>

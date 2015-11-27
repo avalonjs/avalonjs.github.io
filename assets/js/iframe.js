@@ -4,7 +4,6 @@ $(function () {
             
             var sw = $(document).width()
             var sh = $(document).height()
-            console.log(sw, sh)
             $("iframe", parent.document).css({
                 width: sw,
                 height: sh

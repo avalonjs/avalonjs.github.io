@@ -3,9 +3,11 @@
 <p>是指VM中的$model属性，它是一个纯净的javascript对象，去掉$id, $watch等方法或属性，可以直接通过$.ajax提交给后端，当然我们
 还可以通过<code>JSON.parse(JSON.stringify(vm.$model))</code>干掉里面的所有函数。
 </p>
-<p>注意,不要修改$model,你只能通过VM来改动$model,否则在1.5中,$model是只读的,每次都是返回一个全新的对象给你
+
+<div class="bs-callout bs-callout-danger">
+   注意,不要修改$model,你只能通过VM来改动$model,否则在1.5中,$model是只读的,每次都是返回一个全新的对象给你
 你改了也没有用!
-</p>
+</div>
 <fieldset><legend>MVVM模式下，ViewModel和View，Model有什么区别</legend>
 
     <p><strong>Model</strong>：很简单，就是业务逻辑相关的数据对象，通常从数据库映射而来，我们可以说是<strong>与数据库对应的model</strong>。</p>

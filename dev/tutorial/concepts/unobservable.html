@@ -1,43 +1,46 @@
-<h3 id="c-unobservable">非监控属性</h3>
+
+<h2 id='tutorial/concepts/unobservable.html'>非监控属性</h2>
+
 <p>这包括框架添加的$id, $events, $model属性, $fire, $watch, $unwatch方法，及用户自己设置的以$开头的属性，放在$skipArray数组中的属性，值为函数、各种DOM节点的属性，总之，改变它们的值不会产生同步视图的效果。</p>
-<pre class="brush:html;gutter:false;toolbar:false">
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-    &lt;head&gt;
-        &lt;title&gt;unobservable&lt;/title&gt;
-        &lt;meta charset="UTF-8"&gt;
-        &lt;meta name="viewport" content="width=device-width"&gt;
-        &lt;script src="avalon.js"&gt;&lt;/script&gt;
-        &lt;script&gt;
-    var vm = avalon.define({
-        $id: "test",
-        $aaa: "sss",
-        $skipArray: ["bbb", "ccc"],
-        aaa: 111,
-        bbb: 222,
-        ccc: 333,
-        fn: function() {
-            return "函数"
-        },
-        click: function() {
-            vm.$aaa = vm.aaa = vm.bbb = vm.ccc = "change"
-            vm.fn = function() {
-                return "----------"
-            }
-        }
-    })
-        &lt;/script&gt;
-    &lt;/head&gt;
-    &lt;body ms-controller="test"&gt;
-        &lt;p&gt;{{$aaa}}&lt;/p&gt;
-        &lt;p&gt;{{aaa}}&lt;/p&gt;
-        &lt;p&gt;{{bbb}}&lt;/p&gt;
-        &lt;p&gt;{{ccc}}&lt;/p&gt;
-        &lt;p&gt;{{fn()}}&lt;/p&gt;
-        &lt;button type="button" ms-click="click"&gt;点我&lt;/button&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-</pre>
+<xmp class="html">
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>unobservable</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width">
+            <script src="avalon.js"></script>
+            <script>
+                var vm = avalon.define({
+                    $id: "test",
+                    $aaa: "sss",
+                    $skipArray: ["bbb", "ccc"],
+                    aaa: 111,
+                    bbb: 222,
+                    ccc: 333,
+                    fn: function () {
+                        return "函数"
+                    },
+                    click: function () {
+                        vm.$aaa = vm.aaa = vm.bbb = vm.ccc = "change"
+                        vm.fn = function () {
+                            return "----------"
+                        }
+                    }
+                })
+            </script>
+        </head>
+        <body ms-controller="test">
+            <p>{{$aaa}}</p>
+            <p>{{aaa}}</p>
+            <p>{{bbb}}</p>
+            <p>{{ccc}}</p>
+            <p>{{fn()}}</p>
+            <button type="button" ms-click="click">点我</button>
+        </body>
+    </html>
+
+</xmp>
 
 <script>
     var vm = avalon.define({
@@ -47,12 +50,12 @@
         aaa: 111,
         bbb: 222,
         ccc: 333,
-        fn: function() {
+        fn: function () {
             return "函数"
         },
-        click: function() {
+        click: function () {
             vm.$aaa = vm.aaa = vm.bbb = vm.ccc = "change"
-            vm.fn = function() {
+            vm.fn = function () {
                 return "----------"
             }
         }

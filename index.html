@@ -68,10 +68,10 @@
         <div class="bs-docs-sidebar" ms-controller="nav">
             <ul class="nav bs-docs-sidenav">
                 <li ms-repeat="array" ms-class="active: aname === el.href">
-                    <a ms-attr-href="#{{el.href}}" ms-text="el.name" ms-click="aclick(el.href)"></a>
+                    <a ms-attr-href="#{{el.href}}" ms-text="el.name" ms-click="aclick(el.href,$event)"></a>
                     <ul class="nav">
                         <li ms-repeat-elem="el.sub" ms-class="active: bname == elem.href">
-                            <a ms-attr-href="'#'+elem.href" ms-text="elem.name" ms-click="bclick(elem.href)"></a>
+                            <a ms-attr-href="'#'+elem.href" ms-text="elem.name" ms-click="bclick(elem.href,$event)"></a>
                         </li>
                     </ul>
                 </li>
@@ -98,30 +98,30 @@
 
         <script>
             $(function () {
-                
+
                 parent.array = []
                 $(window).on("hashchange", function () {
                     var hash = location.hash.replace(/^#/, "")
-                    console.log("hash "+hash)
                     if (!hash || hash == "home.html") {
                         $(".bs-docs-sidebar").hide()
                         $("iframe").prop("src", "home.html")
                     } else {
                         $(".bs-docs-sidebar").show()
                         if (/\.html/.test(hash)) {
+                           // $("iframe")[0].style.height = "auto"
                             $("iframe").prop("src", hash)
                         }
                     }
 
                 })
                 $("a[data-toggle='iframe']").click(function (e) {
-                    window.scrollTo(0, 0)
+                    $('html,body').animate({scrollTop: 0}, 500)
                 })
 
                 $(window).on("resize", function () {
                     $("iframe").css("width", "100%")
                 })
-                
+
 
             })
         </script>
