@@ -1,8 +1,33 @@
-;(function () {
+;
+(function () {
     var vm = avalon.define({
         $id: "nav",
+        aname: "",
+        bname: "",
         array: [
-  
+            {
+                href: "tutorial/home/index.html",
+                name: "介绍",
+                sub: [
+                    {
+                        href: "home-download",
+                        name: "下载"
+                    },
+                    {
+                        href: "home-cdn",
+                        name: "数据模型"
+                    },
+                    {
+                        href: "home-10",
+                        name: "监控属性"
+                    },
+                    {
+                        href: "home-origin",
+                        name: "监控数组"
+                    }
+
+                ]
+            },
             {
                 href: "tutorial/concepts/index.html",
                 name: "核心概念",
@@ -172,5 +197,31 @@
         ]
     })
     avalon.scan(0, vm)
+    $(".navbar-nav a").click(function(){
+        var hash = this.getAttribute("href", 2)
+        if(hash.indexOf("/") > 0){
+            vm.aname = hash.replace(/^#/,"")
+        }
+    })
+    var bname = ""
+    var now = new Date - 0
+    $(window).scroll(function () {
+        var then = new Date
+        if (then - now > 60) {
+            now = then
+            var height = $(window).scrollTop()
+            var name = ""
+            console.log(window.array)
+            window.array.forEach(function (el) {
+                if (el.top < height) {
+                    name = el.id
+                }
+            })
+            console.log(name, "!")
+            if (name != bname) {
+                vm.bname = bname
+            }
+        }
 
+    })
 })();

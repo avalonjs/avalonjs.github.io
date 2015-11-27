@@ -43,7 +43,7 @@ gulp.task('combo', function () {
                         }
                         d = d.replace(/\s+$/, "")
 
-                        return "<div ms-skip><pre class='brush:'" + c + ";gutter:false;toolbar:false'>" + d + "</pre></div>"
+                        return "<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:" + c + ";gutter:false;toolbar:false'>" + d + "</pre></div>"
                     }))
                     .pipe(gulp.dest(file.replace("/dev", "").replace(fileName, "")))
         })

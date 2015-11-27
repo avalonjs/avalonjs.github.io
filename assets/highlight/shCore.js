@@ -2188,5 +2188,5 @@ SyntaxHighlighter.brushes.Xml.aliases = ['xml', 'xhtml', 'xslt', 'html'];
 })();
 SyntaxHighlighter.utils.addEvent(window, "load", function() {
     SyntaxHighlighter.highlight()
-})
+});
 

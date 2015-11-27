@@ -3,9 +3,9 @@
     <div class="row">
         <div class="col-md-9" role="main">
             <div class="bs-docs-section">
-                <h1 id="download" class="page-header">下载</h1>
+                <h1 class="page-header">下载<h2 style="visibility: hidden" id="home-download"></h2></h1>
 
-                <p class="lead">avalon根据兼并容浏览器或平台的不同划分为三个版本。</p>
+                <p><b><a href="https://github.com/RubyLouvre/avalon">avalon</a></b>根据兼并容浏览器或平台的不同划分为三个版本。</p>
 
                 <div class="row bs-downloads">
                     <div class="col-sm-4">
@@ -31,7 +31,7 @@
                     </div>
                 </div>
 
-                <h2 id="download-cdn">CDN支持</h2>
+                <h2 id="home-cdn">CDN支持</h2>
                 <p>
                     我们可以使用bootcdn免费提供的CDN加速服务下载avalon:&nbsp;<a href="http://www.bootcdn.cn/avalon.js/">http://www.bootcdn.cn/avalon.js/</a>
                 </p>
@@ -62,7 +62,8 @@
                         <li>avalon1.5不再使用<code>avalon.bindingHandlers</code>,<code>avalon.bindingExecutors</code>来创建新指令，再改用更方便的avalon.directive方法</li>
                         <li>avalon在循环对象时，以前需要自己计算索引值，现在它与循环数组一样，存在<strong>$index变量</strong>了!</li>
                     </ul>
-                </div>      
+                </div>   
+                <h2 id="home-10">10 秒钟看懂 avalon</h2>
                 <xmp class="html">
                     <!DOCTYPE html>
                     <html>
@@ -70,7 +71,7 @@
                             <title>first example</title>
                             <meta charset="UTF-8">
                             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                            <script src="//cdn.bootcss.com/avalon.js/1.5.5/avalon.js"></script>
+                            <script src="avalon.js"></script>
                             <script>
                                 var vm = avalon.define({
                                     $id: "test",
@@ -84,8 +85,37 @@
                         </body>
                     </html>
                 </xmp>
-
+                <script src="../../assets/js/avalon.shim.js"></script>
+                <script>
+                                var vm = avalon.define({
+                                    $id: "test",
+                                    name: "司徒正美"
+                                })
+                </script>
+                <div ms-controller="test">
+                    <input ms-duplex="name" >
+                    <p>Hello，{{name}}!</p>
+                </div>
+                <p>这就是一个经典的MVVM页面,定义VM,然后 用ms-controller圈定需要要作用的区域.</p>
             </div>
+            <h2 id="home-origin">avalon的起源</h2>
+            <p><a href="https://github.com/RubyLouvre/avalon">avalon</a>是一个简单易用迷你的MVVM框架，它最早发布于2012.09.15，
+                为解决同一业务逻辑存在各种视图呈现而开发出来的。 
+                事实上，这问题其实也可以简单地利用一般的前端模板加jQuery 事件委托 搞定，
+                但随着业务的膨胀， 代码就充满了各种选择器与事件回调，难以维护。
+                因此彻底的将业务与逻辑分离，就只能求助于架构。 
+                最初想到的是MVC，尝试过backbone，但代码不降反升，很偶尔的机会，碰上微软的WPF，
+                优雅的MVVM架构立马吸引住我，我觉得这就是我一直寻找的解决之道。</p>
+            <p>avalon将所有前端代码彻底分成两部分，视图的处理通过绑定实现（angular有个更炫酷的名词叫指令），
+                业务逻辑则集中在一个个叫VM的对象中处理。我们只要操作VM的数据，它就自然而然地神奇地同步到视图。
+                显然所有神秘都有其内幕，C#是通过一种叫访问器属性的语句实现，那么JS也有对应的东西。
+                感谢上帝，IE8最早引入这东西（<code>Object.defineProperty</code>），可惜有BUG，但带动了其他浏览器实现它，
+                IE9+便能安全使用它。 对于老式IE，我找了好久，实在没有办法，使用<code>VBScript</code>实现了。</p>
+
+            <p><code>Object.defineProperty</code>或<code>VBS</code>的作用是将对象的某一个属性，转换一个setter与getter， 
+            我们只要劫持这两个方法，通过Pub/Sub模式就能偷偷操作视图。为了纪念WPF的指引，
+            我将此项目以WPF最初的开发代号avalon来命名。 它真的能让前端人员脱离DOM的苦海，来到数据的乐园中！</p>
+            <p>avalon的所有指令都是以ms-*命名,ms是用纪念我之前的一个框架<code>mass Framework</code>!</p>
 
         </div>
 
@@ -95,6 +125,7 @@
 
             </nav>
         </div>
+
 
     </div>
 

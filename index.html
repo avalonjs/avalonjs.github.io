@@ -43,12 +43,12 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand hidden-sm" data-toggle="iframe" href="home.html" >avalon</a>
+                    <a class="navbar-brand hidden-sm" data-toggle="iframe" href="#home.html" >avalon</a>
                 </div>
                 <div class="navbar-collapse collapse" role="navigation">
                     <ul class="nav navbar-nav">
-                        <li><a href="tutorial/home/start.html" data-toggle="iframe">教程</a></li>
-                        <li><a href="pages/api.html" data-toggle="iframe" >API</a></li>
+                        <li><a href="#tutorial/home/index.html" data-toggle="iframe">教程</a></li>
+                        <li><a href="#pages/api.html" data-toggle="iframe" >API</a></li>
                         <li><a href="http://edu.51cto.com/course/course_id-2533-page-1.html" target="_blank" >视频</a></li>
                         <li><a href="http://www.avalon.org.cn/" target="_blank" >论坛</a></li>
                         <li><a href="http://www.cnblogs.com/rubylouvre/" target="_blank" >博客</a></li>
@@ -56,7 +56,7 @@
                         <li><a href="http://expo.bootcss.com" target="_blank" >提问 </a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right hidden-sm">
-                        <li><a href="/about/">关于</a></li>
+                        <li><a href="#about">关于</a></li>
                     </ul>
                 </div>
             </div>
@@ -67,10 +67,10 @@
         <!-- /.container -->
         <div class="bs-docs-sidebar" ms-controller="nav">
             <ul class="nav bs-docs-sidenav">
-                <li ms-repeat="array">
+                <li ms-repeat="array" ms-class="active: aname === el.href">
                     <a ms-attr-href="#{{el.href}}" ms-text="el.name"></a>
                     <ul class="nav">
-                        <li ms-repeat-elem="el.sub">
+                        <li ms-repeat-elem="el.sub" ms-class="active: bname == elem.href">
                             <a ms-attr-href="'#'+elem.href" ms-text="elem.name"></a>
                         </li>
                     </ul>
@@ -95,53 +95,41 @@
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
-        <!--        <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-                <script src="http://cdn.bootcss.com/unveil/1.3.0/jquery.unveil.min.js"></script>
-                <script src="http://cdn.bootcss.com/scrollup/2.4.0/jquery.scrollUp.min.js"></script>
-                <script src="http://cdn.bootcss.com/toc/0.3.2/toc.min.js"></script>
-                <script src="http://cdn.bootcss.com/jquery.matchHeight/0.5.2/jquery.matchHeight-min.js"></script>
-                <script src="http://static.bootcss.com/www/assets/js/site.min.js"></script>-->
+
         <script>
             $(function () {
                 var bannerHeight = $(".navbar .container").height()
-                console.log("bannerHeight " + bannerHeight)
-                $("a[data-toggle='iframe']").click(function (e) {
-                    e.preventDefault()
-                    var hash = this.getAttribute("href", 2)
-                    $("iframe").prop("src", hash)
-                    location.hash = hash
-                    if (hash !== "home.html") {
-                        $(".bs-docs-sidebar").show().height($(document).height() - bannerHeight - 10)
-
-                    } else {
+                parent.array = []
+                $(window).on("hashchange", function () {
+                    var hash = location.hash
+                    if (!hash || hash == "home.html") {
                         $(".bs-docs-sidebar").hide()
+                        $("iframe").prop("src", "home.html")
+                    } else {
+                        $(".bs-docs-sidebar").show()
+                        if (/\.html/.test(hash)) {
+                            $("iframe").prop("src", hash.replace(/^#/, ""))
+                        }
                     }
 
                 })
+                $("a[data-toggle='iframe']").click(function (e) {
+                    window.scrollTo(0, 0)
+                })
+
                 $(window).on("resize", function () {
                     $("iframe").css("width", "100%")
                 })
                 $(document).on("click", ".bs-docs-sidenav li a", function () {
                     var hash = this.getAttribute("href", 2)
-                    $(".bs-docs-sidenav .active").removeClass("active")
+                   // $(".bs-docs-sidenav .active").removeClass("active")
 
-
-
-                    $(this).parents("li").addClass("active")
-                    $("iframe").prop("src", hash)
-                    location.hash = hash
-                    $(".bs-docs-sidebar").show().height($(document).height() - 200)
+                  //  $(this).parents("li").addClass("active")
+                    //$("iframe").prop("src", hash.replace(/^#/, ""))
 
 
                 })
-                $(window).scroll(function () {
-                    var height = $(window).scrollTop()
-                    if (height > bannerHeight) {
-                        $(".bs-docs-sidebar").css("top", -1 * height)
-                    } else {
-                        $(".bs-docs-sidebar").css("top", bannerHeight)
-                    }
-                })
+
             })
         </script>
 
