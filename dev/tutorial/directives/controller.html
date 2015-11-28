@@ -1,0 +1,140 @@
+<h2>作用域圈定(ms-controller, ms-important, ms-skip)</h2>
+<p>一个项目是由许多人分工写的，因此必须要合理地拆散，于是有了模块化。体现在工作上，PM通常它这为某某版块，某某频道，某某页面。
+    某一个模块，必须是包含其固有的数据，样式，HTML与处理逻辑。在jQuery时代，奉行的是“无侵入式javascript”，
+    页面虽然是拆成一块块，但最后是通过PHP等后端模板合并起来，并且把第一屏的数据直接灌进去，
+    接着是无尽的选择某些元素进行处理，选择某些元素进行处理。
+    javascript里面是满屏的CSS表达式，如果不一一对着HTML页面，这是无法阅读的。
+    换言之，jQuery很容易产生writeOnly的代码。</p>
+
+<p>avalon是引入分层构架，视图就是视图，数据就是数据，JS里面是操作数据，不会再操作视图，泾渭分明。
+    视图，换言之就是最初做好的那些HTML片段，只需要在里面添加上ms-controller指令（或叫绑定属性），指定其将要作用的ViewModel的ID，
+    然后在它里面添加其他绑定就行了。数据，特指是ViewModel，avalon是通过define方法定义，目的是实现“操作数据即操作DOM”，
+    从此我们再也用不上什么操作DOM的API，javascript代码量立即减少了一半以上，条理更清晰，更易维护。</p>
+
+<p>当我们通过avalon.define方法定义了一个ViewModel，我们怎么将它们应用到视图里呢？要知道，孤岛是不会产生作用的，想引起蝴蝶效应必须通过某种媒介。
+    这就到ms-controller、 ms-important、ms-skip这三大指令出场了。
+
+</p>
+
+<p><strong>ms-controller</strong>在页面上表现为一个特殊的属性，其属性值为ViewModel的$id，表示将在此元素或其子孙元素上圈定它的作用域范围，
+    但如果这些HTML存在它没有的属性，它可以向上查找上一级的ViewModel的属性。
+    换言之，ms-controller可以互相套嵌的。 </p>
+
+<p><strong>ms-important</strong>的用法与ms-controller差不多，但它不会向上查找。</p>
+<p ms-skip>ms-skip注明这块区域不应用任何的ViewModel的属性，它里面的任何指令（绑定属性）都会失效。
+    因为{{}}也算一种指令，而任何指令在被扫描后都会被移除，如果我们想保留某个区域的{{}}，就需要用到ms-skip。</p>
+
+<p>我们看下面的例子：</p>
+
+<h3>HTML结构</h3>
+<xmp class="html">
+    <div ms-controller="AAA">
+        <div>{{name}} :  {{color}}</div>
+        <div ms-controller="BBB">
+            <div>{{name}} :  {{color}}</div>
+            <div ms-controller="CCC">
+                <div>{{name}} :  {{color}}</div>
+            </div>
+            <div ms-important="DDD">
+                <div>{{name}} :  {{color}}</div>
+            </div>
+        </div>
+    </div>
+
+</xmp>   
+
+<h3>ViewModel</h3>
+<xmp class="javascript">
+  　avalon.ready(function() {
+　　    avalon.define({
+    $id: "AAA",
+    name: "liger",
+　　        color: "green"
+　　    });
+    avalon.define({
+    $id: "BBB",
+    name: "sphinx",
+　　        color: "red"
+　　    });
+　　    avalon.define({
+    $id: "CCC",
+    name: "dragon" //不存在color
+　　    });
+    avalon.define({
+    $id: "DDD",
+    name: "sirenia" //不存在color
+　　    });
+　　    avalon.scan()
+　　})
+</xmp>
+
+<fieldset>
+    <div><img src="../../assets/css/directives/controller/controller.png"/></div>
+    <script>
+        avalon.ready(function () {
+            var a = avalon.define({
+                $id: "AAA",
+                name: "liger",
+                color: "green"
+            });
+            var b = avalon.define({
+                $id: "BBB",
+                name: "sphinx",
+                color: "red"
+            });
+            var c = avalon.define({
+                $id: "CCC",
+                name: "dragon" //不存在color
+            });
+            var d = avalon.define({
+                $id: "DDD",
+                name: "sirenia" //不存在color
+            });
+            avalon.scan(0, [a, b, c, d])
+        })
+    </script>
+    <div ms-controller="AAA">
+        <div>{{name}} :  {{color}}</div>
+        <div ms-controller="BBB">
+            <div>{{name}} :  {{color}}</div>
+            <div ms-controller="CCC">
+                <div>{{name}} :  {{color}}</div>
+            </div>
+            <div ms-important="DDD">
+                <div>{{name}} :  {{color}}</div>
+            </div>
+        </div>
+    </div>
+</fieldset>
+<p>可以看出ViewModel在DOM树的作用范围其实与CSS很相似，采取就近原则，如果当前ViewModel没有此字段
+    就找上一级ViewModel的同名字段，这个机制非常有利于团队协作。</p>
+<p>如果从另一个角度来看，由于这种随机组成的方式就能实现类似继承的方式，因此我们就不必在JS代码时构建复杂的<b>继承体系</b>。</p>
+<p>类的继承体系是源自后端复杂业务的膨胀而诞生的。早在20世界80年代初期，也就是面向对象发展的初期，人们就非常看重继承这个概念。
+    继承关系蕴涵的意义是非常深远的。使用继承我们可以基于差异编程，也就是说，对于一个满足我们大部分需求的类，可以创建一个它的子类，重载它个别方法来实现我们所要的功能。只子继承一个类，
+    就可以重类该类的代码！通过继承，我们可以建立完整的软件结构分类，其中每一个层都可以重用该层次以上的代码。这是一个美丽新世界。</p>
+<p>但类继承的缺点也是很明显的，在下摘录一些：</p>
+<blockquote>
+    面向对象语言与生俱来的问题就是它们与生俱来的这一整个隐性环境。你想要一根香蕉，但你得到的是一头手里握着香蕉的大猩猩，以及整个丛林。 -- Joe Armstrong
+</blockquote>
+<blockquote>
+    在适合使用复合模式的共有类中使用继承，会把这个类与它的超类永远地束缚在一起，从而人为地限制了子类的性能
+</blockquote>
+<blockquote>
+    <h3>
+        类继承的缺点  
+    </h3>          
+    <ol>
+        <li>超类改变，子类要跟着改变，违反了“开——闭”原则</li>
+        <li>不能动态改变方法实现，不能在运行时改变由父类继承来的实现</li>
+        <li>破坏原有封装，因为基类向子类暴露了实现细节</li>
+        <li>继承会导致类的爆炸</li>
+    </ol>
+</blockquote>
+<p>因此在选择是继承还是组合的问题上，avalon倾向组合。组合的使用范例就是CSS，因此也有了ms-important的诞生。</p>
+<p>而ms-important就相当于CSS的important语句，强制这个区域使用此ViewModel，不再往上查找同名属性或方法！</p>
+<p>另，为了避免未经处理的原始模板内容在页面载入时在页面中一闪而过，我们可以使用以下样式（<a href="https://github.com/RubyLouvre/avalon/issues/89">详见这里</a>）：</p>
+<xmp class="css">
+  　.ms-controller,.ms-important,[ms-controller],[ms-important]{
+        visibility: hidden;
+    }
+</xmp>

@@ -13,8 +13,7 @@
         bclick: function (href, e) {
             vm.bname = href
             //如果从一个子页跳转到另一个子页
-            if (window.activeArray.length === 1 &&
-                    window.activeArray[0].id !== href) {
+            if (window.activeArray.length <= 1) {
                 $('html,body').animate({
                     scrollTop: 0
                 }, 500)
@@ -116,12 +115,16 @@
                         name: "ms-css"
                     },
                     {
+                        href: "tutorial/directives/data.html",
+                        name: "ms-data"
+                    },
+                    {
                         href: "tutorial/directives/duplex.html",
                         name: "ms-duplex"
                     },
                     {
-                        href: "tutorial/directives/each.html",
-                        name: "ms-repeat"
+                        href: "tutorial/directives/repeat.html",
+                        name: "ms-each"
                     },
                     {
                         href: "tutorial/directives/effect.html",
@@ -156,7 +159,7 @@
                         name: "ms-repeat"
                     },
                     {
-                        href: "tutorial/directives/skip.html",
+                        href: "tutorial/directives/controller.html",
                         name: "ms-skip"
                     },
                     {

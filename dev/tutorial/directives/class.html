@@ -28,6 +28,7 @@
     <html>
         <head>
             <meta charset="UTF-8">
+            <title>旧风格</title>
             <meta name="viewport" content="width=device-width">
             <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
             <script src="avalon.js"></script>
@@ -43,8 +44,9 @@
         </head>
         <body>
             <div class="well" ms-controller="ms-class">
+                <!--新风格只需要 ms-class="{{toggle? 'btn-success':'btn-danger'}}" -->
                 <button type="button" class="btn" ms-click="click"
-                        ms-class="{{toggle? 'btn-success':'btn-danger'}}">点我</button>
+                        ms-class-btn-success="toggle" ms-class-btn-danger="!toggle">点我</button>
             </div>
         </body>
     </html>
@@ -65,7 +67,7 @@
 <br/>
 <div class="well" ms-controller="ms-class">
     <button type="button" class="btn" ms-click="click"
-            ms-class="{{toggle?'btn-success':'btn-danger'}}">点我</button>
+     ms-class-btn-success="toggle" ms-class-btn-danger="!toggle">点我</button>
 </div>
 
 <p>新风格的格式为<code>ms-class=&#8221;class:expr&#8221;</code>。其中ms-class也可以带第三个参数
@@ -299,7 +301,7 @@
             <ul class="list-group" ms-controller="list">
                 <li class="list-group-item" ms-class="list-group-item-success">ms-class不带表达式</li>
                 <li class="list-group-item" ms-class="{{aaa}}">ms-class带表达式</li>
-                <li class="list-group-item" ms-attr-class="aaa">ms-attr-class不带表达式</li>
+                <li class="list-group-item" ms-attr-class="list-group-item-success">ms-attr-class不带表达式</li>
                 <li class="list-group-item" ms-attr-class="{{aaa}}">ms-attr-class带表达式</li>
             </ul>
 
@@ -307,11 +309,11 @@
     </html>
 
 </xmp>
-
+<br/>
 <ul class="list-group" ms-controller="list">
     <li class="list-group-item" ms-class="list-group-item-success">ms-class不带表达式</li>
     <li class="list-group-item" ms-class="{{aaa}}">ms-class带表达式</li>
-    <li class="list-group-item" ms-attr-class="aaa">ms-attr-class不带表达式</li>
+    <li class="list-group-item" ms-attr-class="list-group-item-success">ms-attr-class不带表达式</li>
     <li class="list-group-item" ms-attr-class="{{aaa}}">ms-attr-class带表达式</li>
 </ul>
 <script>
