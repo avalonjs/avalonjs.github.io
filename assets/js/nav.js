@@ -173,6 +173,10 @@
                     {
                         href: "tutorial/directives/repeat.html",
                         name: "ms-with"
+                    },
+                    {
+                        href: "tutorial/directives/widget.html",
+                        name: "ms-widget"
                     }
                 ]
             },
