@@ -131,7 +131,7 @@
                         name: "ms-effect"
                     },
                     {
-                        href: "tutorial/directives/html.html",
+                        href: "tutorial/directives/text.html",
                         name: "ms-html"
                     },
                     {
