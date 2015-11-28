@@ -11,17 +11,23 @@
             $('html,body').animate({scrollTop: 0}, 500)
         },
         bclick: function (href, e) {
-           // e.preventDefault()
             vm.bname = href
-           
-            window.activeArray.some(function (el) {
-                if (el.id === href) {
-                    $('html,body').animate({
-                        scrollTop: Math.max(0, el.top - bannerHeight)
-                    }, 500)
-                }
-            })
-        
+            //如果从一个子页跳转到另一个子页
+            if (window.activeArray.length === 1 &&
+                    window.activeArray[0].id !== href) {
+                $('html,body').animate({
+                    scrollTop: 0
+                }, 500)
+            } else {
+                //如果是一个子页间的锚点的移动
+                window.activeArray.some(function (el) {
+                    if (el.id === href) {
+                        $('html,body').animate({
+                            scrollTop: Math.max(0, el.top - bannerHeight)
+                        }, 500)
+                    }
+                })
+            }
         },
         array: [
             {
@@ -98,12 +104,12 @@
                         name: "ms-active"
                     },
                     {
-                        href: "tutorial/directives/class.html",
-                        name: "ms-class"
+                        href: "tutorial/directives/controller.html",
+                        name: "ms-controller"
                     },
                     {
-                        href: "tutorial/directives/controller.html",
-                        name: "ms-controll"
+                        href: "tutorial/directives/class.html",
+                        name: "ms-class"
                     },
                     {
                         href: "tutorial/directives/css.html",
@@ -212,15 +218,22 @@
                         name: "uppercase"
                     }
                 ]
+            },
+            {
+                href: "tutorial/interceptors/index.html",
+                name: "拦截器"
+            },
+            {
+                href: "tutorial/component/index.html",
+                name: "组件"
             }
+
         ]
     })
 
     avalon.scan(0, vm)
     $(".navbar-nav a").click(function (e) {
-        e.preventDefault()
         var hash = this.getAttribute("href", 2)
-        location.hash = hash
         if (hash.indexOf("/") > 0) {
             vm.aname = hash.replace(/^#/, "")
         }

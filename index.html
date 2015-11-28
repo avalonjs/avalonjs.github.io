@@ -108,7 +108,6 @@
                     } else {
                         $(".bs-docs-sidebar").show()
                         if (/\.html/.test(hash)) {
-                           // $("iframe")[0].style.height = "auto"
                             $("iframe").prop("src", hash)
                         }
                     }
@@ -119,7 +118,7 @@
                 })
 
                 $(window).on("resize", function () {
-                    $("iframe").css("width", "100%")
+                   // $("iframe").css("width", "100%")
                 })
 
 

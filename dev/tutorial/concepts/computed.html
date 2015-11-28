@@ -55,14 +55,16 @@
         $id: "computedtest",
         firstName: "司徒",
         lastName: "正美",
-        fullName: {//一个包含set或get的对象
-            set: function (val) {//里面必须用this指向vm，但不能使用vm
-                var array = (val || "").split(" ");
-                this.firstName = array[0] || "";
-                this.lastName = array[1] || "";
-            },
-            get: function () {
-                return this.firstName + " " + this.lastName;
+        $computed: {
+            fullName: {//一个包含set或get的对象
+                set: function (val) {//里面必须用this指向vm，但不能使用vm
+                    var array = (val || "").split(" ");
+                    this.firstName = array[0] || "";
+                    this.lastName = array[1] || "";
+                },
+                get: function () {
+                    return this.firstName + " " + this.lastName;
+                }
             }
         }
     })
