@@ -398,7 +398,7 @@
         </select>
     </p>
     <table class="table table-bordered">
-        <tbody >
+        <tbody>
             <tr ms-repeat="data">
                 <td>{{el.name}}</td> <td>{{el.size}}</td> <td>{{el.date}}</td>
             </tr>
@@ -442,8 +442,8 @@
         array: [[1, 2, 3, 4], ["a", "b", "c", "d"], [11, 22, 33, 44]]
     })
 </script>
-</head>
-<div ms-controller="repeatouter"  >
+
+<div ms-controller="repeatouter" >
     <table class="table table-bordered">
         <tr ms-repeat="array">
             <td  ms-repeat-elem="el">{{$outer.$index}}.{{$index}}.{{elem}}</td>
