@@ -1,0 +1,61 @@
+<h2 id='tutorial/concepts/observable.html'>监控属性</h2>
+
+<p>在VM中，改变它们会引起视图改变的属性。</p>
+<xmp class="html">
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>Avalon by RubyLouvre</title>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            <script src="avalon.js" ></script>
+
+            <script>
+                avalon.define({
+                    $id: "test",
+                    string: "xxx",
+                    bool: true,
+                    number: 100,
+                    object: {
+                        aaa: "aaa",
+                        bbb: "bbb"
+                    }
+                })
+            </script>
+        </head>
+        <body>
+            <div ms-controller="test">
+                <input ms-duplex="string">{{string}}
+                <input ms-duplex="bool" type="radio">{{bool}}
+                <input ms-duplex="number" >{{number}}
+                <ul>
+                    <li ms-repeat="object">{{$key}} --> {{$val}}</li>
+                </ul>
+            </div>
+        </body>
+    </html>
+
+</xmp>
+<script>
+    avalon.define({
+        $id: "test",
+        string: "xxx",
+        bool: true,
+        number: 100,
+        object: {
+            aaa: "aaa",
+            bbb: "bbb"
+        }
+    })
+
+</script>
+<div ms-controller="test">
+    <input ms-duplex="string">{{string}}
+    <input ms-duplex="bool" type="radio">{{bool}}
+    <input ms-duplex="number" >{{number}}
+    <ul>
+        <li ms-repeat="object">{{$key}} --> {{$val}}</li>
+    </ul>
+</div>
+
+
+

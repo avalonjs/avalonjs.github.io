@@ -1,0 +1,28 @@
+
+<h2 id='tutorial/concepts/$model.html'>数据模型</h2>
+<p>是指VM中的$model属性，它是一个纯净的javascript对象，去掉$id, $watch等方法或属性，可以直接通过$.ajax提交给后端，当然我们
+还可以通过<code>JSON.parse(JSON.stringify(vm.$model))</code>干掉里面的所有函数。
+</p>
+
+<div class="bs-callout bs-callout-danger">
+   注意,不要修改$model,你只能通过VM来改动$model,否则在1.5中,$model是只读的,每次都是返回一个全新的对象给你
+你改了也没有用!
+</div>
+<fieldset><legend>MVVM模式下，ViewModel和View，Model有什么区别</legend>
+
+    <p><strong>Model</strong>：很简单，就是业务逻辑相关的数据对象，通常从数据库映射而来，我们可以说是<strong>与数据库对应的model</strong>。</p>
+
+    <p><strong>View</strong>：也很简单，就是展现出来的用户界面。</p>
+
+    <p>基本上，绝大多数软件所做的工作无非就是从数据存储中读出数据，展现到用户界面上，然后从用户界面接收输入，写入到数据存储里面去。所以，对于数据存储（model）和界面（view）这两层，大家基本没什么异议。但是，如何把model展现到view上，以及如何把数据从view写入到model里，不同的人有不同的意见。</p>
+
+    <p>MVC派的看法是，界面上的每个变化都是一个事件，我只需要针对每个事件写一堆代码，来把用户的输入转换成model里的对象就行了，这堆代码可以叫controller。</p>
+
+    <p>而MVVM派的看法是，我给view里面的各种控件也定义一个对应的数据对象，这样，只要修改这个数据对象，view里面显示的内容就自动跟着刷新，而在view 里做了任何操作，这个数据对象也跟着自动更新，这样多美。所以：</p>
+
+    <p><strong>ViewModel</strong>：就是<strong>与界面（view）对应的Model</strong>。因为，数据库结构往往是不能直接跟界面控件一一对应上的，所以，需要再定义一个数据对象专门对应view上的控件。而ViewModel的职责就是把model对象封装成可以显示和接受输入的界面数据对象。</p>
+
+    <p>至于viewmodel的数据随着view自动刷新，并且同步到model里去，这部分代码可以写成公用的框架，不用程序员自己操心了。</p>
+
+    <p>简单的说，ViewModel就是View与Model的连接器，View与Model通过ViewModel实现双向绑定。</p>
+</fieldset>

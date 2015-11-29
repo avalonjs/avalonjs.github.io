@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="avalonjs - 迷你简单易用的前端MVVM框架，让你的网站更快更炫更好用">
+        <meta name="keywords" content="MVVM, CSS, JavaScript, framework, avalon, web development">
+        <meta name="author" content="RubyLouvre,司徒正美">
+
+
+        <title>avalon中文文档</title>
+        <script src="../../assets/js/avalon.shim.js"></script>
+
+        <!-- Bootstrap core CSS -->
+        <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="../../assets/css/patch.css" rel="stylesheet">
+
+        <!-- Documentation extras -->
+
+        <link href="../../assets/css/docs.min.css" rel="stylesheet">
+        <style>
+            body,html{
+               overflow-y: hidden;
+            }
+        </style>
+        <!--[if lt IE 9]><script src="../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+        <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="icon" href="/favicon.ico">
+
+    </head>
+    <body>
+
+
+
+
+        <div class="container bs-docs-container">
+
+            <div class="row">
+                <div class="col-md-9" role="main">
+
+
+<div class="bs-docs-section">
+    <h1 class="page-header">下载<h2 style="visibility: hidden" id="home-download"></h2></h1>
+
+    <p><b><a href="https://github.com/RubyLouvre/avalon">avalon</a></b>根据兼并容浏览器或平台的不同划分为三个版本。</p>
+
+    <div class="row bs-downloads">
+        <div class="col-sm-4">
+            <h3>avalon.js</h3>
+            <p>兼容IE6及其他浏览器。<strong>需要严格遵守先定义后使用的规则</strong>。</p>
+            <p>
+                <a href="https://raw.githubusercontent.com/RubyLouvre/avalon/1.5.5/dist/avalon.js" download="avalon.js" class="btn btn-lg btn-outline">点我下载源码</a>
+            </p>
+        </div>
+        <div class="col-sm-4">
+            <h3>avalon.modern.js</h3>
+            <p>兼容IE10及其他浏览器。<strong>它使用一些新API,以提高性能及获取更小的体积</strong>。</p>
+            <p>
+                <a href="https://raw.githubusercontent.com/RubyLouvre/avalon/1.5.5/dist/avalon.modern.js" download="avalon.modern.js" class="btn btn-lg btn-outline">点我下载源码</a>
+            </p>
+        </div>
+        <div class="col-sm-4">
+            <h3>avalon.mobile</h3>
+            <p>运行于手机端。<strong>只是在avalon.modern.js加上触屏事件的支持</strong>。</p>
+            <p>
+                <a href="https://raw.githubusercontent.com/RubyLouvre/avalon/1.5.5/dist/avalon.mobile.js" download="avalon.mobile.js" class="btn btn-lg btn-outline">点我下载源码</a>
+            </p>
+        </div>
+    </div>
+
+    <h2 id="home-cdn">CDN支持</h2>
+    <p>
+        我们可以使用bootcdn免费提供的CDN加速服务下载avalon:&nbsp;<a href="http://www.bootcdn.cn/avalon.js/">http://www.bootcdn.cn/avalon.js/</a>
+    </p>
+    <p>在这里我们可以看到有10多个版本.其中带<code>min</code>字样的是压缩版本,
+        带<code>modern</code>字样的是用于现代浏览器的高性能版本,
+        带<code>mobile</code>字样的是用于移动端,
+        带<code>shim</code>字样的是去掉加载器的版本.</p>
+    <p>
+        <strong class="text-danger">avalon现在是并行<code>1.4.*</code>与<code>1.5.*</code>
+            两个分支.1.4.*可以使用新旧两种风格定义VM,&nbsp;与onui搭配使用; 1.5.*只能用新风格定义VM,与avalon.bootsrap搭配使用
+        </strong>
+    </p>
+    <div class="bs-callout bs-callout-danger">
+        <h4>avalon1.4.*到1.5*的升级指南</h4>
+        <ul>
+            <li>avalon1.5不再支持旧风格，<code>avalon.define(id, callback)</code>全部改成
+                <code>avalon.define(object)</code>这种形式</li>
+            <li>avalon1.5定义计算属性时，需要在<code>$computed</code>对象上统一定义</li>
+            <li>avalon1.5生成的VM 只有第一层对象上拥有<code>$fire</code>, <code>$watch</code>方法，
+                <strong class="text-danger">子对象没有$fire, $watch方法</strong>。
+                之前监听数组长度变化时，是用<code>vm.array.$watch("length",callback)</code>，
+                现在改成<code>vm.$watch("array.length", callback)</code>，之前监听子对象某个属性的变化，
+                是使用<code>vm.aaa.$watch("bbb",callback)</code>,现在改成<code>vm.$watch("aaa.bbb",callback)</code>，
+                之前监听某一层的所有属性变化是vm.$watch("all!", callback)，现在改成vm.$watch("*",callback);之前不能监听数组元素变化，现在可以vm.$watch("array2.*", callback)</li>
+            <li>avalon1.5不再支持$unwatch，详见上方。</li>
+            <li>avalon1.5<strong class="text-danger">不再支持data-duplex-focus, data-duplex-observe辅助指令</strong></li>
+            <li>avalon1.5<strong class="text-danger">不再支持ms-widget</strong>，请使用avalon.component创建组件，然后以自定义标签的形式声明使用。</li>
+            <li>avalon1.5不再使用<code>avalon.bindingHandlers</code>,<code>avalon.bindingExecutors</code>来创建新指令，再改用更方便的avalon.directive方法</li>
+            <li>avalon在循环对象时，以前需要自己计算索引值，现在它与循环数组一样，存在<strong>$index变量</strong>了!</li>
+        </ul>
+    </div>   
+    <h2 id="home-10">10 秒钟看懂 avalon</h2>
+    <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;title&gt;first example&lt;/title&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        var vm = avalon.define({
+            $id: "test",
+            name: "司徒正美"
+        })
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body ms-controller="test"&gt;
+    &lt;input ms-duplex="name"&gt;
+    &lt;p&gt;Hello,{{name}}!&lt;/p&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+    <script>
+                    var vm = avalon.define({
+                        $id: "test",
+                        name: "司徒正美"
+                    })
+    </script>
+    <div ms-controller="test">
+        <input ms-duplex="name" >
+        <p>Hello，{{name}}!</p>
+    </div>
+    <p>这就是一个经典的MVVM页面,定义VM,然后 用ms-controller圈定需要要作用的区域.</p>
+</div>
+<h2 id="home-origin">avalon的起源</h2>
+<p><a href="https://github.com/RubyLouvre/avalon">avalon</a>是一个简单易用迷你的MVVM框架，它最早发布于2012.09.15，
+    为解决同一业务逻辑存在各种视图呈现而开发出来的。 
+    事实上，这问题其实也可以简单地利用一般的前端模板加jQuery 事件委托 搞定，
+    但随着业务的膨胀， 代码就充满了各种选择器与事件回调，难以维护。
+    因此彻底的将业务与逻辑分离，就只能求助于架构。 
+    最初想到的是MVC，尝试过backbone，但代码不降反升，很偶尔的机会，碰上微软的WPF，
+    优雅的MVVM架构立马吸引住我，我觉得这就是我一直寻找的解决之道。</p>
+<p>avalon将所有前端代码彻底分成两部分，视图的处理通过绑定实现（angular有个更炫酷的名词叫指令），
+    业务逻辑则集中在一个个叫VM的对象中处理。我们只要操作VM的数据，它就自然而然地神奇地同步到视图。
+    显然所有神秘都有其内幕，C#是通过一种叫访问器属性的语句实现，那么JS也有对应的东西。
+    感谢上帝，IE8最早引入这东西（<code>Object.defineProperty</code>），可惜有BUG，但带动了其他浏览器实现它，
+    IE9+便能安全使用它。 对于老式IE，我找了好久，实在没有办法，使用<code>VBScript</code>实现了。</p>
+
+<p><code>Object.defineProperty</code>或<code>VBS</code>的作用是将对象的某一个属性，转换一个setter与getter， 
+    我们只要劫持这两个方法，通过Pub/Sub模式就能偷偷操作视图。为了纪念WPF的指引，
+    我将此项目以WPF最初的开发代号avalon来命名。 它真的能让前端人员脱离DOM的苦海，来到数据的乐园中！</p>
+<p>avalon的所有指令都是以ms-*命名,ms是用纪念我之前的一个框架<code>mass Framework</code>!</p>
+
+
+
+
+
+
+</div>
+<div class="col-md-3" role="complementary">
+
+</div>
+</div>
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="../../assets/highlight/shCore.js"></script>
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="../../assets/js/iframe.js"></script>
+</body>
+</html>
+

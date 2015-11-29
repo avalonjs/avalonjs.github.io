@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="avalonjs - 迷你简单易用的前端MVVM框架，让你的网站更快更炫更好用">
+        <meta name="keywords" content="MVVM, CSS, JavaScript, framework, avalon, web development">
+        <meta name="author" content="RubyLouvre,司徒正美">
+
+
+        <title>avalon中文文档</title>
+        <script src="../../assets/js/avalon.shim.js"></script>
+
+        <!-- Bootstrap core CSS -->
+        <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="../../assets/css/patch.css" rel="stylesheet">
+
+        <!-- Documentation extras -->
+
+        <link href="../../assets/css/docs.min.css" rel="stylesheet">
+        <style>
+            body,html{
+               overflow-y: hidden;
+            }
+        </style>
+        <!--[if lt IE 9]><script src="../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+        <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="icon" href="/favicon.ico">
+
+    </head>
+    <body>
+
+
+
+
+        <div class="container bs-docs-container">
+
+            <div class="row">
+                <div class="col-md-9" role="main">
+
+<h1>指令</h1>
+
+<p>avalon的绑定（或指令），这是定义在HTML中的特殊标记，代替我们操作DOM的一种DSL。
+    它拥有以下三种类型：<p>
+<ul>
+    <li ms-skip>{{}}插值表达式， 这是开标签与闭标签间，换言之，也是位于文本节点中，innerText里。{{}}里面可以添加各种过滤器（以|进行标识）。
+        值得注意的是{{}}实际是文本绑定(ms-text)的一种形式。</li>
+    <li>ms-*绑定属性， 这是位于开标签的内部， 95%的绑定都以这种形式存在。
+        它们的格式大概是这样划分的
+        <span style="color:green">"ms" + type + "-" + param1 + "-" + param1 + "-" + param2 + ... + number = value</span>
+    <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:css;gutter:false;toolbar:false'>ms-skip //这个绑定属性没有值
+ms-controller="expr" //这个绑定属性没有参数
+ms-if="expr" //这个绑定属性没有参数
+ms-if-loop="expr" //这个绑定属性有一个参数
+ms-repeat-el="array" //这个绑定属性有一个参数
+ms-attr-href="xxxx" //这个绑定属性有一个参数
+ms-attr-src="xxx/{{a}}/yyy/{{b}}" //这个绑定属性的值包含插值表达式，注意只有少部分表示字符串类型的属性可以使用插值表达式
+ms-click-1="fn" //这个绑定属性的名字最后有数字，这是方便我们绑定更多点击事件 ms-click-2="fn"  ms-click-3="fn"
+ms-on-click="fn" //只有表示事件与类名的绑定属性的可以加数字，如这个也可以写成  ms-on-click-0="fn"
+ms-class-1="xxx" ms-class-2="yyy" ms-class-3="xxx" //数字还表示绑定的次序
+ms-css-background-color="xxx" //这个绑定属性有两个参数，但在css绑定里，相当于一个，会内部转换为backgroundColor
+ms-duplex-aaa-bbb-string="xxx" //这个绑定属性有三个参数，表示三种不同的拦截操作</pre></div>
+</li>
+<li>
+    data-xxx-yyy="xxx"，辅助指令，比如ms-duplex的某一个辅助指令为data-duplex-event="change"，ms-repeat的某一个辅助指令为data-repeat-rendered="yyy"
+</li>
+</ul>
+<p>在1.4.5中新增<b>一次性绑定</b>，就在原来的文本节点的最前面加入::，如<b ms-skip>{{aaa}}</b>改成 <b ms-skip>{{::aaa}}</b>，
+    ms-*属性的值最前面加上::，如<b ms-skip>ms-attr-value="aaa"</b>改成 <b ms-skip>ms-attr-value="::aaa"</b>。
+    一次性绑定只渲染视图一次，下次vm.aaa发生改动，不会再同步视图。这非常适用纯数据展示的表格。如果ms-*属性的值里面有<span ms-skip>{{}}</span>，不能
+    在这些花括号里面加 ::
+</p>
+<p>有一个第三方绑定指令ms-l20n提供国际化能力。如果需要提供国际化页面可以使用，用法参见<a href="https://pinghe.github.io/avalon.components/l20n/examples/examples.html">这里</a></p>
+<p>灰色代表已被废弃，蓝色是常用，红色是必须，橙色是最新增的</p>
+
+<div>
+    <img src="../../assets/css/directives/bindings.png"/>
+</div>
+<br/>
+<div class="panel panel-default">
+    <div class="panel-heading">一次性绑定</div>
+    <div class="panel-body">
+        <p>该特性是<code>avalon1.4.5</code>新增的.</p>
+        <p>avalon所有绑定(或叫指令),根据其作用次数与方向,分为三类:单次, 单向, 双向.</p>
+        <p>单次是指只在扫描时发生一次效果, 以后VM的属性发生改动, 也不会影响视图对应位置的区域</p>
+        <p>单向是指, 当VM的属性发生变化时, 视图对应区域会跟着变化, 并总是从VM-->V</p>
+        <p>双向仅仅是指ms-duplex这个指令(当然,它还衔生出许多子指令,如ms-duplex-string,
+            ms-duplex-boolean, ms-duplex-number, ms-duplex-checked), 当VM发生改动时, V会跟着变化
+            当V发生改动时,VM也会变化.V在这里具体指表单元素,在div, span绑定ms-duplex是没有意义的.</p>
+        <h4>如何使用单次绑定?</h4>
+        <p>我们只需要在插值表达式的最前面加上 ::, 或是在绑定属性的值的最前面加上 :: ,该绑定就变成单次绑定</p>
+        <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;title&gt;Avalon by RubyLouvre&lt;/title&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        var vm = avalon.define({
+            $id: 'test',
+            value: "xxx",
+            text: "yyy"
+        })
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;div ms-controller="test"&gt;
+        &lt;input ms-attr-value="::value" /&gt;
+        &lt;p&gt;{{::text}}&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+    </div>
+</div>
+
+
+
+
+</div>
+<div class="col-md-3" role="complementary">
+
+</div>
+</div>
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="../../assets/highlight/shCore.js"></script>
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="../../assets/js/iframe.js"></script>
+</body>
+</html>
+

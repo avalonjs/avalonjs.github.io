@@ -1,0 +1,121 @@
+
+<h2 id='tutorial/concepts/computed.html'>计算属性</h2>
+
+<p>计算属性，监控属性的一种，名字取自<code>emberjs</code>，相当于WPF的DependencyProperty（依赖属性），
+    意即它的值是根据其他两个或两个以上的监控属性计算出来。 </p>
+<div class="bs-callout bs-callout-warning">
+    <p>在1.5+ 中,所有计算属性应该写在$computed对象中,计算属性为一个拥有get/set(set可选)的对象.
+        它里面的<b>this</b>指向VM，不能用<code>avalon.define(id, function(vm){})</code>这里的vm。</p>
+</div>
+
+<div class="bs-callout bs-callout-warning">
+    不能用计算属性生成对象及数组,换言之它就不能用在ms-repeat中.
+</div>
+<xmp class="html">
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>计算属性</title>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            <script src="avalon.js" ></script>
+
+            <script>
+                avalon.define({
+                    $id: "test",
+                    firstName: "司徒",
+                    lastName: "正美",
+                    $computed: {
+                        fullName: {//一个包含set或get的对象
+                            set: function (val) {//里面必须用this指向vm，但不能使用vm
+                                var array = (val || "").split(" ");
+                                this.firstName = array[0] || "";
+                                this.lastName = array[1] || "";
+                            },
+                            get: function () {
+                                return this.firstName + " " + this.lastName;
+                            }
+                        }
+                    }
+                })
+            </script>
+        </head>
+        <body>
+            <div ms-controller="test">
+                <p>First name: <input ms-duplex="firstName" /></p>
+                <p>Last name: <input ms-duplex="lastName"  /></p>
+                <p>Hello,    <input ms-duplex="fullName"></p>
+                <div>{{firstName +"  "+ lastName }}</div>
+            </div>
+        </body>
+    </html>
+
+</xmp>
+<script>
+    avalon.define({
+        $id: "computedtest",
+        firstName: "司徒",
+        lastName: "正美",
+        $computed: {
+            fullName: {//一个包含set或get的对象
+                set: function (val) {//里面必须用this指向vm，但不能使用vm
+                    var array = (val || "").split(" ");
+                    this.firstName = array[0] || "";
+                    this.lastName = array[1] || "";
+                },
+                get: function () {
+                    return this.firstName + " " + this.lastName;
+                }
+            }
+        }
+    })
+</script>
+<div ms-important="computedtest">
+    <p>First name: <input ms-duplex="firstName" /></p>
+    <p>Last name: <input ms-duplex="lastName"  /></p>
+    <p>Hello,    <input ms-duplex="fullName"></p>
+    <div>{{firstName +"  "+ lastName }}</div>
+</div>
+<div class="bs-callout bs-callout-danger">
+    <p>计算属性的get方法应该返回一个简单数据类型，比如下面这样做是错误的</p>
+</div>
+<xmp class="html">
+    <!DOCTYPE html>
+    <html>
+        <head lang="en">
+            <meta charset="UTF-8">
+            <title></title>
+            <style type="text/css">
+                .btn{display: inline-block; background-color: red; padding: 6px 10px;}
+            </style>
+            <script type="text/javascript" src="common/avalon1.38.1223.js"></script>
+            <script type="text/javascript">
+    var vm = avalon.define({
+        $id: "test",
+        num: 0,
+        $computed: {
+            cal: {
+                get: function () {
+                    return [this.num - 1, this.num, this.num + 1];
+                }
+            },
+        },
+        add: function () {
+            vm.num++;
+        }
+    });
+            </script>
+        </head>
+        <body>
+            <div ms-controller="test">
+                <div>{{ cal.join(",") }}</div>
+                <div ms-repeat="cal">{{ el }}</div>
+                <div class="btn" ms-click="add">add</div>
+            </div>
+        </body>
+    </html>
+
+</xmp>
+<div class="bs-callout bs-callout-warning">
+    ms-repeat只能对应一个子VM或一个监控数组
+</div>
+

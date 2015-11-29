@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="avalonjs - 迷你简单易用的前端MVVM框架，让你的网站更快更炫更好用">
+        <meta name="keywords" content="MVVM, CSS, JavaScript, framework, avalon, web development">
+        <meta name="author" content="RubyLouvre,司徒正美">
+
+
+        <title>avalon中文文档</title>
+        <script src="../../assets/js/avalon.shim.js"></script>
+
+        <!-- Bootstrap core CSS -->
+        <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="../../assets/css/patch.css" rel="stylesheet">
+
+        <!-- Documentation extras -->
+
+        <link href="../../assets/css/docs.min.css" rel="stylesheet">
+        <style>
+            body,html{
+               overflow-y: hidden;
+            }
+        </style>
+        <!--[if lt IE 9]><script src="../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+        <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="icon" href="/favicon.ico">
+
+    </head>
+    <body>
+
+
+
+
+        <div class="container bs-docs-container">
+
+            <div class="row">
+                <div class="col-md-9" role="main">
+
+<h2>样式操作(ms-css)</h2>
+<p>一般情况下我们通过设置类名就可以改变元素的样式，但涉及到动画部分，就一定需要设置内联样式了，因此有了<strong>ms-css</strong>。
+    <em>ms-css</em>的用法为<code class='language-javascript'>ms-css-样式名="样式值"</code>， 
+    如ms-css-width=&#8221;prop&#8221;(会自动补px)，ms-css-height=&#8221;{{prop}}%&#8221;, 
+    ms-css-color=&#8221;prop&#8221;, ms-css-background-color=&#8221;prop&#8221;,
+    ms-css-background-image=&#8221;url({{imageUrl}})&#8221;,
+    ms-css-font-size=&#8221;{{prop}}px&#8221;。细细联想，ms-css与ms-class的旧风格、
+    ms-data、ms-attr的用法相仿，属性名接第三个参数作为name，属性值作为value。</p>
+<div class="bs-callout bs-callout-warning">
+   <p>注意，这里的样式名不能带厂商前缀，如ms-css--webkit-animation="xxx"是错误的</p>
+</div>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        var vm = avalon.define({
+            $id: "test",
+            background: "red"
+        })
+        vm.$watch("background", function(v) {
+            vm.background = v
+        })
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;div ms-controller="test"&gt;
+        &lt;div style="width:200px; height:50px" ms-css-background="background"&gt;
+
+        &lt;/div&gt;
+        &lt;select ms-duplex="background"&gt;
+            &lt;option value="red"&gt;红&lt;/option&gt;
+            &lt;option value="yellow"&gt;黄&lt;/option&gt;
+            &lt;option value="green"&gt;绿&lt;/option&gt;
+        &lt;/select&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+
+<p><img src="../../assets/css/directives/css/1409641824175-css1.gif" alt="enter image description here" title /></p>
+
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        var vm = avalon.define({
+            $id: "test",
+            percent: 0
+        })
+        var a = true
+        var id = setInterval(function() {
+            if (a) {
+                if (vm.percent &lt; 100) {
+                    vm.percent++
+                } else {
+                    a = false
+                }
+            } else {
+                if (vm.percent &gt; 0) {
+                    vm.percent--
+                } else {
+                    a = true
+                }
+            }
+        }, 100)
+    &lt;/script&gt;
+    &lt;style&gt;
+        .handerx {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            color: #fff;
+            background: #000;
+        }
+        
+        .sliderx {
+            width: 100%;
+            height: 20px;
+            position: relative;
+        }
+        
+        .body {
+            padding: 40px;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body ms-controller="test" class="body"&gt;
+    &lt;div class="slider" style="background:red;"&gt;
+        &lt;div class="handerx" ms-css-left="{{percent}}%"&gt;{{percent}}&lt;/div&gt;
+        &lt;div style="background: greenyellow;height:20px" ms-css-width="{{percent}}%"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="sliderx" style="background:#d2d2d2;"&gt;
+        &lt;div style="background: #2FECDC;height:20px" ms-css-width="{{100-percent}}%"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+
+<p><img src="../../assets/css/directives/css/1409642170677-css2.gif" alt="enter image description here" title /></p>
+
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;title&gt;ms-css&lt;/title&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+    &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" /&gt;
+    &lt;script src="../avalon.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        var vm = avalon.define({
+            $id: "test",
+            w: 100,
+            h: 100,
+            click: function() {
+                vm.w = parseFloat(vm.w) + 10;
+                vm.h = parseFloat(vm.h) + 10;
+            }
+        })
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;div ms-controller="test"&gt;
+        &lt;div style=" background: #a9ea00;" ms-css-width="w" ms-css-height="h" ms-click="click"&gt;&lt;/div&gt;
+        &lt;p&gt;{{ w }} x {{ h }}&lt;/p&gt;
+        &lt;p&gt;W:
+            &lt;input type="text" ms-duplex="w" data-duplex-event="change" /&gt;
+        &lt;/p&gt;
+        &lt;p&gt;H:
+            &lt;input type="text" ms-duplex="h" /&gt;
+        &lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+
+<p><img src="../../assets/css/directives/css/1409642708074-css3.gif" />
+
+<div class="bs-callout bs-callout-info">
+    <p>ms-css已经在内部帮你处理好兼容问题，如opacity在旧式IE下用滤镜替换， tranform的私有前缀添加什么的。
+        最后要注意一点，属性值不能加入CSS hack与important!</p>
+</div>
+
+
+
+</div>
+<div class="col-md-3" role="complementary">
+
+</div>
+</div>
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="../../assets/highlight/shCore.js"></script>
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="../../assets/js/iframe.js"></script>
+</body>
+</html>
+

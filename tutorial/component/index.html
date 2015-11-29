@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="avalonjs - 迷你简单易用的前端MVVM框架，让你的网站更快更炫更好用">
+        <meta name="keywords" content="MVVM, CSS, JavaScript, framework, avalon, web development">
+        <meta name="author" content="RubyLouvre,司徒正美">
+
+
+        <title>avalon中文文档</title>
+        <script src="../../assets/js/avalon.shim.js"></script>
+
+        <!-- Bootstrap core CSS -->
+        <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="../../assets/css/patch.css" rel="stylesheet">
+
+        <!-- Documentation extras -->
+
+        <link href="../../assets/css/docs.min.css" rel="stylesheet">
+        <style>
+            body,html{
+               overflow-y: hidden;
+            }
+        </style>
+        <!--[if lt IE 9]><script src="../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+        <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="icon" href="/favicon.ico">
+
+    </head>
+    <body>
+
+
+
+
+        <div class="container bs-docs-container">
+
+            <div class="row">
+                <div class="col-md-9" role="main">
+
+<h1 class="page-header">组件</h1>
+<h2>介绍</h2>
+<p>avalon1.5新增的特性, 旨在简化原ms-widget复杂的组件定义方式,使用更直观的自定义标签来创建组件.</p>
+<p>avalon的组件是以UI库为单位设计,换言之,一个组件必须隶属于某一个UI库.默认,avalon已经创建好一个叫ms的UI库.
+    我们可以通过avalon.library方法来创建自己的组件库
+
+</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>avalon.library("oni", {
+    $init: function() {},
+    $childReady: function() {},
+    $ready: function() {},
+    $dispose: function() {}
+})</pre></div>
+<ul>
+    <li>$init: Function 该组件开始渲染时调用的回调</li>
+    <li>$childReady: Function 该组件的子组件渲染完毕,冒泡上来的回调</li>
+    <li>$ready: Function 该组件渲杂完毕时调用的回调，它位于其所有子组件的$ready之后</li>
+    <li>$dispose: Fuction 该组件被移出DOM树，并且元素不存在msRetain属性，才会调用的回调</li>
+</ul>
+<p>我们通过avalon.component 来创建一个组件</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>avalon.component("ms:button", {
+    a: 1,
+    $replace: 1,
+    $ready: function() {
+        console.log("BUTTON构建完成")
+    },
+    $template: "<button type='button' >{{a}}<ms:text/></button>"
+})</pre></div>
+
+
+<p>配置对象有如下几个特殊的配置项：</p>
+<ul>
+    <li>$replace: Boolean, 真值时表示替换其容器</li>
+    <li>$slot: String 默认插入点的名字</li>
+    <li>$template: String 组件的模板</li>
+    <li>$extend: String 指定要继承的组件名</li>
+    <li>$container: DOM 插入元素的位置,比如dialog就不一定在使用它的位置插入,通常放在body中</li>
+    <li>$construct: Function 用于调整三个配置项的合并,默认是function:(a, b,c ){return avalon.mix(a, b,c)}</li>
+    <li>$$template Function 用于微调组件的模板,传入$template与当前元素</li>
+    <li>$init: Function 刚开始渲染时调用的回调, 传入vm与当前元素</li>
+    <li>$childReady: Function 当其子组件$ready完毕后, 会冒泡到当前组件触发的回调, 传入vm与当前元素</li>
+    <li>$ready: Function 当组件的所有子组件都调用其$ready回调后才触发的回调, 传入vm与当前元素</li>
+    <li>$dispose: Function 该组件被移出DOM树，并且元素不存在msRetain属性时的销毁回调, 传入vm与当前元素</li>
+</ul>
+<p>当vm构建好时, $replace, $slot, $template,$container, $construct会消失</p>
+
+<p>我们可以在</p>
+<ul>
+    <li>$init中添加各种$watch回调, 为IE6-8的VBscript函数的this指向不正确进行bind fix</li>
+    <li>$ready中重新计算组件的高宽</li>
+    <li>$dispose中将VM中的元素节点置为null，移除各种dom事件，清空元素内部，方便GC</li>
+
+</ul>
+
+<p>此外，每个组件VM，还添加了一个叫 <strong>$refs</strong> 的非监控对象属性，用于存放子组件的VM。</p>
+
+
+<h2 id="callbacks">所有回调的执行顺序</h2>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>组件自身的$$template-- >
+组件自身的$init-- > 库的全局$init-- >
+组件自身的$childReady-- > 库的全局$childReady-- >
+组件自身的$ready-- > 库的全局$ready-- >
+组件自身的$dispose-- > 库的全局$dispose</pre></div>
+<h2 id="config">组件的配置</h2>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>avalon.component("ms:arcus", {
+    a: 1,
+    $template: "<button type='button'>{{a}}</button>"
+})</pre></div>
+<p>这里配置<ms:arcus>这种类型的基本属性与方法，目前，其中a一个属性</p>
+
+<p>然后，我们在页面上调用它时，可以通过<strong>config</strong>属性指定它在VM中的业务数据</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;ms:button config="buttonOpts"&gt;
+&lt;/ms:button&gt;</pre></div>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>avalon.define({
+    $id: "test",
+    $skipArray: ["butttonOpts"],
+    buttonOpts: {
+        a: 555
+    }
+})</pre></div>
+<p>如果你有多个ms:button组件，每个都有不同的配置对象，你可以使用ms-attr-config来动态生成config的值。</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;div ms-repeat=array&gt;
+    &lt;ms:button ms-attr-config="opts{{$index}}"&gt;
+&lt;/div&gt;</pre></div>
+<p>如果你嫌这样麻烦，不想在VM上加这配置属性，还可以使用ms-data-button-a来生成这个值。</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;div ms-repeat=array&gt;
+    &lt;ms:button ms-data-button-a="$index+ 10"&gt;
+&lt;/div&gt;</pre></div>
+<p>如果你连这个也不想，那么框架就会在已有的VM链上寻找<b>默认配置对象</b>。比如你的自定义签标的tagName为&lt;ms:dropdown&gt;，
+    那你在已有VM上定义一个叫ms:dropdown的对象就行了。如果你的自定义标签存在横线，比如ms:color-picker,那么它的默认配置对象
+    应为ms:colorPicker。
+
+</p>
+
+<p>因此通过，在avalon.component定义的共公配置对象，加上 VM上指定的个性化配置对象，
+    加上每个元素上使用ms-data指定的dataset配置对象，能让每个button实例都尽然不同！
+</p>
+<p>此外，我们还可以使用<strong>$id或identifier</strong>属性来指定组件VM的$id，不过当我们用ms-attr-$id动态生成$id可能有问题,
+    因为$是DOM属性中不是一个合法字符,我们只能用ms-attr-identifier来动态生成它。</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;script&gt;
+        var vm = avalon.define({
+            $id: "test",
+            array: [1, 2, 3],
+            $skipArray: ["x0", "x1", "x2"],
+            x0: { //x0, x1, x2为ms:button的配置对象
+                a: "aaa",
+                "ms:text": { //这个为ms:button的ms:text的默认配置对象
+                    b: 44
+                }
+            },
+            x1: {
+                a: "222",
+                "ms:text": {
+                    b: 55
+                }
+            },
+            x2: {
+                a: "333",
+                "ms:text": {
+                    b: 66
+                }
+            }
+        })
+
+        avalon.component("ms:button", {
+            a: 1,
+            $replace: 1,
+            $ready: function(vm, elem) {
+                console.log("BUTTON构建完成")
+            },
+            $template: "&lt;button type='button'&gt;&lt;span&gt;|&lt;ms:text&gt;&lt;/ms:text&gt;|&lt;/span&gt;{{a}}&lt;ms:text/&gt;&lt;/button&gt;"
+        })
+        avalon.component("ms:text", {
+            b: "默认值",
+            $replace: 1,
+            $ready: function() {
+                console.log("TEXT构建完成")
+            },
+            $template: "&lt;strong&gt;{{b}}&lt;/strong&gt;"
+        })
+    &lt;/script&gt;
+    &lt;div ms-controller="test"&gt;
+        &lt;ms:button ms-repeat="array" ms-attr-config="x{{$index}}"&gt;&lt;/ms:button&gt;
+    &lt;/div&gt;
+
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+<p><img src="../../assets/css/component/component01.png" /></p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;&lt;/title&gt;
+    &lt;style&gt;
+        div {
+            height: 50px;
+            width: 200px;
+            background: green;
+            margin: 5px;
+        }
+    &lt;/style&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        avalon.component('ms:abc', {
+            $template: '&lt;div&gt;&lt;/div&gt;',
+            onClick: function() {},
+            $ready: function(vm, el) {
+                console.log(vm.$id)
+            }
+        });
+        var vm = avalon.define({
+            $id: 'test',
+            arr: [1, 2, 3]
+        })
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body ms-controller="test"&gt;
+    &lt;header&gt;
+        &lt;ms:abc ms-repeat="arr" ms-attr-identifier="abc{{$index}}"&gt;&lt;/ms:abc&gt;
+    &lt;/header&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+<p><img src="../../assets/css/component/component03.png" /></p>
+
+
+<p>注意,$refs只保存其子组件的VM，不保存其子组件的子组件的VM！
+    并且$refs里面的内容是你自己在$childReady回调添加,框架不会帮你做的.</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;script&gt;
+        var vm = avalon.define({
+            $id: "test"
+        })
+        avalon.libraries.ms.$childReady = function(vm, e) {
+            var child = e.vm
+            vm.$refs[child.$id] = vm
+        }
+
+        avalon.component("ms:ancestor", {
+            a: 111,
+            $ready: function() {
+                console.log("ancestor构建完成")
+            },
+            $template: "&lt;div&gt;&lt;ms:parent&gt;&lt;/ms:parent&gt;{{a}}&lt;ms:parent&gt;&lt;/ms:parent&gt;&lt;/div&gt;"
+        })
+        avalon.component("ms:parent", {
+            p: 222,
+            $ready: function() {
+                console.log("parent构建完成")
+            },
+            $template: "&lt;div&gt;&lt;ms:son&gt;&lt;/ms:son&gt;{{p}}&lt;ms:son&gt;&lt;/ms:son&gt;&lt;/div&gt;"
+        })
+        avalon.component("ms:son", {
+            s: 333,
+            $ready: function() {
+                console.log("son构建完成")
+            },
+            $template: "&lt;strong&gt;{{s}}&lt;/strong&gt;"
+        })
+    &lt;/script&gt;
+    &lt;div ms-controller="test"&gt;
+        &lt;ms:ancestor $id="pope" /&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+<p><img src="../../assets/css/component/component02.png" /></p>
+<h2 id="slot">插入点的使用</h2>
+<p>我们可以在代表组件的自定义标签的内部,添加一些带slot属性的标签,它们会自动赋给组件VM的同名属性中.</p>
+
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        function heredoc(fn) {
+            return fn.toString()
+                .replace(/^[^\/]+\/\*!?\s?/, '')
+                .replace(/\*\/[^\/]+$/, '')
+        }
+        avalon.component("ms:dialog", {
+            header: "",
+            footer: "",
+            content: "",
+            onClick: function() {
+                console.log(this)
+            },
+            $template: heredoc(function(vm) {
+                /*
+                 &lt;div class="dialog"&gt;
+                 {{header|html}}
+                 {{content|html}}
+                 {{footer|html}}
+                 &lt;/div&gt;
+                 */
+            })
+        })
+        avalon.define({
+            $id: "test",
+            a: "这是内容"
+        })
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body ms-controller="test"&gt;
+    &lt;ms:dialog&gt;
+        &lt;div slot="header"&gt;弹出层的头部&lt;/div&gt;
+        &lt;div slot="content"&gt;
+            {{a}}
+        &lt;/div&gt;
+        &lt;div slot="footer"&gt;弹出层的底部&lt;/div&gt;
+    &lt;/ms:dialog&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+<p>这些带solt的元素叫做插入元素,它们在$init回调后进行收集, 收集完毕, 代表组件的自定义标签的innerHTML将会被其$template属性重写,
+    之后,这些插入元素会根据slot值进行分类,放到一个个文档碎片对象上.
+    然后这些文档碎片将插入到$template中的<strong ms-skip>{{xxx|html}}</strong>位置上.
+</p>
+<p><img src="../../assets/css/component/slot01.png" width="50%" height="50%"/></p>
+<p><img src="../../assets/css/component/slot02.png" width="50%" height="50%" /></p>
+<p><img src="../../assets/css/component/slot03.png" width="50%" height="50%"/></p>
+
+<p>插入元素的定义有严格的要求,它必须是自定义元素的直接子节点. 如果这些节点中没有 slot 属性,并且你没有指定$slot的值 ,那么就没有插入点,
+    如果你指定了slot属性,并且也指定了$slot,那么除了那些指定了slot属性的节点,其他子节点都是$slot的
+</p>
+
+
+<p>在<b>avalon1.5.5</b>中,自定义标签支持由取其on-xxx属性,框架会将它转换为onXXX,属性值为一个函数名,框架会在之前的vmodels中查找,
+    最后将它合并到组件VM中.
+</p>
+<h2 id="getvm">获取组件VM</h2>
+
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head lang="en"&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;&lt;/title&gt;
+    &lt;script type="text/javascript" src="avalon.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+        var tabVM
+        avalon.library("test", {
+            $ready: function(vm) {
+                if (vm.$id === "tab1") {
+                    //在这里操作
+                    tabVM = vm
+                    console.log(vm.$id)
+                    console.log(vm)
+                }
+            }
+        })
+        avalon.component("test:tab", {
+            $template: '&lt;h1&gt;{{content|html}}&lt;/h1&gt;',
+            content: "", //插入点机制
+            $slot: "content", //插入点机制
+            $init: function(vm, el) {},
+            $ready: function(vm, el) {},
+            $dispose: function(vm, el) {
+                el.innerHTML = "";
+            }
+        });
+    &lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+        avalon.ready(function() {
+            var vm = avalon.define({
+                $id: "test",
+                onClick: function() {
+                    if (tabVM) {
+                        alert("onClick " + tabVM.$id)
+                    }
+                }
+            });
+            avalon.scan(document.body, vm);
+
+        });
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body ms-controller="test"&gt;
+    &lt;div ms-click="onClick"&gt;点我&lt;/div&gt;
+    &lt;test:tab $id="tab1"&gt;这是tabs中的内容&lt;/test:tab&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+
+<p>缺点是需要预先指定组件VM的$id</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head lang="en"&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;&lt;/title&gt;
+    &lt;script type="text/javascript" src="avalon.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+        var tabVM
+        avalon.component("test:tab", {
+            $template: '&lt;h1&gt;{{content|html}}&lt;/h1&gt;',
+            content: "", //插入点机制
+            $slot: "content", //插入点机制
+            onInit: function() {}, //必须定义此接口
+            $init: function(vm, el) {},
+            $ready: function(vm, el) {
+                vm.onInit(vm)
+            },
+            $dispose: function(vm, el) {
+                el.innerHTML = "";
+            }
+        });
+    &lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+        avalon.ready(function() {
+            var vm = avalon.define({
+                $id: "test",
+                getVM: function(vm) { //用来重写onInit
+                    tabVM = vm
+                        //这里继续做其他事
+                },
+                onClick: function() {
+                    if (tabVM) {
+                        alert("onClick " + tabVM.$id)
+                    }
+                }
+            });
+            avalon.scan(document.body, vm);
+
+        });
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body ms-controller="test"&gt;
+    &lt;div ms-click="onClick"&gt;点我&lt;/div&gt;
+    &lt;test:tab on-init="getVM"&gt;这是tabs中的内容&lt;/test:tab&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+<p>此例则不需要指定VM,有点麻烦,但通用性更好</p>
+
+<h2 id="construct">组件的构建全过程</h2>
+<p>avalon的扫描器从上往下扫描, 如果遇到带<b>:</b>号的自定义标签,就默认为是组件,如果它上面存在一个叫msResolved属性,那么立即开始构建过程.</p>
+<p>如果没有msResolved属性,就把此元素的相关信息放到一个叫componentQueue列队中.</p>
+<p>待到该组件的JS文件加载下来,执行avalon.component方法时,componentQueue就会被重新检测,如果符合条件,就执行它的构建过程</p>
+<p>构建过程以下:</p>
+<fieldset>
+    <ol>
+        <li>设置一变量dependencies,其值为1</li>
+        <li>读取其所有属性,去掉其中的$id, config, id, class, tabindex, style,
+            ms-*属性,data-*属性,构成一个叫elemOpts的对象</li>
+        <li>读取其config属性, 从上层的VM中查找与其值同名的对象, 称之为vmOpts对象</li>
+        <li>将上面的对象与组件的定义对象,合并成一个对象, 这个合并过程可以通过$construct方法进行微调.
+            否则默认的$construct方法就相当于avalon.mix .</li>
+        <li>去掉合并对象中$replace, $slot, $template, $container,$construct属性, 然后放进avaon.define中转换一个VM, 称之为组件VM</li>
+        <li>将当前自定义元素的msResolved属性设置为1 </li>
+        <li>遍历其子节点,读取它们slot属性,然后 分类,并且一个个文档碎片对象,重赋对应的VM属性</li>
+        <li>将原$tempate属性放进行$$template方法中进行微调,然后用innerHTML改写自定义标签的内部 </li>
+        <li>如果用户设置了$replace属性,那么用该元素的第一个子元素代替它自身</li>
+        <li>如果用户设置了$container属性,那么将该元素移动到新容器之下</li>
+        <li>然后触发一个datasetchanged事件, 通知上层组件将dependencies减1</li>
+        <li>为自己绑定一个datasetchanged事件,用于接收下层组件发出来的datasetchanged事件.</li>
+        <li>开始扫描此元素及其下级 </li>
+        <li>如果此元素没有孩子,立即触发datasetchanged事件,为自己的dependencies减1,否则将
+            dependencies减1的逻辑放到一个renderCallbacks的列队中,此列队会在其子节点扫描后执行.
+        </li>
+        <li>
+            datasetchanged事件的逻辑为: 当该组件的子组件初始化时,它们就会为dependencies加1,
+            ready时就会减1, 并将子组件的VM储放到其$refs对象中,  并且触发一个叫$childReady的回调.
+            当dependencies为0时,触发自身的ready回调,并移除datasetchanged事件,将此元素放进销毁检测列队
+        </li>
+        <li>销毁检测列队是当元素被移出DOM树,并其msRetain属性没指定时,就进行销毁. 这个销毁的检测时机有两利,一是全局的定时轮询,
+            如果浏览器支持DOMNodeRemovedFromDocument事件,那么也为此元素添加此事件.
+        </li>
+        <li>销毁时,会调用$dispose回调,并从avalon.vmodels中将其ID删掉.</li>
+    </ol>
+</fieldset>
+
+<h2 id="ie68">IE6-8的特殊处理</h2>
+
+<p>由于IE6－8下VM是一个VBScript对象 ，函数中的this并不是指向VM，而是window，需要我们在库的$init方法统一hack一下！</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>avalon.libraries.ms.$init = function(vm) {
+    for (var i in vm) {
+        if (vm.hasOwnProperty(i) && typeof vm[i] === "function") {
+            vm[i] = vm[i].bind(vm)
+        }
+    }
+}</pre></div>
+<p>如果你的组件是以ms为命名空间的话, 不需要使用avalon.librarys("ms"), 否则就要像下面这样做</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;script src="avalon.js"&gt;
+&lt;/script&gt;
+&lt;script&gt;
+    avalon.library("oni") //这个东西必须跟挨着avalon库,并且放到head标签中
+&lt;/script&gt;</pre></div>
+<p>如果你是使用requirejs加载avalon库, 那你需要在head标签中插入以下脚本</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;script src="avalon.js"&gt;
+&lt;/script&gt;
+&lt;script&gt;
+    if (document.namespaces) {
+        document.namespaces.add("oni", 'http://www.w3.org/1999/xhtml')
+    }
+&lt;/script&gt;</pre></div>
+<h2 id="tag">自定义标签是没有半闭合一说</h2>
+<p>
+    &lt;xx:aaa /&gt;浏览器总是将它解析成&lt;xxx:aaa&gt;&lt;/xxx:aaa&gt;，
+    如果它后跟着一个元素，就悲剧了！&lt;xxx:aaa/&gt;&lt;strong&gt;111&lt;/strong&gt;，
+    本来设想好的平级关系变成父子关系了，
+    &lt;xxx:aaa&gt;&lt;strong&gt;111&lt;/strong&gt;&lt;/xxx:aaa&gt;
+</p>
+
+
+</div>
+<div class="col-md-3" role="complementary">
+
+</div>
+</div>
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="../../assets/highlight/shCore.js"></script>
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="../../assets/js/iframe.js"></script>
+</body>
+</html>
+

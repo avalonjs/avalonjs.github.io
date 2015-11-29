@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="avalonjs - 迷你简单易用的前端MVVM框架，让你的网站更快更炫更好用">
+        <meta name="keywords" content="MVVM, CSS, JavaScript, framework, avalon, web development">
+        <meta name="author" content="RubyLouvre,司徒正美">
+
+
+        <title>avalon中文文档</title>
+        <script src="../../assets/js/avalon.shim.js"></script>
+
+        <!-- Bootstrap core CSS -->
+        <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="../../assets/css/patch.css" rel="stylesheet">
+
+        <!-- Documentation extras -->
+
+        <link href="../../assets/css/docs.min.css" rel="stylesheet">
+        <style>
+            body,html{
+               overflow-y: hidden;
+            }
+        </style>
+        <!--[if lt IE 9]><script src="../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+        <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="icon" href="/favicon.ico">
+
+    </head>
+    <body>
+
+
+
+
+        <div class="container bs-docs-container">
+
+            <div class="row">
+                <div class="col-md-9" role="main">
+
+<h2 id='tutorial/concepts/$watch.html'>$watch方法</h2>
+
+<p>1.5+</p>
+<p>avalon1.5对$watch机制进行大重构, 支持利用通配符*, 解决对数组元素,子属性的监听.注意,*号只能出现一次.</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>var vm = avalon.define({
+    $id: "test",
+    array: [1, 2, 3],
+    arr: [{
+        a: 1
+    }, {
+        a: 2
+    }, {
+        a: 3
+    }],
+    obj: {
+        a: 1,
+        b: 2
+    },
+    a: {
+        b: {
+            c: {
+                d: 33
+            }
+        }
+    }
+})
+vm.$watch("array.*", function(a, b) {
+    expect(a).to.be(6)
+    expect(b).to.be(2)
+})
+vm.$watch("arr.*.a", function(a, b) {
+    expect(a).to.be(99)
+    expect(b).to.be(1)
+})
+vm.$watch("obj.*", function(a, b, c) {
+    expect(a).to.be(111)
+    expect(b).to.be(1)
+})
+vm.$watch("a.*.c.d", function(a, b, c) {
+    expect(a).to.be(88)
+    expect(b).to.be(33)
+})
+setTimeout(function() {
+    vm.array.set(1, 6)
+    vm.arr[0].a = 99
+    vm.obj.a = 111
+    vm.a.b.c.d = 88
+}, 100)</pre></div>
+<p>$watch会返回一个函数,用于解除监听: </p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>var unwatch = vm.$watch("array.*", function(a, b) {
+    expect(a).to.be(6)
+    expect(b).to.be(2)
+})
+unwatch() //移除当前$watch回调</pre></div>
+<hr>
+<p>1.5-</p>
+<p>此方法是位于VM中，与$unwatch, $fire是一套东西，建议用户不要在同一个VM中调用$fire,很容易造成死循环。格式为：</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>vm.$watch(prop, function(value, oldValue) {})</pre></div>
+<p>prop为VM中的第一层属性，类型是string,boolean,number这些简单类型或是数组长度，当它们发生改变时，就会执行预先绑定的回调。
+    一般地，回调里有<span style="color:red">两个参数</span>，第一个是新值<b>value</b>，第2个是旧值<b>oldValue</b>。
+    但prop为<span style="color:orange">$all</span>这个特殊的属性，它会在你修改VM中的任何第一层属性时，触发回调，
+    这时回调拥有<span style="color:red">三个参数</span>，第一个是发生变动的属性的名字，第二个是新值，第三个是旧值。</p>
+<p>如果目标对象是数组，那么只能监听它的长度变化，并只能跑到avalon.define的外面绑定$watch回调。</p>
+<p>如果你想监听二级或三级对象的属性时，需要跑到avalon.define的外面，定位到目标属性的父对象上添加$watch回调。</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>var model = avalon.define({
+    $id: "test",
+    data: {
+        xxx: 222,
+        yyy: 333
+    }
+})
+model.data.$watch("xxx", function(a, b) {
+    //................
+})</pre></div>
+<h4>一个简单的例子</h4>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;title&gt;$watch&lt;/title&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        var model = avalon.define({
+            $id: "$watch1",
+            prop: "xxx",
+            array: ["aaa", "bbb", "ccc", "ddd"],
+            data: {
+                aaa: "lll"
+            },
+            propWatch: "",
+            arrayWatch: 4,
+            dataAAAWatch: "",
+            click: function() {
+                model.prop = new Date - 1
+                model.data.aaa = new Date - 2
+                model.array.push(new Date - 3)
+            }
+        })
+        model.$watch("prop", function(a) {
+            model.propWatch = a + " $watch"
+        })
+
+        //在avalon.define外面绑定$watch回调
+        model.$watch("array.length", function(a) {
+            model.arrayWatch = a + " $watch"
+        })
+        model.$watch("data.aaa", function(a) {
+            model.dataAAAWatch = a + " $watch"
+        })
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;div ms-controller="$watch1"&gt;
+        &lt;p&gt;prop: {{prop}} --&gt; propWatch: {{propWatch}}&lt;/p&gt;
+        &lt;p&gt;array.length: {{array.size()}} --&gt; arrayWatch: {{arrayWatch}}&lt;/p&gt;
+        &lt;p&gt;data.aaa: {{data.aaa}} --&gt; dataAAAWatch: {{dataAAAWatch}}&lt;/p&gt;
+        &lt;p&gt;
+            &lt;button ms-click="click" type="button"&gt;点我&lt;/button&gt;
+        &lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+
+<fieldset>
+    <legend>例子一</legend>
+    <div ms-controller="test">
+        <p>prop: {{prop}} --> propWatch: {{propWatch}}</p>
+        <p>array.length: {{array.size()}} --> arrayWatch: {{arrayWatch}}</p>
+        <p>data.aaa: {{data.aaa}} --> dataAAAWatch: {{dataAAAWatch}}</p>
+        <p><button ms-click="click" type="button">点我</button></p>
+    </div>
+</fieldset>
+<h3>监听$all特殊属性</h3>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;title&gt;$watch&lt;/title&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        var props = ["aaa", "bbb", "ccc", "ddd"]
+        var backup = props.concat()
+        var model = avalon.define({
+            $id: "$watch2",
+            aaa: "xxx",
+            bbb: "yyy",
+            ccc: "zzz",
+            ddd: "uuu",
+            propWatch: "",
+            click: function() {
+                var index = Math.floor(Math.random() * props.length)
+                var prop = props.splice(index, 1)[0]
+                if (!props.length) {
+                    props = backup.concat()
+                }
+                model[prop] = new Date - 1
+            }
+        })
+        model.$watch("$all", function(name) {
+            if (name !== "propWatch") {
+                model.propWatch = name + "  属性发生改变"
+            }
+        })
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;div ms-controller="$watch2"&gt;
+        &lt;ul&gt;
+            &lt;li&gt;aaa: {{aaa}}&lt;/li&gt;
+            &lt;li&gt;bbb: {{bbb}}&lt;/li&gt;
+            &lt;li&gt;ccc: {{ccc}}&lt;/li&gt;
+            &lt;li&gt;ddd: {{ddd}}&lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;p&gt;{{propWatch}}&lt;/p&gt;
+        &lt;p&gt;
+            &lt;button ms-click="click" type="button"&gt;点我&lt;/button&gt;
+        &lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+<fieldset>
+    <legend>例子二</legend>
+    <div ms-controller="$watch2">
+        <ul>
+            <li>aaa: {{aaa}}</li>
+            <li>bbb: {{bbb}}</li>
+            <li>ccc: {{ccc}}</li>
+            <li>ddd: {{ddd}}</li>
+        </ul>
+        <p>{{propWatch}}</p>
+        <p><button ms-click="click" type="button">点我</button></p>
+    </div>
+</fieldset>
+<p>与ms-duplex结合使用</p>
+<fieldset id="validate"><legend>手机号码格式化</legend>
+    <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;title&gt;avalon by RubyLouvre&lt;/title&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width"&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        var model = avalon.define({
+            $id: "mobile",
+            phone: ""
+        })
+        model.$watch("phone", function(a) {
+            var b = a.replace(/\s+/g, "")
+            var array = b.split("")
+            var ret = ""
+            for (var i = 0, n = array.length; i &lt; n; i++) {
+                if (i &gt; 10) //不能超过11位
+                    break
+                if (i == 3) {
+                    ret += " "
+                }
+                if (i == 7) {
+                    ret += " "
+                }
+                ret += array[i]
+            }
+            model.phone = ret
+        })
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;div ms-controller="mobile"&gt;
+        &lt;input ms-duplex="phone" /&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+</fieldset>
+<fieldset>
+    <legend>例子三</legend>
+    <div ms-controller="mobile">
+        <input ms-duplex="phone" />
+    </div>
+</fieldset>
+
+<style>
+    .msform{
+        width:500px;
+        padding:5px;
+        border: 3px solid #666;
+    }
+    .msform div{
+        padding:2px;
+    }
+    .msform input{
+        width:200px;
+    }
+
+    .msform .error{
+        color: red;
+    }
+    .msform input.error{
+        border: 1px solid red;
+    }
+    .msform .ok{
+        color: green;
+    }
+</style>
+
+<script type="text/javascript">
+    var model = avalon.define({
+        $id: "$watch1",
+        prop: "xxx",
+        array: ["aaa", "bbb", "ccc", "ddd"],
+        data: {
+            aaa: "lll"
+        },
+        propWatch: "",
+        arrayWatch: 4,
+        dataAAAWatch: "",
+        click: function () {
+            model.prop = new Date - 1
+            model.data.aaa = new Date - 2
+            model.array.push(new Date - 3)
+        }
+    })
+    model.$watch("prop", function (a) {
+        model.propWatch = a + " $watch"
+    })
+
+    //在avalon.define外面绑定$watch回调
+    model.$watch("array.length", function (a) {
+        model.arrayWatch = a + " $watch"
+    })
+    model.$watch("data.aaa", function (a) {
+        model.dataAAAWatch = a + " $watch"
+    })
+            ;
+    (function () {
+        var props = ["aaa", "bbb", "ccc", "ddd"]
+        var backup = props.concat()
+        var model = avalon.define({
+            $id: "$watch2",
+            aaa: "xxx",
+            bbb: "yyy",
+            ccc: "zzz",
+            ddd: "uuu",
+            propWatch: "",
+            click: function () {
+                var index = Math.floor(Math.random() * props.length)
+                var prop = props.splice(index, 1)[0]
+                if (!props.length) {
+                    props = backup.concat()
+                }
+                model[prop] = new Date - 1
+            }
+        })
+        model.$watch("$all", function (name) {
+            if (name !== "propWatch") {
+                model.propWatch = name + "  属性发生改变"
+            }
+        })
+    })();
+    var model3 = avalon.define({
+        $id: "mobile",
+        phone: ""
+    })
+    model3.$watch("phone", function (a) {
+        var b = a.replace(/\s+/g, "")
+        var array = b.split("")
+        var ret = ""
+        for (var i = 0, n = array.length; i < n; i++) {
+            if (i > 10)//不能超过11位
+                break
+            if (i == 3) {
+                ret += " "
+            }
+            if (i == 7) {
+                ret += " "
+            }
+            ret += array[i]
+        }
+        model3.phone = ret
+    })
+</script>
+
+
+</div>
+<div class="col-md-3" role="complementary">
+
+</div>
+</div>
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="../../assets/highlight/shCore.js"></script>
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="../../assets/js/iframe.js"></script>
+</body>
+</html>
+

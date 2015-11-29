@@ -1,0 +1,102 @@
+
+<h1 class="page-header">配置</h1>
+<p>本章节，主要是介绍<a href="https://github.com/RubyLouvre/avalon">avalon.config</a>方法，通过它来制定一些更贴心的功能。</p>
+
+<p>一般情况下，我们在使用ms-controller绑定时，需要添加一个ms-controller类名，目的是为了防止网速慢时将花括号暴露出来。</p>
+<xmp class="html">
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>avalon入门</title>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            <script src="avalon.modern.js" type="text/javascript"></script>
+            <script>
+                var model = avalon.define({
+                    $id: "test",
+                    array: [{check: 1}, {check: 2}, {check: 3}],
+                    aaa: "999"
+                })
+            </script>
+            <style>
+                .ms-controller{
+                    visibility: hidden
+                }
+            </style>
+        </head>
+        <body>
+            <div ms-controller="test" class="ms-controller">
+                <div ms-repeat="array">
+                    {{el.check}}
+                </div>
+                <a ms-href="xxxx{{aaa}}.html">ddd</a>
+            </div>
+        </body>
+    </html>
+</xmp>
+<div><img src="../../assets/css/configuration/images/config01.png"> </div>
+<p>双花括号也默认是python一些著名模板的界定符，为了防止冲突，我们有更换界定符的需求。这时我们可以这样做</p>
+
+<xmp class="html">
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>avalon入门</title>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            <script src="avalon.modern.js" type="text/javascript"></script>
+            <script>
+                avalon.config({
+                    interpolate: ["{&", "&}"]
+                })
+                var model = avalon.define({
+                    $id: "test",
+                    array: [{check: 1}, {check: 2}, {check: 3}],
+                    aaa: "999"
+                })
+            </script>
+        </head>
+        <body>
+            <div ms-controller="test" class="ms-controller">
+                <div ms-repeat="array">
+                    {&amp;el.check&amp;}
+                </div>
+                <a ms-href="xxxx{&amp;aaa&amp;}.html">ddd</a>
+            </div>
+        </body>
+    </html>
+</xmp>
+
+<p>注意,左右定界符不能一样,不能出现<或>。</p>
+
+<p>我们再看下一个有用的配置项，debug。<a href="https://github.com/RubyLouvre/avalon">avalon</a>默认是在控制台下打印没有调试消息的，上线时我们不愿用户看到它们，可以这样关掉它们。
+</p>
+<div><img src="../../assets/css/configuration/images/config02.jpg"  /></div>
+<div><img src="../../assets/css/configuration/images/config03.jpg" /></div>
+<div><img src="../../assets/css/configuration/images/config04.jpg"/></div>
+
+<xmp class="javascript">
+    avalon.config({debug: false})
+</xmp>
+
+<p><a href="https://github.com/RubyLouvre/avalon">avalon</a>拥有自己的AMD加载器，如果你想用requirejs或seajs，那你可以使用shim版本或禁用自带的加载器，或像<a href="http://www.html-js.com/article/Avalon-tutorial-1-the-introduction-of-Avalon">第一节</a>建议的那样，直接在源码里面把它整个删掉。详细方式参见<a href="/../../assets/css/engineering/loader.html">这里</a></p>
+
+<xmp class="javascript">
+    avalon.config({loader: false})
+</xmp>
+
+<p>此外，avalon还有两个隐秘的配置项。</p>
+<div class="bs-callout bs-callout-warning">
+    <h4>maxRepeatSize</h4>
+    <p>maxRepeatSize是用来配置ms-repeat循环绑定生成的代理节点所在的池子大小，目的是重复利用这些VM对象。默认是100。手机上对内存比较严重，可以将此阀值调少点。</p>
+    <xmp class="javascript">
+        avalon.config({lmaxRepeatSize: 40})
+    </xmp>
+</div>
+
+<div class="bs-callout bs-callout-danger" >
+    <h4>dettachVModels</h4>
+    <p>dettachVModels是决定在事件绑定的this对象上添加$vmodels、 $vmodel属性。以前是默认添加的，现在是默认不添加，这是出于CG回收的考虑。并且在IE6-8下，为元素添加$vmodels属性不知为何会抛异常。看源码：
+    <div><img src="../../assets/css/configuration/images/config05.jpg" /></div>
+    <p>$vmodels、 $vmodel应该鲜为人知，大家不要管它们就是。此配置项也将在1.36中去掉。</p>
+</div>
+
+

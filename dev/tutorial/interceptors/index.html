@@ -1,0 +1,191 @@
+<h1 class="page-header">拦截器</h1>
+<h2 id="tutorial/interceptors/index.html">介绍</h2>
+<p>拦截器是avalon在构建ms-duplex过程中,逐渐形成的一种增强机制,最初是用于数据类型转换.
+    否则我们的数据在VM中无法是数字或布尔,都会统统变成字符串.于是在ms-duplex后面加一点修饰,
+    让从表单元素获取的value值还原成我们之前的数据类型.
+</p>
+<p>拦截器机制到1.3.7才最终成型, 这时功能不限于类型转换,还能实现表单验证,光标处理,数据格式化^——^</p>
+<p>于是从时间上划分, 1.3.7之前的称为duplex1.0, 1.3.7及之后的称为duplex2.0.
+    到目前为止, avalon还是很有节操地支持duplex1.0, 关于两者的对应关系详见下表
+</p>
+<table class="table table-bordered">
+    <col width="190"><col width="220">
+    <tr><td>duplex2.0</td><td>duplex1.0</td><td>功能</td></tr>
+    <tr><td>
+            <code>ms-duplex-checked</code>
+            <br>只能应用于radio、 checkbox
+        </td>
+        <td>
+            <code>ms-duplex</code>
+            <br>只能应用于radio
+            <br><code>ms-duplex-radio</code>
+            <br>checkbox
+        </td>
+        <td>通过checked属性同步VM</td>
+    </tr>
+    <tr>
+        <td>
+            <code>ms-duplex-string</code>
+            <br>应用于所有表单元素
+        </td>
+        <td>
+            <code>ms-duplex-text</code>
+            <br>只能应用于radio
+        </td>
+        <td>通过value属性同步VM</td>
+    </tr>
+    <tr>
+        <td>
+            <code>ms-duplex-boolean</code>
+            <br>应用于所有表单元素
+        </td>
+        <td>
+            <code>ms-duplex-bool</code>
+            <br>只能应用于radio
+        </td>
+        <td>value为&#8221;true&#8221;时转为true，其他值转为false同步VM</td>
+    </tr>
+    <tr>
+        <td>
+            <code>ms-duplex-number</code>
+            <br>应用于表单元素
+        </td>
+        <td>没有对应项</td>
+        <td>如果value是数字格式就转换为数值，否则不做转换，然后再同步VM</td>
+    </tr>
+</table>
+<h2 id="ms-duplex-string">ms-duplex-string</h2>
+<p>这是最简单的拦截器，因为我们从表单元素上取出来，就是字符串类型。它通常用于text, textarea, select, password等元素。</p>
+<div class="bs-callout bs-callout-info">
+    <p>我们可以简单地将除了radio, checkbox外的表单元素上的<code>ms-duplex</code>当成<code>ms-duplex-string</code>。</p>
+</div>
+<h2 id="ms-duplex-checked">ms-duplex-checked</h2>
+<p>许多场合，我们的radio, checkbox并非用于上传数据，而是用于切换某个状态值，将true变成false或将false变成true，这个拦截器就发挥作用了。</p>
+<p>它会将当前元素的checked属性值同步到VM的属性上，而checked属性无异乎上两个，true或false!</p>
+<div class="bs-callout bs-callout-info" >
+    <p>在duplex1.0中，我们默认radio的ms-duplex就相当于ms-duplex-checked，duplex2.0为了兼容旧版还是这样干，但建议直接使用ms-duplex-checked。</p>
+</div>
+<h2 id="ms-duplex-boolean">ms-duplex-boolean</h2>
+<p>ms-duplex-boolean与ms-duplex-checked很相似，但它是将表单元素的value值转换为布尔。它的转换规则很简单，
+    如果值为"true"，那么转换为true,其他统统转换成false.</p>
+<h2 id="ms-duplex-number">ms-duplex-number</h2>
+<p>将表单元素的value转换为数字, 不过转换规则比较复杂(这来源于现实中的业务需求,必须满足!), 因此在1.4.1中, 添加data-duplex-number辅助指令</p>
+<ul>
+    <li>如果它等于strong时,那么input.value的值为数字时就转换为数字，否则转换为0， 包括什么也不填时也转换为0</li>
+    <li>如果它等于medium时,那么input.value的值为数字时就转换为数字，如果没有填时，就不转换，其他情况转换为0。
+        这也是默认情况，如果你也没有设置data-duplex-number，就默认为medium。</li>
+    <li>如果它等于weak时,那么input.value的值为数字时就转换为数字，否则就不进行转换</li>
+</ul>
+
+<xmp class="html">
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>TODO supply a title</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width">
+            <script src="avalon.js" ></script>
+            <script>
+                var vm = avalon.define({
+                    $id: "test",
+                    a: true,
+                    b: true,
+                    c: "",
+                    d: "",
+                    e: 10,
+                    f: true,
+                    g: ["b", "c"],
+                    h: [1, 4],
+                    i: [false],
+                    j: "2222",
+                    k: 2222,
+                    l: false,
+                    m: ["bbbb", "dddd"],
+                    n: [11, 44],
+                    msg: ""
+                });
+                vm.$watch("*", function (a, b, c) {
+                    if (!/^avalon\-/.test(a) && c !== "msg") {
+                        vm.msg = c + "的值由[" + (typeof b) + "]" + b + "变成[" + (typeof a) + "]" + a
+                    }
+                })
+
+            </script>
+        </head>
+        <body>
+            <div ms-controller="test">
+                <h3 style="text-align: center">ms-duplex 2.0</h3>
+                <table>
+                    <tr>
+                        <td>
+                            <p>ms-duplex-checked<input ms-duplex-checked="a" type="radio" />{{a}}</p>
+                            <p>ms-duplex-checked<input ms-duplex-checked="b" type="checkbox"/>{{b}}</p>
+                            <p>ms-duplex-string<input ms-duplex="c" />{{c}}</p>
+                            <p>ms-duplex-string<input ms-duplex-string="d" />{{d}}</p>
+                            <p>ms-duplex-number<input ms-duplex-number="e" />{{e}}</p>
+                            <p>ms-duplex-boolean<input ms-duplex-boolean="f" data-duplex-event="change" />{{f}}</p>
+                        </td>
+                        <td>
+                            <p>ms-duplex-string
+                                <input ms-duplex-string="g" type="checkbox" value="a" />
+                                <input ms-duplex-string="g" type="checkbox" value="b" />
+                                <input ms-duplex-string="g" type="checkbox" value="c" />
+                                <input ms-duplex-string="g" type="checkbox" value="d" />
+                                {{g}}</p>
+                            <p>ms-duplex-number
+                                <input ms-duplex-number="h" type="checkbox" value="1" />
+                                <input ms-duplex-number="h" type="checkbox" value="2" />
+                                <input ms-duplex-number="h" type="checkbox" value="3" />
+                                <input ms-duplex-number="h" type="checkbox" value="4" />
+                                {{h}}</p>
+                            <p>ms-duplex-boolean
+                                <input ms-duplex-boolean="i" type="checkbox" value="false" />
+                                <input ms-duplex-boolean="i" type="checkbox" value="true" />
+                                {{i}}</p>
+                            <p>ms-duplex-string/ms-duplex
+                                <select ms-duplex="j">
+                                    <option>1111</option>
+                                    <option>2222</option>
+                                    <option>3333</option>
+                                </select>
+                            </p>
+                            <p>ms-duplex-number
+                                <select ms-duplex-number="k">
+                                    <option>1111</option>
+                                    <option>2222</option>
+                                    <option>3333</option>
+                                </select>
+                            </p>
+                            <p>ms-duplex-boolean
+                                <select ms-duplex-boolean="l">
+                                    <option>true</option>
+                                    <option>false</option>
+                                </select>
+                            </p>
+                        </td>
+                        <td>
+                            <p>ms-duplex-string/ms-duplex<br/>
+                                <select ms-duplex="m" multiple>
+                                    <option>aaaa</option>
+                                    <option>bbbb</option>
+                                    <option>cccc</option>
+                                    <option>dddd</option>
+                                </select>
+                            </p>
+                            <p>ms-duplex-number<br/>
+                                <select ms-duplex-number="n" multiple>
+                                    <option>11</option>
+                                    <option>22</option>
+                                    <option>33</option>
+                                    <option>44</option>
+                                </select>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+                <p>{{msg}}</p>
+            </div>
+        </body>
+    </html>
+
+</xmp>
