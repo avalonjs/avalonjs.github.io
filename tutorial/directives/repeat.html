@@ -416,10 +416,10 @@
             <meta name="viewport" content="width=device-width">
             <script src="avalon.js"></script>
             <script>
-      avalon.define({
-          $id: "test",
-          array: [[1, 2, 3, 4], ["a", "b", "c", "d"], [11, 22, 33, 44]]
-      })
+    avalon.define({
+        $id: "test",
+        array: [[1, 2, 3, 4], ["a", "b", "c", "d"], [11, 22, 33, 44]]
+    })
             </script>
         </head>
         <body ms-controller="test" >
@@ -447,7 +447,7 @@
     </table>
 </div>
 <div class="bs-callout bs-callout-info" >
-    <p>此外，我们还可以通过<strong>data-repeat-rendered, data-each-rendered, data-with-rendered</strong>
+    <p>此外，我们还可以通过<code>data-repeat-rendered, data-each-rendered, data-with-rendered</code>
         来指定这些元素都插入DOM被渲染了后执行的回调，
         this指向元素节点，有一个参数表示为当前的操作，是add、 del、 move、 index。</p>
 </div>
@@ -466,7 +466,7 @@
     &lt;meta name="viewport" content="width=device-width"&gt;
     &lt;script src="avalon.js"&gt;&lt;/script&gt;
     &lt;script&gt;
-        var index = 0
+        var index = 0 //1.4.*
         var model = avalon.define({
             $id: "test",
             data: {
@@ -492,7 +492,7 @@
 
 <p><img src="../../assets/css/directives/repeat/1409654405940-repeat8.jpg" /></p>
 
-<p>如果我们想控制对象属性的输出顺序，或让某些元素不输出来，那么我们可以使用<strong>data-with-sorted</strong>回调。
+<p>如果我们想控制对象属性的输出顺序，或让某些元素不输出来，那么我们可以使用<code>data-with-sorted</code>回调。
     它用ms-repeat、ms-with绑定，赶对象渲染之前触发，要求输出一个字符串数组，对象的键值对会根据它依次输出；
     框架默认会输入原对象的所有键名构成的数组作为参数。</p>
 
@@ -536,18 +536,20 @@
 
 &lt;/html&gt;</pre></div>
 
-<p><img src="../../assets/css/directives/repeat/1409654809239-repeat9.jpg"  /></p>
+<p><img src="../../assets/css/directives/repeat/1409654809239-repeat9.jpg" ></p>
 
 <h4>在删除本地数组的元素的同时也远程同步删除后台数组的元素</h4>
 <p>方法1</p>
+
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;ul&gt;
-    &lt;li ms-repeat="array"&gt;内容
+    &lt;li ms-repeat="array"&gt;
+        内容
         &lt;button type="button" ms-click="removeRemote($index, $remove)"&gt;x
             &lt;button&gt;
     &lt;/li&gt;
 &lt;/ul&gt;</pre></div>
-                    <br/>
-                    <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>avalon.define({
+<br/>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>avalon.define({
     $id: "test",
     array: [1, 2, 3, 4],
     removeRemote: function($index, $remove) {
@@ -564,14 +566,17 @@
     }
 })</pre></div>
 
-                    <p>方法2</p>
-                    <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;ul&gt;
-    &lt;li ms-repeat="array" data-repeat-rendered="handle"&gt;内容
+<p>方法2</p>
+
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;ul&gt;
+    &lt;li ms-repeat="array" data-repeat-rendered="handle"&gt;
+        内容
         &lt;button type="button" ms-click="$remove"&gt;x
             &lt;button&gt;
     &lt;/li&gt;
 &lt;/ul&gt;</pre></div>
-                                        <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>avalon.define({
+<br/>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>avalon.define({
             $id: "test",
             array: [1, 2, 3, 4],
             handle: function(action, offset, length) {
@@ -590,6 +595,7 @@
 
                 }
             })</pre></div>
+
 
 
 </div>

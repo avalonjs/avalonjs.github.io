@@ -122,10 +122,10 @@
             <meta name="viewport" content="width=device-width">
             <script src="avalon.js" ></script>
             <script>
-              avalon.define({
-                  $id: "test",
-                  array: ["葡萄", "椰子", "火龙果", "橙子"]
-              })
+                avalon.define({
+                    $id: "test",
+                    array: ["葡萄", "椰子", "火龙果", "橙子"]
+                })
             </script>
         </head>
         <body ms-controller="test">
@@ -156,14 +156,14 @@
                 }
             </style>
             <script>
-              var vm = avalon.define({
-                  $id: "tabs",
-                  array: [{text: "111111111111"}, {text: "2222222222"}, {text: "3333333333"}, {text: "44444444444"}],
-                  toggle: function (i) {
-                      vm.currentIndex = i
-                  },
-                  currentIndex: 0
-              })
+                var vm = avalon.define({
+                    $id: "tabs",
+                    array: [{text: "111111111111"}, {text: "2222222222"}, {text: "3333333333"}, {text: "44444444444"}],
+                    toggle: function (i) {
+                        vm.currentIndex = i
+                    },
+                    currentIndex: 0
+                })
             </script>
         </head>
         <body ms-controller="tabs">
@@ -208,44 +208,44 @@
             <meta http-equiv="X-UA-Compatible" content="IE=edge" />
             <script src="avalon.js" ></script>
             <script>
-      new function () {
-          if (!Date.now) {//fix 旧式IE
-              Date.now = function () {
-                  return new Date - 0;
-              }
-          }
-          var model = avalon.define({
-              $id: "repeatgrid",
-              selected: "name",
-              options: ["name", "size", "date"],
-              trend: 1,
-              data: [
-                  {name: "aaa", size: 213, date: Date.now() + 20},
-                  {name: "bbb", size: 4576, date: Date.now() - 4},
-                  {name: "ccc", size: 563, date: Date.now() - 7},
-                  {name: "eee", size: 3713, date: Date.now() + 9},
-                  {name: "555", size: 389, date: Date.now() - 20}
-              ]
-          })
-          model.$watch("selected", function (v) {
-              var t = parseFloat(model.trend)
-              model.data.sort(function (a, b) {
-                  if (v === "name") {
-                      return t * a[v].toLocaleString(b[v])
-                  } else {
-                      var ret = a[v] > b[v] ? 1 : -1
-                      return t * ret
-                  }
-              })
-          })
-          model.$watch("trend", function (t) {
-              var v = model.selected, t = parseFloat(t)
-              model.data.sort(function (a, b) {
-                  var ret = a[v] > b[v] ? 1 : -1
-                  return t * ret
-              })
-          })
-      }
+    new function () {
+        if (!Date.now) {//fix 旧式IE
+            Date.now = function () {
+                return new Date - 0;
+            }
+        }
+        var model = avalon.define({
+            $id: "repeatgrid",
+            selected: "name",
+            options: ["name", "size", "date"],
+            trend: 1,
+            data: [
+                {name: "aaa", size: 213, date: Date.now() + 20},
+                {name: "bbb", size: 4576, date: Date.now() - 4},
+                {name: "ccc", size: 563, date: Date.now() - 7},
+                {name: "eee", size: 3713, date: Date.now() + 9},
+                {name: "555", size: 389, date: Date.now() - 20}
+            ]
+        })
+        model.$watch("selected", function (v) {
+            var t = parseFloat(model.trend)
+            model.data.sort(function (a, b) {
+                if (v === "name") {
+                    return t * a[v].toLocaleString(b[v])
+                } else {
+                    var ret = a[v] > b[v] ? 1 : -1
+                    return t * ret
+                }
+            })
+        })
+        model.$watch("trend", function (t) {
+            var v = model.selected, t = parseFloat(t)
+            model.data.sort(function (a, b) {
+                var ret = a[v] > b[v] ? 1 : -1
+                return t * ret
+            })
+        })
+    }
             </script>
         </head>
         <body ms-controller="repeatgrid">
@@ -339,10 +339,10 @@
             <meta name="viewport" content="width=device-width">
             <script src="avalon.js"></script>
             <script>
-      avalon.define({
-          $id: "test",
-          array: [[1, 2, 3, 4], ["a", "b", "c", "d"], [11, 22, 33, 44]]
-      })
+    avalon.define({
+        $id: "test",
+        array: [[1, 2, 3, 4], ["a", "b", "c", "d"], [11, 22, 33, 44]]
+    })
             </script>
         </head>
         <body ms-controller="test" >
@@ -370,7 +370,7 @@
     </table>
 </div>
 <div class="bs-callout bs-callout-info" >
-    <p>此外，我们还可以通过<strong>data-repeat-rendered, data-each-rendered, data-with-rendered</strong>
+    <p>此外，我们还可以通过<code>data-repeat-rendered, data-each-rendered, data-with-rendered</code>
         来指定这些元素都插入DOM被渲染了后执行的回调，
         this指向元素节点，有一个参数表示为当前的操作，是add、 del、 move、 index。</p>
 </div>
@@ -389,19 +389,19 @@
             <meta name="viewport" content="width=device-width">
             <script src="avalon.js"></script>
             <script>
-      var index = 0
-      var model = avalon.define({
-          $id: "test",
-          data: {
-              aaa: 1111,
-              bbb: 2222,
-              ccc: 3333,
-              ddd: 4444
-          },
-          getIndex: function () {
-              return index++
-          }
-      })
+    var index = 0//1.4.*
+    var model = avalon.define({
+        $id: "test",
+        data: {
+            aaa: 1111,
+            bbb: 2222,
+            ccc: 3333,
+            ddd: 4444
+        },
+        getIndex: function () {
+            return index++
+        }
+    })
             </script>
         </head>
         <body ms-controller="test">
@@ -414,7 +414,7 @@
 
 <p><img src="../../assets/css/directives/repeat/1409654405940-repeat8.jpg" /></p>
 
-<p>如果我们想控制对象属性的输出顺序，或让某些元素不输出来，那么我们可以使用<strong>data-with-sorted</strong>回调。
+<p>如果我们想控制对象属性的输出顺序，或让某些元素不输出来，那么我们可以使用<code>data-with-sorted</code>回调。
     它用ms-repeat、ms-with绑定，赶对象渲染之前触发，要求输出一个字符串数组，对象的键值对会根据它依次输出；
     框架默认会输入原对象的所有键名构成的数组作为参数。</p>
 
@@ -429,24 +429,24 @@
             <meta name="viewport" content="width=device-width">
             <script src="avalon.js"></script>
             <script>
-      var index = 0
-      var model = avalon.define({
-          $id: "test",
-          data: {
-              aaa: 1111,
-              bbb: 2222,
-              ccc: 3333,
-              ddd: 4444
-          },
-          keys: function (a) {
-              console.log(a)
-              console.log(this)
-              return  ["ccc", "ddd", "aaa"]
-          },
-          getIndex: function () {
-              return index++
-          }
-      })
+    var index = 0
+    var model = avalon.define({
+        $id: "test",
+        data: {
+            aaa: 1111,
+            bbb: 2222,
+            ccc: 3333,
+            ddd: 4444
+        },
+        keys: function (a) {
+            console.log(a)
+            console.log(this)
+            return  ["ccc", "ddd", "aaa"]
+        },
+        getIndex: function () {
+            return index++
+        }
+    })
             </script>
         </head>
         <body ms-controller="test">
@@ -457,53 +457,64 @@
     </html>
 </xmp>
 
-<p><img src="../../assets/css/directives/repeat/1409654809239-repeat9.jpg"  /></p>
+<p><img src="../../assets/css/directives/repeat/1409654809239-repeat9.jpg" ></p>
 
 <h4>在删除本地数组的元素的同时也远程同步删除后台数组的元素</h4>
 <p>方法1</p>
+
+<xmp class="html">
+        <ul>
+            <li ms-repeat="array">
+                内容
+                <button type="button"
+                        ms-click="removeRemote($index, $remove)">x<button>
+            </li>
+        </ul>
+</xmp>
+<br/>
+<xmp class="javascript">
+    avalon.define({
+    $id: "test",
+    array: [1,2,3,4],
+    removeRemote: function($index, $remove){
+    $.ajax({
+    url: url,
+    data: { offset: $index, size: 1},
+    success: function(){
+    $remove()
+    }
+    })
+    }
+    })
+</xmp>
+
+<p>方法2</p>
+
 <xmp class="html">
     <ul>
-        <li ms-repeat="array">内容<button type="button" ms-click="removeRemote($index, $remove)">x<button></li>
-                    </ul>
-                    </xmp>
-                    <br/>
-                    <xmp class="javascript">
-                        avalon.define({
-                        $id: "test",
-                        array: [1,2,3,4],
-                        removeRemote: function($index, $remove){
-                        $.ajax({
-                        url: url,
-                        data: { offset: $index, size: 1},
-                        success: function(){
-                        $remove()
-                        }
-                        })
-                        }
-                        })
-                    </xmp>
+        <li ms-repeat="array" data-repeat-rendered="handle">
+            内容
+            <button type="button" ms-click="$remove">x<button>
+        </li>
+    </ul>
+</xmp>
+<br/>
+<xmp class="javascript">
+    avalon.define({
+    $id: "test",
+    array: [1,2,3,4],
+    handle: function(action, offset, length){
+    switch(action){
+    case "del":
+    $.ajax({
+    url: url,
+    data: { offset: $index, size: 1},
+    success: callback
+    })
+    break;
+    //....
 
-                    <p>方法2</p>
-                    <xmp class="html">
-                        <ul>
-                            <li ms-repeat="array" data-repeat-rendered="handle">内容<button type="button" ms-click="$remove">x<button></li>
-                                        </ul>
-                                        </xmp>
-                                        <xmp class="javascript">
-                                            avalon.define({
-                                            $id: "test",
-                                            array: [1,2,3,4],
-                                            handle: function(action, offset, length){
-                                            switch(action){
-                                            case "del":
-                                            $.ajax({
-                                            url: url,
-                                            data: { offset: $index, size: 1},
-                                            success: callback
-                                            })
-                                            break;
-                                            //....
+    }
+    })
+</xmp>
 
-                                            }
-                                            })
-                                        </xmp>
