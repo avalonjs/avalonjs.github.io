@@ -68,12 +68,12 @@
 
 </p>
 
-<p><strong>ms-controller</strong>在页面上表现为一个特殊的属性，其属性值为ViewModel的$id，表示将在此元素或其子孙元素上圈定它的作用域范围，
+<p><code>ms-controller</code>在页面上表现为一个特殊的属性，其属性值为ViewModel的$id，表示将在此元素或其子孙元素上圈定它的作用域范围，
     但如果这些HTML存在它没有的属性，它可以向上查找上一级的ViewModel的属性。
     换言之，ms-controller可以互相套嵌的。 </p>
 
-<p><strong>ms-important</strong>的用法与ms-controller差不多，但它不会向上查找。</p>
-<p ms-skip>ms-skip注明这块区域不应用任何的ViewModel的属性，它里面的任何指令（绑定属性）都会失效。
+<p><code>ms-important</code>的用法与ms-controller差不多，但它不会向上查找。</p>
+<p ms-skip><code>ms-skip</code>注明这块区域不应用任何的ViewModel的属性，它里面的任何指令（绑定属性）都会失效。
     因为{{}}也算一种指令，而任何指令在被扫描后都会被移除，如果我们想保留某个区域的{{}}，就需要用到ms-skip。</p>
 
 <p>我们看下面的例子：</p>
