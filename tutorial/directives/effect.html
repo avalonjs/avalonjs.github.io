@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="avalonjs - 迷你简单易用的前端MVVM框架，让你的网站更快更炫更好用">
+        <meta name="keywords" content="MVVM, CSS, JavaScript, framework, avalon, web development">
+        <meta name="author" content="RubyLouvre,司徒正美">
+
+
+        <title>avalon中文文档</title>
+        <script src="../../assets/js/avalon.shim.js"></script>
+
+        <!-- Bootstrap core CSS -->
+        <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="../../assets/css/patch.css" rel="stylesheet">
+
+        <!-- Documentation extras -->
+
+        <link href="../../assets/css/docs.min.css" rel="stylesheet">
+        <style>
+            body,html{
+               overflow-y: hidden;
+            }
+        </style>
+        <!--[if lt IE 9]><script src="../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+        <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="icon" href="/favicon.ico">
+
+    </head>
+    <body>
+
+
+
+
+        <div class="container bs-docs-container">
+
+            <div class="row">
+                <div class="col-md-9" role="main">
+
+<h2>动画(ms-effect)</h2>
+<p>avalon在<code>1.5</code>中添加的新指令,是对现有JS动画库或CSS3动画的高级封装。
+    avalon核心库本身不是提供任何动画功能。但凭借巧妙的设计，它能很好实现我们要的一切效果，
+    甚至比jQuery实现的更简单更炫目！</p>
+<p ms-skip=''>avalon 的动画指令<code>ms-effect="effectName"</code>，当effectName里面不包含{{}}时，属性值 就是我们要的特效名;
+    否则，就会跑进内部的解析器，将{{}}里面的变量分析出来，与其他部分结合成我们要的特效名。</p>
+
+<p>ms-effect其实是包括两种动画操作,即<code>进入这页面时的动画(entter)</code>,及<code>离开这页面时的动画(leave)</code>.</p>
+
+<p>在avalon中,我们可以轻松使用ms-if, ms-visble, ms-include, ms-repeat, ms-each, ms-with触发动画.具体来说,
+    ms-if在元素插入DOM树时调用enter动画,移出DOM树时调用leave动画;ms-visible在其真值时调用enter动画,其假值时调用leave动画;
+    ms-include有点特别,enter动画与leave动画同时进行,被移出的视图执行leave动画,正在插入的视图执行enter动画;
+    ms-repeat, ms-with, ms-each是对一组元素进行添加删除移动,其中添加与移动操作是执行enter动画,删除是执行leave动画,
+    因此是一组动画同时,会有点乱,于是提供了data-effect-stagger辅助指令错开每个动画,让整体看起来更加賞心悦目!
+</p>
+
+<p>视实现不同,一共分为三种:<code>CSS3 transition动画</code>,<code>CSS3 animation动画</code>, <code>JS动画</code>。</p>
+
+
+<h3>CSS3 transition动画<span class="badge">★</span></h3>
+
+<p>首先元素必须添加一个带<code>transition-duration</code>的类名,或者在内联style指定transition-duration
+    (这个可能有厂商前缀,如-webkit,-o-)</p>
+然后定义一组类名, 比如.ani, ani.ani-enter, ani.ani-leave(默认是在动画名后加上"-enter","-leave",
+换言之,你不使用回调什么的,也不用写avalon.effect了);
+如果你是angular过来的,想重用之前的CSS3,如, xxx, xxx.ng-enter, xxx.ng-leave,再要使用 avalon.effect方法注册一下;
+
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>avalon.effect("xxx", {
+    enterClass: "ng-enter",
+    leaveClass: "ng-leave"
+})
+
+avalon.effect("flip", {
+    enterClass: "flip-en xxx", //可以使用多个类名
+    leaveClass: "flip-le yyy"
+})
+
+
+avalon.effect("bounce", {
+    enterClass: "bounce-in",
+    leaveClass: "bounce-out"
+})</pre></div>
+
+<p>如果你想随机执行各种动画效果, 这两个配置项可以改成函数</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>var ani = ["rotate-in", "flip", "zoom-in", "roll", "speed", "elastic"]
+var lastIndex = NaN
+
+function getRandomAni() {
+    while (true) {
+        var index = ~~Math.random() * 6
+        if (index != lastIndex) {
+            lastIndex = index
+            return ani[index]
+        }
+    }
+}
+avalon.effect("animate", {
+    enterClass: getRandomAni,
+    leaveClass: getRandomAni
+})</pre></div>
+<h3>CSS3 animation动画<span class="badge">★</span></h3>
+
+<p>首先元素必须添加一个带animation-duration的类名,或者在内联style指定animation-duration,
+    其他流程一样</p>
+
+<h3>JS 动画<span class="badge">★</span></h3>
+<p>这只是留给IE6-8使用的, avalon.effect中需要你在enter, leave方法
+    中实现动画.框架会给这两个方法传入两个参数(el:进行动画的元素,done:动画完成的回调),
+    你务必都用上它们.</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;script src="jquery.js"&gt;&lt;/script&gt;
+    &lt;style&gt;
+        .box {
+            width: 200px;
+            height: 200px;
+            background: red;
+        }
+    &lt;/style&gt;
+    &lt;script&gt;
+        avalon.effect("toggle", {
+            enter: function(elem, done) {
+                $(elem).show(500, done)
+            },
+            leave: function(elem, done) {
+                $(elem).hide(500, done)
+            }
+
+        })
+        var vm = avalon.define({
+            $id: "test",
+            bool: true,
+            click: function() {
+                vm.bool = !vm.bool
+            }
+        })
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body ms-controller="test"&gt;
+    &lt;div ms-effect="toggle" ms-visible="bool" class="box"&gt;&lt;/div&gt;
+    &lt;p&gt;
+        &lt;button ms-click="click" type="button"&gt;button&lt;/button&gt;
+    &lt;/p&gt;
+
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+<p><img src="../../assets/css/directives/effect/effect01.gif" /></p>
+<p>如果上面使用CSS3则是这样实现:</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;style&gt;
+        .box {
+            width: 200px;
+            height: 200px;
+            background: red;
+        }
+        
+        .toggle {
+            transition: all 0.5s ease;
+        }
+        
+        .toggle-enter {
+            width: 0px;
+            height: 0px;
+        }
+        
+        .toggle-leave {
+            width: 0px;
+            height: 0px;
+        }
+    &lt;/style&gt;
+    &lt;script&gt;
+        var vm = avalon.define({
+            $id: "test",
+            bool: true,
+            click: function() {
+                vm.bool = !vm.bool
+            }
+        })
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body ms-controller="test"&gt;
+    &lt;div ms-effect="toggle" ms-visible="bool" class="box toggle"&gt;&lt;/div&gt;
+    &lt;p&gt;
+        &lt;button ms-click="click" type="button"&gt;button&lt;/button&gt;
+    &lt;/p&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+<p>如果你要使用回调,那就必须在avalon.effect方法的第二个参数对象上添加, 一共有如下回调:</p>
+<ul>
+    <li>beforeEnter: 在动画开始前执行</li>
+    <li>afterEnter: 在动画结束后执行</li>
+    <li>abortEnter: 在动画还没有结束前执行,会立即回到原始状态</li>
+    <li>beforeLeave: 在动画开始前执行</li>
+    <li>afterLeave: 在动画结束后执行</li>
+    <li>abortLeave: 在动画还没有结束前执行,会立即回到原始状态</li>
+</ul>
+<p>我们结合ms-if演示一下效果:</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;style&gt;
+        .box {
+            width: 200px;
+            height: 200px;
+            background: red;
+        }
+        
+        .toggle {
+            transition: all 0.5s ease;
+        }
+        
+        .toggle-enter {
+            width: 0px;
+            height: 0px;
+        }
+        
+        .toggle-leave {
+            width: 0px;
+            height: 0px;
+        }
+    &lt;/style&gt;
+    &lt;script&gt;
+        avalon.effect("toggle", {
+            afterEnter: function(el) {
+                console.log("enter")
+            },
+            afterLeave: function(el) {
+                console.log("leave")
+            }
+        })
+        var vm = avalon.define({
+            $id: "test",
+            bool: true,
+            click: function() {
+                vm.bool = !vm.bool
+            }
+        })
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body ms-controller="test"&gt;
+    &lt;div ms-effect="toggle" ms-if="bool" class="box toggle"&gt;&lt;/div&gt;
+    &lt;p&gt;
+        &lt;button ms-click="click" type="button"&gt;button&lt;/button&gt;
+    &lt;/p&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+<p><img src="../../assets/css/directives/effect/effect02.gif" /></p>
+<h3>ms-include动画效果</h3>
+<p>ms-include的动画效果非常复杂,它的enter动画与leave动画是同时进行.</p>
+
+<p>下例,我们还使用了著名的CSS3动画库<a href="https://daneden.github.io/animate.css/">animate.css</a></p>
+
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;meta http-equiv="X-UA-Compatible" content="IE=8" /&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;link rel="stylesheet" href="animate.css" type="text/css"&gt;
+    &lt;style&gt;
+        .contain {
+            border: 1px solid red;
+            position: relative;
+            width: 200px;
+            top: 0px;
+            height: 220px;
+        }
+        
+        .aaa {
+            background: #a9ea00;
+            height: 200px;
+        }
+        
+        .bbb {
+            background: #e0f2be;
+            height: 200px;
+        }
+        
+        .fadeInLeft {
+            position: absolute;
+            width: 100%;
+        }
+        
+        .fadeOutRight {
+            position: absolute;
+            width: 100%;
+        }
+        
+        .zoomEffect {
+            position: relative;
+        }
+        
+        .zoomInDown,
+        .zoomOutUp {
+            width: 100%;
+            height: 100%;
+            top: 50%;
+            margin-left: -150px;
+            margin-top: -170px;
+            left: 50%;
+            position: absolute;
+        }
+    &lt;/style&gt;
+    &lt;script&gt;
+        avalon.effect("xxx", {
+            leaveClass: "fadeOutRight",
+            enterClass: "fadeInLeft"
+
+        })
+        avalon.effect("yyy", {
+            enterClass: "zoomInDown",
+            leaveClass: "zoomOutUp"
+        })
+        var a = avalon.define({
+            $id: "test",
+            aaa: "aaa.html",
+            change: function() {
+                a.aaa = a.aaa === "aaa.html" ? "bbb.html" : "aaa.html"
+            }
+        })
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body ms-controller="test" style="padding-bottom: 1000px;"&gt;
+    &lt;div ms-include-src="'include2'+aaa" data-include-cache="true"&gt;&lt;/div&gt;
+    &lt;h5&gt;data-include-repalce="false"&lt;/h5&gt;
+    &lt;div class='contain' style='overflow: hidden'&gt;
+        &lt;div ms-include-src="'include2'+aaa" class="animated" ms-effect="xxx" data-include-cache="true"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;button type="button" ms-click="change"&gt;change&lt;/button&gt;
+    &lt;h5&gt;data-include-replace="true"&lt;/h5&gt;
+    &lt;div class='contain zoomEffect' style='overflow: hidden'&gt;
+        &lt;div ms-include-src="'include2'+aaa" class="contain animated" ms-effect="yyy" data-include-replace="true" data-include-cache="true"&gt;哈哈哈&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+<p>include2aaa.html</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;div class="aaa"&gt;
+    第一个面板
+&lt;/div&gt;</pre></div>
+<p>include2bbb.html</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;div class="aaa"&gt;
+    第二个面板
+&lt;/div&gt;</pre></div>
+
+<p><img src="../../assets/css/directives/effect/effect03.gif" /></p>
+<h3>ms-repeat动画效果</h3>
+<p>ms-repeat, ms-each, ms-with支持一个叫data-effect-stagger的辅助指令,对应一个数字,大小应该在10~1000之间,
+    有了它,我们就可以做出非常炫目的效果.
+</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;style&gt;
+        .my-repeat-animation {
+            width: 400px;
+            height: 30px;
+            -webkit-animation-duration: 1s;
+            animation-duration: 1s;
+        }
+        
+        .ng-enter {
+            -webkit-animation-name: enter_animation;
+            animation-name: enter_animation;
+        }
+        
+        .ng-leave {
+            -webkit-animation-name: leave_animation;
+            animation-name: leave_animation;
+        }
+        
+        @keyframes enter_animation {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes leave_animation {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+        
+        @-webkit-keyframes enter_animation {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @-webkit-keyframes leave_animation {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+    &lt;/style&gt;
+    &lt;script&gt;
+        avalon.effect("my-repeat-animation", {
+            enterClass: "ng-enter",
+            leaveClass: "ng-leave"
+        })
+        var vm = avalon.define({
+            $id: "test",
+            array: [1, 2, 3, 4],
+            getBg: function() {
+                return '#' + Math.floor(Math.random() * 16777215).toString(16);
+            },
+            add: function() {
+                vm.array.push(vm.array.length + 1)
+                vm.array.push(vm.array.length + 1)
+                vm.array.push(vm.array.length + 1)
+                vm.array.push(vm.array.length + 1)
+                vm.array.push(vm.array.length + 1)
+                vm.array.push(vm.array.length + 1)
+                vm.array.push(vm.array.length + 1)
+                vm.array.push(vm.array.length + 1)
+                vm.array.push(vm.array.length + 1)
+            },
+            value: ""
+        })
+        vm.$watch("value", function(a) {
+            if (a) {
+                vm.array.removeAll(function(el) {
+                    return el !== a
+                })
+            } else {
+                vm.add()
+            }
+        })
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body ms-controller="test"&gt;
+    &lt;button ms-click="add"&gt;Add&lt;/button&gt;
+    &lt;input placeholder="只保留" ms-duplex-number="value" /&gt;
+    &lt;div class="my-repeat-animation" data-effect-stagger="100" ms-repeat-item="array" ms-css-background="getBg()" ms-effect="my-repeat-animation"&gt;
+        {{item}}
+    &lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+<p><img src="../../assets/css/directives/effect/effect04.gif" /></p>
+<p>我们再看一下数组重排删除的动画效果吧.</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;title&gt;ms-repeat&lt;/title&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;link rel="stylesheet" href="animate.css" type="text/css"&gt;
+
+    &lt;script&gt;
+        avalon.effect("xxx", {
+            enterClass: "lightSpeedIn",
+            leaveClass: "lightSpeedOut"
+        })
+        var vm = avalon.define({
+            $id: "test",
+            array: ["a", "b", "c", "d", "d"],
+            add: function() {
+                vm.array.push(55, 66, 33, "3", "o", "p")
+            },
+            getBg: function() {
+
+                return '#' + Math.floor(Math.random() * 16777215).toString(16)
+            },
+            reverse: function() {
+                vm.array.reverse()
+            },
+            pop: function() {
+                vm.array.pop()
+            },
+            remove: function() {
+                vm.array.splice(1, 5)
+            }
+        })
+    &lt;/script&gt;
+    &lt;style&gt;
+        ul {
+            width: 400px;
+        }
+        
+        li {
+            height: 25px;
+            margin-top: 1px;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body ms-controller="test"&gt;
+    &lt;h1&gt;ms-repeat&lt;/h1&gt;
+    &lt;ul&gt;
+        &lt;li ms-repeat="array" class="animated" data-effect-stagger="40" ms-css-background="getBg()" ms-effect="xxx"&gt;{{el}}*{{$index}}&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;div&gt;
+        &lt;button type="button" ms-click="add"&gt;add&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+        &lt;button type="button" ms-click="reverse"&gt;reverse&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+        &lt;button type="button" ms-click="remove"&gt;remove&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+<p><img src="../../assets/css/directives/effect/effect05.gif" /></p>
+<h3>底层JS动画函数</h3>
+<p>avalon实现上述效果,其实都是通过avalon.efffect.apply实现,其参数如下: </p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>avalon.efffect.apply = function(el, dir, before, after, opts) {}
+    //el 元素节点,用于动画
+    //dir 0或1, 0表示leave, 1代表enter
+    //before 动画执行前的回调,可选
+    //after 动画结束后的回调,可选
+    //opts 配置对象,可选
+    //           effectName 特效的名字,同ms-effect的值
+    //           effectDriver 使用何种方式实现动画,值分别为t, a, j ,代表transition, animation, javascript
+    //           effectLeaveStagger leave动画的错开时间
+    //           effectEnterStagger enter动画的错开时间
+    //           effectClass  动画开始时要添加的类名</pre></div>
+
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;title&gt;ms-repeat&lt;/title&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;link rel="stylesheet" href="animate.css" type="text/css"&gt;
+
+    &lt;script&gt;
+        avalon.effect("auto", {
+            leaveClass: function() {
+                return "bounceOutUp" //动画激活时添加的类名(结束时会移除)
+            }
+        })
+        var vm = avalon.define({
+            $id: "test",
+            click: function() {
+                avalon.effect.apply(this, 0, function() {}, function() {
+                    console.log("leave")
+                }, {
+                    effectName: "auto",
+                    effectClass: "animated", //动画开始时添加的类名
+                    effectDriver: "a"
+                })
+            }
+        })
+    &lt;/script&gt;
+    &lt;style&gt;
+        .box {
+            width: 250px;
+            height: 250px;
+            background: #f35626;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body ms-controller="test"&gt;
+    &lt;div class="box" ms-click="click"&gt;点我&lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+<p><img src="../../assets/css/directives/effect/effect06.gif" /></p>
+<p>基于它,还衔生出avalon.effect.append, avalon.effect.before, avalon.effect.remove,它们都是属于非常底层方法,
+    用于帮助你自己做动画时用.但平时,都是ms-effect已经帮你准备avalon.effect.apply的所有参数了.
+</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>avalon.mix(avalon.effect, {
+    apply: applyEffect,
+    append: function(el, parent, after, opts) {
+        return applyEffect(el, 1, function() {
+            parent.appendChild(el)
+        }, after, opts)
+    },
+    before: function(el, target, after, opts) {
+        return applyEffect(el, 1, function() {
+            target.parentNode.insertBefore(el, target)
+        }, after, opts)
+    },
+    remove: function(el, parent, after, opts) {
+        return applyEffect(el, 0, function() {
+            if (el.parentNode === parent)
+                parent.removeChild(el)
+        }, after, opts)
+    }
+})</pre></div>
+<br/>
+
+
+</div>
+<div class="col-md-3" role="complementary">
+
+</div>
+</div>
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="../../assets/highlight/shCore.js"></script>
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="../../assets/js/iframe.js"></script>
+</body>
+</html>
+

@@ -48,7 +48,7 @@
                 <div class="navbar-collapse collapse" role="navigation">
                     <ul class="nav navbar-nav">
                         <li><a href="#tutorial/home/index.html" data-toggle="iframe">教程</a></li>
-                        <li><a href="#pages/api.html" data-toggle="iframe" >API</a></li>
+                        <li><a href="#api.html" data-toggle="iframe" >API</a></li>
                         <li><a href="http://edu.51cto.com/course/course_id-2533-page-1.html" target="_blank" >视频</a></li>
                         <li><a href="http://www.avalon.org.cn/" target="_blank" >论坛</a></li>
                         <li><a href="http://www.cnblogs.com/rubylouvre/" target="_blank" >博客</a></li>
@@ -83,7 +83,7 @@
         <style>
             .bs-docs-sidebar{
                 display: none;
-                width:300px;
+                width:200px;
                 position: fixed;
                 right:40px;
                 height:200px;
@@ -104,7 +104,13 @@
                     if (!hash || hash == "home.html") {
                         $(".bs-docs-sidebar").hide()
                         $("iframe").prop("src", "home.html")
+
+                    } else if (hash == "api.html") {
+                        $(".bs-docs-sidebar").hide()
+                        $("iframe").prop("src", "api.html")
+
                     } else {
+
                         $(".bs-docs-sidebar").show()
                         if (/\.html/.test(hash)) {
                             $("iframe").prop("src", hash)
@@ -116,9 +122,22 @@
                     $('html,body').animate({scrollTop: 0}, 500)
                 })
 
-                $(window).on("resize", function () {
-                    // $("iframe").css("width", "100%")
-                })
+
+                function setLeft() {
+                    return
+                    var iframe = $("iframe")[0]
+                    var idoc = iframe.contentDocument || idoc.contentWindow.document
+                    var main = $(".col-md-9", idoc)
+                    console.log(main[0])
+                    if (main.length) {
+                        var left = main.width() + main.offset().left
+
+                        $(".bs-docs-sidebar").css("left", left)
+                    }
+
+                }
+                setLeft()
+                $(window).on("resize", setLeft)
 
 
             })

@@ -185,57 +185,113 @@
                 name: "过滤器",
                 sub: [
                     {
-                        href: "tutorial/filters/camelize.html",
+                        href: "camelize",
                         name: "camelize"
                     },
                     {
-                        href: "tutorial/filters/currency.html",
+                        href: "currency",
                         name: "currency"
                     },
                     {
-                        href: "tutorial/filters/date.html",
+                        href: "date",
                         name: "date"
                     },
                     {
-                        href: "tutorial/filters/escape.html",
+                        href: "escape",
                         name: "escape"
                     },
                     {
-                        href: "tutorial/filters/html.html",
+                        href: "html",
                         name: "html"
                     },
                     {
-                        href: "tutorial/filters/lowercase.html",
+                        href: "lowercase",
                         name: "lowercase"
                     },
                     {
-                        href: "tutorial/filters/number.html",
+                        href: "number",
                         name: "number"
                     },
                     {
-                        href: "tutorial/filters/sanitize.html",
+                        href: "sanitize",
                         name: "sanitize"
                     },
                     {
-                        href: "tutorial/filters/truncate.html",
+                        href: "truncate",
                         name: "truncate"
                     },
                     {
-                        href: "tutorial/filters/uppercase.html",
+                        href: "uppercase",
                         name: "uppercase"
                     }
                 ]
             },
             {
                 href: "tutorial/interceptors/index.html",
-                name: "拦截器"
+                name: "拦截器",
+                sub: [
+                    {
+                        href: "ms-duplex-string",
+                        name: "ms-duplex-string"
+                    },
+                    {
+                        href: "ms-duplex-checked",
+                        name: "ms-duplex-checked"
+                    },
+                    {
+                        href: "ms-duplex-boolean",
+                        name: "ms-duplex-boolean"
+                    },
+                    {
+                        href: "ms-duplex-number",
+                        name: "ms-duplex-number"
+                    }
+                ]
             },
             {
                 href: "tutorial/component/index.html",
-                name: "组件"
+                name: "组件",
+                sub: [
+                    {
+                        href: "callbacks",
+                        name: "所有回调的执行顺序"
+                    },
+                    {
+                        href: "config",
+                        name: "组件的配置"
+                    },
+                    {
+                        href: "slot",
+                        name: "插入点的使用"
+                    },
+                    {
+                        href: "getvm",
+                        name: "获取组件VM"
+                    },
+                    {
+                        href: "construct",
+                        name: "组件的构建全过程"
+                    },
+                    {
+                        href: "ie68",
+                        name: "IE6-8的特殊处理"
+                    },
+                    {
+                        href: "tag",
+                        name: "自定义标签"
+                    }
+                ]
+            },
+            {
+                href: "tutorial/callbacks/index.html",
+                name: "回调"
+            },
+            {
+                href: "tutorial/configuration/index.html",
+                name: "配置"
             }
-
         ]
+        
     })
 
     avalon.scan(0, vm)
@@ -266,4 +322,6 @@
         }
 
     })
+
+
 })();
