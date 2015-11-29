@@ -27,6 +27,7 @@
         <![endif]-->
 
         <!-- Favicons -->
+        <script src="../assets/js/avalon.shim.js"></script>
         <link rel="apple-touch-icon-precomposed" href="http://static.bootcss.com/www/assets/ico/apple-touch-icon-precomposed.png">
         <link rel="shortcut icon" href="http://static.bootcss.com/www/assets/ico/favicon.png">
         <link href="./assets/css/docs.min.css" rel="stylesheet">
@@ -77,9 +78,153 @@
                 <h2>谁有使用avalon</h2>
                 <p>欢迎各位使用者到Q群找作者提交你们公司的LOGO与链接</p>
             </div>
+            <script>
+                var logos = [
+                    {
+                        src: "qunar.jpg",
+                        link: "http://www.qunar.com/"
+                    }, {
+                        src: "wuxian.baidu.jpg",
+                        link: "http://wuxian.baidu.com/"
+                    }, {
+                        src: "market.baidu.jpg",
+                        link: "javascript:void 0"
+                    }, {
+                        src: "baidutuiguang.jpeg",
+                        link: "http://tuiguang.baidu.com"
+                    },
+                    {
+                        src: "bianfeng.png",
+                        link: "http://www.bianfeng.com/"
+                    }, {
+                        src: "ccssoft.jpg",
+                        link: "http://www.ccssoft.com.cn/"
+                    }, {
+                        src: "maimaiys.png",
+                        link: "http://www.maimaiys.com/"
+                    }, {
+                        src: "quanshi_logo.jpg",
+                        link: "http://www.quanshi.com/"
+                    }, {
+                        src: "ronglian.png",
+                        link: "http://www.ronglian.com/"
+                    }, {
+                        src: "sdl_logo.png",
+                        link: "http://www.cloudary.com.cn/"
+                    }, {
+                        src: "sohulogo.png",
+                        link: "http://www.sohu.com/"
+                    }, {
+                        src: "ustack.png",
+                        link: "http://www.ustack.com/"
+                    }, {
+                        src: "wiz.jpg",
+                        link: "https://note.wiz.cn/"
+                    }, {
+                        src: "wps.jpg",
+                        link: "https://vip.wps.cn/"
+                    }, {
+                        src: "xiaojukeji.png",
+                        link: "http://www.xiaojukeji.com/website/index.html"
+                    }, {
+                        src: "isoftstone.png",
+                        link: "http://www.isoftstone.com/cn/industries/insurance.aspx?id=insurance"
+                    }, {
+                        src: "cevlink.png",
+                        link: "http://www.cevlink.com/"
+                    }, {
+                        src: "xiezhe.png",
+                        link: "http://xizhe.it"
+                    }, {
+                        src: "chinaedu.jpg",
+                        link: "http://www.chinaedu.net/"
+                    }, {
+                        src: "itangyuan.png",
+                        link: "http://itangyuan.com"
+                    }, {
+                        src: "syntop_logo.png",
+                        link: "http://www.syntop.com"
+                    }, {
+                        src: "angelcrunch.png",
+                        link: "http://angelcrunch.com/"
+                    }, {
+                        src: "newwwedu.png",
+                        link: "http://www.newwwedu.com/"
+                    }, {
+                        src: "vcb.jpg",
+                        link: "http://crmdemo.vcb.cn/loginview.aspx?ReturnUrl=/default.aspx"
+                    }, {
+                        src: "niaobushi.png",
+                        link: "http://www.niaobushi360.com/"
+                    }, {
+                        src: "mokylin.png",
+                        link: "http://www.mokylin.com/"
+                    }, {
+                        src: "aiispo.jpg",
+                        link: "http://aiispo.cn/"
+                    }, {
+                        src: "wohuizhong.png",
+                        link: "http://www.wohuizhong.com/"
+                    }, {
+                        src: "kagou.png",
+                        link: "http://www.cargopm.com/dzg-system-front/#!/home"
+                    }
+                ];
 
-            <div class="row">
+                avalon.define({
+                    $id: "logos",
+                    logos: logos
+                });
+            </script>
+            <style>
+                .logos {
+                    width: 980px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    overflow: hidden;
+                    *zoom: 1;
+                }
 
+                .logos li{
+                    float: left;
+                    width: 140px;
+                    height: 140px;
+                    margin: 10px;
+                    text-align:center;
+                    font-size:0;
+                    background: #fff;
+                    border-radius: 10px;
+                }
+
+                .logos li:after,.logos li span{
+                    display:inline-block;
+                    *display:inline;
+                    *zoom:1;
+                    width:0;
+                    height:100%;
+                    vertical-align:middle;
+                }
+                .logos li:after{
+                    content:'';
+                }
+                .logos li img{
+                    display:inline-block;
+                    *display:inline;
+                    *zoom:1;
+                    vertical-align:middle;
+                    font-size:16px;
+                    width: 120px;
+                }
+            </style>
+            <div class="row jumbotron" >
+                <ul class="logos" ms-controller="logos">
+                    <a ms-href="el.link" target="_blank" ms-repeat="logos">
+                        <li>
+                            <img ms-src="./assets/css/logos/{{el.src}}"/>
+                            <!--[if lt IE 8]><span></span><![endif]-->
+                        </li>
+                    </a>
+                </ul>
 
             </div>
         </div>
