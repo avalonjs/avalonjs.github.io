@@ -407,31 +407,35 @@
 </div>
 <p>监控数组的更新，分两种情况。一种是简单数据类型，它需要用set方法进行更新，另一种是对象类型，直接vm[1].xxx = yyy， vm[1]是你要更新的对象，xxx为此对象已经存在的属性。</p>
 <p>如果大家在想内层循环访问外层循环的变量，可以通过$outer实现，比如$outer.$index, $outer.el, $outer.$outer.$index……</p>
-<xml class="html">
-    <!DOCTYPE html>
-    <html>
-        <head>
-            <title>TODO supply a title</title>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width">
-            <script src="avalon.js"></script>
-            <script>
-    avalon.define({
-        $id: "test",
-        array: [[1, 2, 3, 4], ["a", "b", "c", "d"], [11, 22, 33, 44]]
-    })
-            </script>
-        </head>
-        <body ms-controller="test" >
-            <table border="1" width="800">
-                <tr ms-repeat="array">
-                    <td  ms-repeat-elem="el">{{$outer.$index}}.{{$index}}.{{elem}}</td>
-                </tr>
-            </table>
-        </body>
-    </html>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
 
-</xmp>
+&lt;head&gt;
+    &lt;title&gt;TODO supply a title&lt;/title&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width"&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        avalon.define({
+            $id: "test",
+            array: [
+                [1, 2, 3, 4],
+                ["a", "b", "c", "d"],
+                [11, 22, 33, 44]
+            ]
+        })
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body ms-controller="test"&gt;
+    &lt;table border="1" width="800"&gt;
+        &lt;tr ms-repeat="array"&gt;
+            &lt;td ms-repeat-elem="el"&gt;{{$outer.$index}}.{{$index}}.{{elem}}&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
 <script>
     avalon.define({
         $id: "repeatouter",
@@ -540,12 +544,10 @@
 
 <h4>在删除本地数组的元素的同时也远程同步删除后台数组的元素</h4>
 <p>方法1</p>
-
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;ul&gt;
     &lt;li ms-repeat="array"&gt;
         内容
-        &lt;button type="button" ms-click="removeRemote($index, $remove)"&gt;x
-            &lt;button&gt;
+        &lt;button type="button" ms-click="removeRemote($index, $remove)"&gt;x&lt;/button&gt;
     &lt;/li&gt;
 &lt;/ul&gt;</pre></div>
 <br/>
@@ -571,8 +573,7 @@
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;ul&gt;
     &lt;li ms-repeat="array" data-repeat-rendered="handle"&gt;
         内容
-        &lt;button type="button" ms-click="$remove"&gt;x
-            &lt;button&gt;
+        &lt;button type="button" ms-click="$remove"&gt;x&lt;/button&gt;
     &lt;/li&gt;
 &lt;/ul&gt;</pre></div>
 <br/>

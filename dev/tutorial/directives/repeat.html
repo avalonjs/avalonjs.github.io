@@ -330,7 +330,7 @@
 </div>
 <p>监控数组的更新，分两种情况。一种是简单数据类型，它需要用set方法进行更新，另一种是对象类型，直接vm[1].xxx = yyy， vm[1]是你要更新的对象，xxx为此对象已经存在的属性。</p>
 <p>如果大家在想内层循环访问外层循环的变量，可以通过$outer实现，比如$outer.$index, $outer.el, $outer.$outer.$index……</p>
-<xml class="html">
+<xmp class="html">
     <!DOCTYPE html>
     <html>
         <head>
@@ -461,15 +461,14 @@
 
 <h4>在删除本地数组的元素的同时也远程同步删除后台数组的元素</h4>
 <p>方法1</p>
-
 <xmp class="html">
-        <ul>
-            <li ms-repeat="array">
-                内容
-                <button type="button"
-                        ms-click="removeRemote($index, $remove)">x<button>
-            </li>
-        </ul>
+    <ul>
+        <li ms-repeat="array">
+            内容
+            <button type="button"
+                    ms-click="removeRemote($index, $remove)">x</button>
+        </li>
+    </ul>
 </xmp>
 <br/>
 <xmp class="javascript">
@@ -494,7 +493,7 @@
     <ul>
         <li ms-repeat="array" data-repeat-rendered="handle">
             内容
-            <button type="button" ms-click="$remove">x<button>
+            <button type="button" ms-click="$remove">x</button>
         </li>
     </ul>
 </xmp>
