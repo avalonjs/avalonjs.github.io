@@ -100,7 +100,7 @@
             $(function () {
 
                 parent.array = []
-                $(window).on("hashchange", function () {
+                function hashChange() {
                     var hash = location.hash.replace(/^#/, "")
                     if (!hash || hash == "home.html") {
                         $(".bs-docs-sidebar").hide()
@@ -118,7 +118,11 @@
                         }
                     }
 
-                })
+                }
+                $(window).on("hashchange", hashChange)
+                if(location.hash){
+                   hashChange()
+                }
                 $("a[data-toggle='iframe']").click(function (e) {
                     $('html,body').animate({scrollTop: 0}, 500)
                 })
