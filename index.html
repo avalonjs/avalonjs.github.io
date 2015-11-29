@@ -123,20 +123,18 @@
                 if(location.hash){
                    hashChange()
                 }
+                
                 $("a[data-toggle='iframe']").click(function (e) {
                     $('html,body').animate({scrollTop: 0}, 500)
                 })
 
 
                 function setLeft() {
-                    return
                     var iframe = $("iframe")[0]
                     var idoc = iframe.contentDocument || idoc.contentWindow.document
                     var main = $(".col-md-9", idoc)
-                    console.log(main[0])
                     if (main.length) {
                         var left = main.width() + main.offset().left
-
                         $(".bs-docs-sidebar").css("left", left)
                     }
 
