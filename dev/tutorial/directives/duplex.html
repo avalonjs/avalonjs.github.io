@@ -53,7 +53,12 @@
                     lang: ["javascript", "ruby"],
                     langtext: "javascript,ruby"
                 })
-                vm.lang.$watch("length", function () {
+                /*1.4.*
+                 * vm.lang.$watch("length", function () {
+                    vm.langtext = vm.lang.join(",")
+                })
+                 */
+                vm.$watch("lang.length", function () {
                     vm.langtext = vm.lang.join(",")
                 })
 

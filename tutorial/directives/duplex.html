@@ -100,12 +100,17 @@
     &lt;script src="avalon.js"&gt;&lt;/script&gt;
     &lt;script&gt;
         var vm = avalon.define({
-            $id: "test2",
-            sex: "man",
-            lang: ["javascript", "ruby"],
-            langtext: "javascript,ruby"
-        })
-        vm.lang.$watch("length", function() {
+                $id: "test2",
+                sex: "man",
+                lang: ["javascript", "ruby"],
+                langtext: "javascript,ruby"
+            })
+            /*1.4.*
+             * vm.lang.$watch("length", function () {
+                vm.langtext = vm.lang.join(",")
+            })
+             */
+        vm.$watch("lang.length", function() {
             vm.langtext = vm.lang.join(",")
         })
     &lt;/script&gt;
