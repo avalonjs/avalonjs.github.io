@@ -177,6 +177,14 @@
                     {
                         href: "tutorial/directives/widget.html",
                         name: "ms-widget"
+                    },
+                     {
+                        href: "tutorial/directives/custom.html",
+                        name: "自定义标签"
+                    },
+                     {
+                        href: "tutorial/directives/i20n.html",
+                        name: "国际化"
                     }
                 ]
             },

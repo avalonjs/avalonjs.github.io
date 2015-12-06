@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="avalonjs - 迷你简单易用的前端MVVM框架，让你的网站更快更炫更好用">
+        <meta name="keywords" content="MVVM, CSS, JavaScript, framework, avalon, web development">
+        <meta name="author" content="RubyLouvre,司徒正美">
+
+
+        <title>avalon中文文档</title>
+        <script src="../../assets/js/avalon.shim.js"></script>
+
+        <!-- Bootstrap core CSS -->
+        <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="../../assets/css/patch.css" rel="stylesheet">
+
+        <!-- Documentation extras -->
+
+        <link href="../../assets/css/docs.min.css" rel="stylesheet">
+        <style>
+            body,html{
+               overflow-y: hidden;
+            }
+        </style>
+        <!--[if lt IE 9]><script src="../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+        <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="icon" href="/favicon.ico">
+
+    </head>
+    <body>
+
+
+
+
+        <div class="container bs-docs-container">
+
+            <div class="row">
+                <div class="col-md-9" role="main">
+
+<h2>自定义绑定</h2>
+<p>avalon1.5新添加的API,avalon.directive, 用于快速创建一种全新的指令!</p>
+<p>过去avalon自定义绑定比较麻烦,非常影响avalon推广,也不利于业务上各种功能的开发,新的定义方式将变得非常简单</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>avalon.directive(name, {
+    init: function(binding) {
+        //在这里处理binding.expr属性
+    },
+    update: function(value, oldValue) {
+        //value是binding.expr经过解析得到的当前VM属性的值
+        //oldValue是它之前的值
+    },
+})</pre></div>
+<p>拿最简单的data绑定来说吧:</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>avalon.directive("data", {
+    priority: 100,
+    update: function(val) {
+        var elem = this.element
+        var key = "data-" + this.param
+        if (val && typeof val === "object") {
+            elem[key] = val
+        } else {
+            elem.setAttribute(key, String(val))
+        }
+    }
+})</pre></div>
+<p>我们发现它没有init回调,init主要是对binding.expr进行加工,或绑定事件的,它这些都不需要,
+    就会直接返回原始值.比如说,&lt;div ms-data-xxx="yyy"&lt; 这里的属性会抽取成下面一个对象:</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>var binding = {
+    name: "ms-data-xxx",
+    expr: "yyy",
+    type: name,
+    element: DIVElement,
+    param: "xxx",
+    oneTime: false,
+    uuid: //框架会在这里生成一个UUID给它
+        priority: //框架会根据上面的定义,计算出来,大概是1000+ ;
+}</pre></div>
+
+<p>假如此时vm.yyy = 999; 那么第一次update时,value与oldValue分别为 999, undefined</p>
+
+<p>对于用户来说,priority一般不需要设置, 其计算公式为</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+//详见 scanAttr
+priority: (directives[type].priority || type.charCodeAt(0) * 10) + (Number(param.replace(/\D/g, "")) || 0)
+
+</pre>
+<p>此外,如果你的绑定需要绑定一些事件来监听用户行为,那么你得在init或update添加一个roolback回调,在里面解绑定事件.</p>
+<p>update方法中的this就是init的传参binding</p>
+
+<p>那么我们做一下简单的例子吧:</p>
+
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+        &lt;script src="avalon.js"&gt;
+
+        &lt;/script&gt;
+        &lt;script&gt;
+            avalon.directive("foo", {
+                init: function (binding) {
+                    var elem = binding.element
+                    var vmodels = binding.vmodels
+                    var remove = avalon(elem).bind("click", function () {
+                        elem.innerHTML = new Date - 0
+                        for (var i = 0, v; v = vmodels[i++]; ) {
+                            if (v.hasOwnProperty(binding.expr)) {
+                                v[binding.expr] = elem.innerHTML
+                                break
+                            }
+                        }
+
+                    })
+                    binding.roolback = function () {
+                        avalon(elem).unbind("click", remove)
+                    }
+                },
+                update: function (value, oldValue) {
+                    this.element.innerHTML = value
+                }
+            })
+            var vm = avalon.define({
+                $id: "test",
+                aaa: 111
+            })
+            vm.$watch("aaa", function (a, b) {
+                console.log(a, b)
+            })
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div ms-controller="test"&gt;
+            &lt;div ms-foo="aaa"&gt;点我&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p><img src="../../assets/css/directives/directive/directive.gif" /></p>
+<p>别看例子简单,其实它是除duplex外又一个新的<strong>双工绑定</strong>!</p>
+
+</div>
+<div class="col-md-3" role="complementary">
+
+</div>
+</div>
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="../../assets/highlight/shCore.js"></script>
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="../../assets/js/iframe.js"></script>
+</body>
+</html>
+
