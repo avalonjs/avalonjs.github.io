@@ -52,6 +52,7 @@
 
                 ]
             },
+
             {
                 href: "tutorial/concepts/index.html",
                 name: "核心概念",
@@ -297,9 +298,23 @@
             {
                 href: "tutorial/configuration/index.html",
                 name: "配置"
+            },
+            {
+                href: "tutorial/engineering/index.html",
+                name: "工程化",
+                sub:[
+                  {
+                      href: "tutorial/engineering/jquery.html",
+                      name: "与jquery混用"
+                  },
+                  {
+                      href: "tutorial/engineering/weixin.html",
+                      name: "在微信中使用"
+                  }
+                ]
             }
         ]
-        
+
     })
 
     avalon.scan(0, vm)
