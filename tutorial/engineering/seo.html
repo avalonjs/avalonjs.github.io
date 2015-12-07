@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="avalonjs - 迷你简单易用的前端MVVM框架，让你的网站更快更炫更好用">
+        <meta name="keywords" content="MVVM, CSS, JavaScript, framework, avalon, web development">
+        <meta name="author" content="RubyLouvre,司徒正美">
+
+
+        <title>avalon中文文档</title>
+        <script src="../../assets/js/avalon.shim.js"></script>
+
+        <!-- Bootstrap core CSS -->
+        <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="../../assets/css/patch.css" rel="stylesheet">
+
+        <!-- Documentation extras -->
+
+        <link href="../../assets/css/docs.min.css" rel="stylesheet">
+        <style>
+            body,html{
+               overflow-y: hidden;
+            }
+        </style>
+        <!--[if lt IE 9]><script src="../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+        <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="icon" href="/favicon.ico">
+
+    </head>
+    <body>
+
+
+
+
+        <div class="container bs-docs-container">
+
+            <div class="row">
+                <div class="col-md-9" role="main">
+
+<h2>SEO策略</h2>
+<p>你应该完全相信现在搜索引擎的能力，因为它们就是千方百计抓取更多内容。</p>
+<pre>
+        http://blog.sina.com.cn/s/blog_6b61ed4b0100lfu1.html
+        http://www.pythontab.com/html/2014/pythonweb_0311/712.html
+</pre>
+<p>上面是比较早的资料，我从公司后端就听说现在百度已经能从内存中抓取内容。不要说百度，就是一般的电商公司，为了让自己商场的产品比其他商场的低一点，
+    他们都会设法通过爬虫把人家的网页（就是那种是纯JS写的，价格是用图片展示出来的）抓下去，通过机器学习得到它们需要的东西。
+
+</p>
+<p>如果你还不放心，还可以使用如下策略：</p>
+<p>方案1,你可以在服务器端运行一个浏览器实例来执行你的应用里的Javascript，然后从DOM中卸下HTML（使用phantomjs, jsdom或者WebLoop）。
+    或者你可以创建一个服务端生成的专供爬虫的替代性HTML版本。</P>
+
+<p>前者， 需要你为每一个页面加载建立一个headless浏览器（或者tab），比起直接产出HTML，这样会花费很多的时间和系统资源。
+    取决于你使用的框架，需要不少精力来决定什么时候页面已经准备好了。 
+    你可以缓存页面，但是如果页面经常改变，那么缓存只能起到非常有限的优化作用，而且会增大复杂度。</p>
+
+<p>后者（创建一个替代性的服务器端站点）对简单站点而言足够了</p>
+
+
+<p>方案2，比如google家的用 !#映射一套URL输出内容
+    比如在页面上输出内容，再用js获取渲染，配合后台，不用hash而使用history.pushState来改变URL，保证每个URL访问的时候页面输出对应的内容神马的。</p>
+
+<p>方案3，facebook的quickling <a href="http://velocity.oreilly.com.cn/2010/index.php?func=session&name=Facebook%E7%BD%91%E7%AB%99%E7%9A%84Ajax%E5%8C%96%E3%80%81%E7%BC%93%E5%AD%98%E5%92%8C%E6%B5%81%E6%B0%B4%E7%BA%BF">
+        点我</a>。<span style="display: none">quickling 主要是减少了 TTI 以及冗余数据的传输，是蜕化版的 PJAX</span></p>
+
+</div>
+<div class="col-md-3" role="complementary">
+
+</div>
+</div>
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="../../assets/highlight/shCore.js"></script>
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="//files.cnblogs.com/files/rubylouvre/avalon.shim.js"></script>
+</body>
+</html>
+
