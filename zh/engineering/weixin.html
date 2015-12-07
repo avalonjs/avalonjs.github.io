@@ -1,11 +1,18 @@
 <h2>与腾讯微信的整合</h2>
 <p>DOMReady原来是等于页面节点建完之后就触发，现在还需要等到微信SDK加载完毕才可以用，它提供了一个wx.ready。</p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
+<xmp class="javascript">
     var oldReady = avalon.ready
     avalon.ready = function(fn){
       wx.ready(function(){
          oldReady(fn)
      })
   }
-</pre>
+</xmp>
+<p>与微信脚本混用,请确保 其sdk放在avalon的前面</p>
+<xmp class="html">
+    <script src='http://res.wx.qq.com/open/js/jweixin-1.0.0.js'></script>
+    <script src='avalon.js'></script>
+    <script src='main.js'></script><!--main.js为业务代码-->
+</xmp>
+
 https://github.com/RubyLouvre/avalon/issues/845#issuecomment-102819858
