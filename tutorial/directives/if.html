@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="avalonjs - 迷你简单易用的前端MVVM框架，让你的网站更快更炫更好用">
+        <meta name="keywords" content="MVVM, CSS, JavaScript, framework, avalon, web development">
+        <meta name="author" content="RubyLouvre,司徒正美">
+
+
+        <title>avalon中文文档</title>
+        <script src="//files.cnblogs.com/files/rubylouvre/avalon.shim.js"></script>
+
+        <!-- Bootstrap core CSS -->
+        <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="../../assets/css/patch.css" rel="stylesheet">
+
+        <!-- Documentation extras -->
+
+        <link href="../../assets/css/docs.min.css" rel="stylesheet">
+        <style>
+            body,html{
+               overflow-y: hidden;
+            }
+        </style>
+        <!--[if lt IE 9]><script src="../assets/js/ie8-responsive-file-warning.js"></script>
+        <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+        <![endif]-->
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="icon" href="/favicon.ico">
+
+    </head>
+    <body>
+
+
+
+
+        <div class="container bs-docs-container">
+
+            <div class="row">
+                <div class="col-md-9" role="main">
+
+<h2>插入移除处理(ms-if)</h2>
+<p>ms-if与ms-each,ms-with,ms-repeat归类为流程绑定，如果表达式为真值那么就将当前元素输出页面，不是就将它移离原位置。
+    它的效果与上一章节的ms-visible效果看起来相似的，
+    但它会影响到:empty伪类，并能更节约性能。ms-if还有一个分支，叫ms-if-loop，它是配合ms-repeat绑定使用，见本文末尾。</p>
+
+<p>我们可以通过以下例子比较一下两者：</p>
+
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE HTML&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;title&gt;ms-if&lt;/title&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        var vmodel = avalon.define({
+            $id: "test",
+            object: {}
+        })
+
+        setTimeout(function() {
+            vmodel.object = {
+                id: "132",
+                message: "显示！！"
+            }
+        }, 3000)
+
+        setTimeout(function() {
+            vmodel.object = {}
+        }, 5000)
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;div ms-controller="test"&gt;
+        这是比较输出结果:{{object.id != null}}
+        &lt;div ms-visible="object.id != null"&gt;
+            这是visible的:
+            &lt;span&gt;{{object.message}}&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div ms-if="object.id != null"&gt;
+            这是if的:
+            &lt;span&gt;{{object.message}}&lt;/span&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+
+<p><img src="../../assets/css/directives/if/1409282401857-if.gif" /></p>
+
+<p>ms-if的实现比ms-visible复杂多了，并且不同时期的实现方式也不一样。在1.36之前，如果表达式为false，它就会立即停止扫描
+    （包括此元素其他绑定属性或它下面的子节点），将它放到一个叫ifSanctuary的DIV元素中，此元素是游离于DOM树之外的。
+    为了能在重新插入DOM时找到正确的位置，avalon还得创建一个注释节点做路标。当表达式再次变为true时，就会将原元素替换掉注释节点。
+    1.36后，avalon会在head标签内创建一个自定义的avalon标签，将ms-if要移除的元素放到它里面去。</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>//1.3.8的源码
+bindingHandlers["if"] =
+    bindingHandlers.data =
+    bindingHandlers.text =
+    bindingHandlers.html =
+    function(data, vmodels) {
+        parseExprProxy(data.value, vmodels, data)
+    }
+
+bindingExecutors["if"] = function(val, elem, data) {
+    if (val) { //插回DOM树
+        if (elem.nodeType === 8) {
+            elem.parentNode.replaceChild(data.template, elem)
+            elem = data.element = data.template //这时可能为null
+        }
+        if (elem.getAttribute(data.name)) {
+            elem.removeAttribute(data.name)
+            scanAttr(elem, data.vmodels)
+        }
+        data.rollback = null
+    } else { //移出DOM树，并用注释节点占据原位置
+        if (elem.nodeType === 1) {
+            var node = data.element = DOC.createComment("ms-if")
+            elem.parentNode.replaceChild(node, elem)
+            data.template = elem //元素节点
+            ifGroup.appendChild(elem)
+            data.rollback = function() {
+                if (elem.parentNode === ifGroup) {
+                    ifGroup.removeChild(elem)
+                }
+            }
+        }
+    }
+}</pre></div>
+
+<p>由于ms-if拥有能够中止扫描的特性，我们可以配合ms-include实现延迟加载与扫描，大大提高页面的性能。</p>
+<p>最后，我们还是用切换卡例子结束本章吧。</p>
+
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;title&gt;TODO supply a title&lt;/title&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width"&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        var model = avalon.define({
+            $id: "test",
+            currentIndex: 0,
+            toggle: function(index) {
+                model.currentIndex = index
+            }
+        })
+    &lt;/script&gt;
+    &lt;style&gt;
+        button {
+            width: 150px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+        }
+        
+        .ms-tabs {
+            border: 1px solid violet;
+            width: 430px;
+            padding: 5px;
+            height: 200px;
+        }
+    &lt;/style&gt;
+
+&lt;/head&gt;
+
+&lt;body ms-controller="test"&gt;
+    &lt;button ms-click="toggle(0)"&gt;触发器1&lt;/button&gt;
+    &lt;button ms-click="toggle(1)"&gt;触发器2&lt;/button&gt;
+    &lt;button ms-click="toggle(2)"&gt;触发器3&lt;/button&gt;
+    &lt;div class="ms-tabs" ms-if="currentIndex === 0"&gt;切换卡1
+        &lt;br/&gt;其他内容&lt;/div&gt;
+    &lt;div class="ms-tabs" ms-if="currentIndex === 1"&gt;切换卡2
+        &lt;br/&gt;及司徒正美&lt;/div&gt;
+    &lt;div class="ms-tabs" ms-if="currentIndex === 2"&gt;切换卡3
+        &lt;br/&gt;最后一个了&lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+
+<p><img src="../../assets/css/directives/if/1409283405578-if2.gif" /></p>
+
+<div class="bs-callout bs-callout-info" >
+    <p>在一个元素中, ms-if与ms-repeat是可以同时存在于某一元素, 但ms-if优先级比ms-repeat高;
+        如果ms-if的表达式为false,那么就会导致所有东西循环不出来.当我们只想循环出数组或对象的某一部分符合元素的项时,
+
+        我们需要一个优先及比ms-if,ms-repeat都低的特殊绑定,这时<code>ms-if-loop</code>就被发明出来了.它要来它必须与ms-repeat位于同一元素上.
+
+        用法与ms-if相同.
+    </p>
+</div>
+
+
+</div>
+<div class="col-md-3" role="complementary">
+
+</div>
+</div>
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="../../assets/highlight/shCore.js"></script>
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>
+

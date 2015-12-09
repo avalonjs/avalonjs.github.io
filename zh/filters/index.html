@@ -1,0 +1,32 @@
+<p>avalon从angular中抄来管道符风格的过滤器，但有点不一样。 它只能用于表示数据填空的ms-text, ms-html, {{prop}}, {{prop|html}}。如果不存在参数，
+    要求直接跟|filter，如果存在参传，则要用小括号括起，参数要有逗号，这与一般的函数调用差不多，如|truncate(20,"……")</p>
+<p>注意,过滤器只能集中放在最后面,不能夹在中间,如下面是错误的</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+{ { aaa ? (aaa | date('yyyy MM dd')) : ""}}
+</pre>
+<p>我们看一下自带过滤器是怎么定义的，就明白怎么自定义过滤器了:</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+var filters = avalon.filters = {
+    uppercase: function(str) { //用法： {{aaa|uppercase}}
+        return str.toUpperCase()
+    },
+    lowercase: function(str) {//用法： {{aaa|lowercase}}
+        return str.toLowerCase()
+    },
+    truncate: function(str, length, truncation) {//用法： {{aaa|truncate(20, '***')}}
+        //length，新字符串长度，truncation，新字符串的结尾的字段,返回新字符串
+        length = length || 30
+        truncation = truncation === void(0) ? "..." : truncation
+        return str.length > length ? str.slice(0, length - truncation.length) + truncation : String(str)
+    },
+    //……略
+    
+  }
+</pre>
+<p>换言之， 我们只要在avalon.filters这个对象添加多一个函数，第一个参数为|之前的表达式得到的值，不能省略，最后要返回一个字符串就行了。</p>
+<p>过滤器中的传参必须是字符串,布尔或数字, 不能是变量或VM中的属性.所有可变动的东西只能出现在|的左边.</p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+avalon.filters.haha =  function(str) { //用法： {{aaa|haha}}
+   return str + "哈哈"
+}
+</pre>

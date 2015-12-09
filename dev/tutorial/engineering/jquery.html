@@ -1,0 +1,96 @@
+<h2>与jQuery的混用</h2>
+<p>方法1, 将jquery及jquery的插件放在前面,然后再引用avalon</p>
+<xmp class="html">
+    <script src='./jquery.js'></script>
+    <script src='./jquery.ui.js'></script>
+    <script src='./jquery.placehoder.js'></script>
+    <script src='avalon.js'></script>
+    <script src='main.js'></script><!--main.js为业务代码-->
+</xmp>
+<p>方法2，将avalon与jquery放在同一目录下，然后：</p>
+<xmp class="html">
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <script src="avalon.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            require.config({
+                paths: {
+                    jquery: "jquery.js",
+                    avalon: "avalon.js"
+                },
+                shim: {
+                    jquery: {
+                        exports: "jQuery"
+                    },
+                    avalon: {
+                        exports: "avalon"
+                    }
+                }
+            })
+            require(["jquery", "avalon"], function($, avalon) {
+                console.log($)
+                console.log(avalon)
+            })
+        </script>
+    </head>
+    <body ms-controller="test">
+        TEST
+    </body>
+</html>
+</xmp>
+<p>方法3，将avalon与jquery与requirejs放在同一目录下</p>
+<p>修改avalon源码 loader: ture  ---> loader: false，然后</p>
+<p>如果换成使用avalon.shim.js，则不用修改avalon源码</p>
+<p>点这里下载&nbsp;<a href="https://github.com/RubyLouvre/avalon/blob/master/min/avalon.shim.js">avalon.shim.js</a></p>
+
+<xmp class="html">
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <script src="require.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            require.config({
+                paths: {
+                    jquery: "jquery.js",
+                    avalon: "avalon.shim.js"
+                },
+                shim: {
+                    jquery: {
+                        exports: "jQuery"
+                    },
+                    avalon: {
+                        exports: "avalon"
+                    }
+                }
+            })
+            require(["jquery", "avalon"], function($, avalon) {
+                console.log($)
+                console.log(avalon)
+            })
+        </script>
+    </head>
+    <body ms-controller="test">
+        TEST
+    </body>
+</html>
+</xmp>
+<p>方法4，使用avalon.shim与jquery</p>
+<xmp class="html">
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+         <script src="jquery.js" type="text/javascript"></script>
+        <script src="avalon.shim.js" type="text/javascript"></script>
+        <script type="text/javascript">
+
+        </script>
+    </head>
+    <body ms-controller="test">
+        TEST
+    </body>
+</html>
+</xmp>

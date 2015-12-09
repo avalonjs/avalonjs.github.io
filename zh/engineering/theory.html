@@ -1,0 +1,40 @@
+
+<p>我们在加载器的define方法下添加一些日志， script的onload或onreadystatechange回调下添加一些日志，同时加载aaa.js, bbb.js模块看看</p>
+<pre class="brush:javascript;gutter:false;">
+//aaa.js
+define(function(){
+    return "complete"
+})
+</pre>
+<br/>
+<pre class="brush:javascript;gutter:false;">
+//bbb.js
+define(function(){
+    return 88
+})
+</pre>
+<p>index.html</p>
+<pre class="brush:javascript;gutter:false;">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;TODO supply a title&lt;/title&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width"&gt;
+        &lt;script src="avalon.js"&gt;  &lt;/script&gt;
+        &lt;script&gt;
+            require(["aaa", "bbb"], function(a, b){
+                avalon.log(a)
+            })
+        
+            &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div&gt;TEXT&lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+
+</pre>
+<p>IE6-9下的加载顺序是非常混乱</p>
+<div><img src="zh/engineering/loader/theory01.png"/></div>
+<p>IE10以上</p>

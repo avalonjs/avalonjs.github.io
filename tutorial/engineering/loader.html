@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="avalonjs - 迷你简单易用的前端MVVM框架，让你的网站更快更炫更好用">
+        <meta name="keywords" content="MVVM, CSS, JavaScript, framework, avalon, web development">
+        <meta name="author" content="RubyLouvre,司徒正美">
+
+
+        <title>avalon中文文档</title>
+        <script src="//files.cnblogs.com/files/rubylouvre/avalon.shim.js"></script>
+
+        <!-- Bootstrap core CSS -->
+        <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="../../assets/css/patch.css" rel="stylesheet">
+
+        <!-- Documentation extras -->
+
+        <link href="../../assets/css/docs.min.css" rel="stylesheet">
+        <style>
+            body,html{
+               overflow-y: hidden;
+            }
+        </style>
+        <!--[if lt IE 9]><script src="../assets/js/ie8-responsive-file-warning.js"></script>
+        <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+        <![endif]-->
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="icon" href="/favicon.ico">
+
+    </head>
+    <body>
+
+
+
+
+        <div class="container bs-docs-container">
+
+            <div class="row">
+                <div class="col-md-9" role="main">
+
+<h2>avalon自带加载器</h2>
+<div ms-include-src="{{userLanguage}}/engineering/loader.menu.html" data-include-replace="true">
+
+</div>
+
+<p><strong>AMD(异步模块定义)是什么？</strong></p>
+<p>
+    JavaScript模块只是遵循SRP(Single Responsibility Principle单一职责原则)的代码段，
+    它暴露了一个公开的API。在现今JavaScript开发中，你可以在模块中封装许多功能，
+    而且在大多数项目中，每个模块都有其自己的文件。这使得JavaScript开发者日子有点难过，
+    因为它们需要持续不断的关注模块之间的依赖性，按照一个特定的顺序加载这些模块，否则运行时将会发生错误。
+</p>
+<p>
+    当你要加载JavaScript模块时，就会使用script标签。为了加载依赖的模块，你就要先加载被依赖的，之后再加载依赖的。
+    使用script标签时，你需要按照此特定顺序安排它们的加载，而且脚本的加载是同步的。
+    可以使用async和defer关键字使得加载异步，但可能因此在加载过程中丢失加载的顺序。
+    另一个选择是将所有的脚本捆绑打包在一起，但在打包后你仍然需要把它们按照正确的顺序排序。
+</p>
+<p>AMD就是这样一种对模块的定义，使模块和它的依赖可以被异步的加载，但又按照正确的顺序。</p>
+<div><img src="zh/engineering/loader/amd.png"/></div>
+<h2><strong>选择加载器</strong></h2>
+<p><strong>内置AMD加载器</strong></p>
+<p>avalon内置了AMD加载器，用于与其原创者requirejs一模一样，但更轻量。它主要涉及以下三个函数:</p>
+<ul>
+    <li>define(id?, deps?, factory)– 一个全局函数，用于定义模块。</li>
+    <li>require(deps, factory)– 一个全局函数，用于加载N个模块，以后将它们作为参数依次传入第二个参数factory中。</li>
+    <li>require.config(settings)-  用于配置加载器的各种行为</li>
+</ul>
+<p>此外， 我们还可以在define.amd对象查看到所有加载过的模块。</p>
+<p><strong>外部AMD加载器</strong></p>
+<P>当然你也可以使用requirejs等外部AMD加载器，此时你应用选用 shim 版本，如 avalon.shim.js，shim 版本没有包含自带的amd加载器。</p>
+<h2>模块ID是什么?</h2>
+<p>require的第一个参数为一个数组，里面就是我们要依赖的模块的ID。模块的ID究竟是一个什么东西呢？通俗来说，就是这个模块的名字，
+    但模块在AMD其实相当于一个独立的JS文件，因此要将名字与文件关联起来，我们就需要做一些手脚。从实现角度来看，加载一个模块，就是加载一个JS文件，
+    就是创建一个script标签，然后给它指定一个src属性，从而发出请求，因此这个模块ID越接近一个URL就容易实现。但URL太长了，像后缀名.js可以砍掉，
+    当前的HTTP请求的协议名，端口，甚至域名都可以砍掉，模块名就无限接近一个<strong>相对路径</strong>！
+</p>
+<p>因此我们可以简单认为模块ID就是一个相对路径，因此它可以以"./", "../"开头，中间可以放N个"/"来标识其目录结构，方便我们最后能找到此JS文件。</p>
+<p>config方法有一个paths配置项， 让我们还可以对这个模块ID进行再重名，让其更短。
+    毕竟有的网站目录结构太深了，砍掉上面那些还是很长，有了paths，我们的模块ID可以用一个单词来代替。在所有主流的框架或库中，
+    如果它们实现了AMD结构，一旦它们依赖jQuery，那么依赖列表中就有"jquery"这个ID进行标识。</p>
+<h2>模块的寻找规则</h2>
+<p>首先要确定baseUrl，如果引入avalon/requirejs的script标签存在data-main属性，那么就使用它作为baseUrl，如js/main， 前面会补上
+    当前的location.protocol， location.hostname与location.port。如果没有data-main属性，就使用当前标签的src去掉文件名与后缀名作为baseUrl。
+    如果main.js里面使用require.config来配置baseUrl，那就使用baseUrl。在配置baseUrl时，我们不需要在前面加上"./"，或在后面放上"/"。
+</p>
+<ul>
+    <li>如果模块ID不以"./", "../"开头，并且不符合/\w+!(\w+)?/的格式(这又叫<b>顶级标识</b>)， 那么它优先在require.config中进行匹配，否则它就会根据baseUrl进行寻找。  </li>
+    <li>如果模块ID以"./"开头(<b>相对标识</b>的一种)，那么它将以其父模块（即其所依赖的模块）所在的目录进行查找； 
+        如果没有父模块，则根据baseUrl进行寻找。  </li>
+    <li>如果模块ID以"../"开头(<b>相对标识</b>的一种)，那么它将以其父模块（即其所依赖的模块）的上级目录进行查找； 
+        如果没有父模块，则根据baseUrl的上级目录寻找。  </li>
+    <li>如果模块ID在paths配置项里配置了，如果它的值是绝对路径，那么就直接用这个没有什么好说的。
+        如果是相对路径，那么先找父模块的路径，没有父模块使用baseUrl。</li>
+    <li>如果模块ID在map配置项里配置了，那么它会在当前父模块的URL加文件名进行替换，前面加上<b>baseUrl</b>，注意不是跟parentUrl
+        <pre class="brush:javascript;gutter:false;toolbar:false">
+requirejs.config({
+    map: {
+        "old/aaa": { //old/aaa.js或old/aaa/目录下的所有模块如果依赖jquery，则使用1.6.4版本
+            'jquery': 'jquery-1.6.4'
+        },
+        'new/aaa': { //new/aaa.js或new/aaa/目录下的所有模块如果依赖jquery，则使用1.7.2版本
+            'jquery': 'jquery-1.7.2'
+        }
+    }
+})
+        </pre>
+        <p>相当于</p>
+        <pre class="brush:javascript;gutter:false;toolbar:false">
+               String(parentUrl + parentName).replace("old/aaa/jquery",function(){
+                        curUrl = baseUrl + "/jquery-1.6.4"
+               })
+               String(parentUrl + parentName).replace("new/aaa/jquery", function(){
+                        curUrl = baseUrl + "/jquery-1.7.2"
+                })
+        </pre>
+
+    </li>
+</ul>
+<p>模块ID也有可能以xxx!yyy的形式存在，xxx为资源插件的名字，为一个JS文件，放在baseUrl目录下。一般情况下，avalon内置了, js!, text!, css!资源插件。
+    比如<strong>aaa</strong>这个模块ID，其实就是<strong>js!aaa</strong>。在明确了对应的资源插件的情况下，我们就不需要写资源对应的扩展名。
+</p>
+<blockquote>
+    <strong>aaa</strong>  =   <strong>js!aaa</strong>  = <strong>js!aaa.js </strong> = <strong> joinPath( baseUrl, aaa.js ) </strong>
+    =  <em>http://xxx/yyy/.aaa.js</em>
+</blockquote>
+<p>当然对于一个非内置的资源插件，它会先加载资源插件再加载JS模块。</p>
+
+
+
+
+
+</div>
+<div class="col-md-3" role="complementary">
+
+</div>
+</div>
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="../../assets/highlight/shCore.js"></script>
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>
+

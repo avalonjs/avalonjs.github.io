@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="../../static/script/avalon.mobile.js"></script>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <style type="text/css">
+            body{margin: 0;padding: 0}
+            div{width: 500px;height: 500px;background-color: #ccc}
+            div.ms-click-active{background-color: red}
+        </style>
+    </head>
+    <body ms-controller='test'>
+        <div ms-on-tap='$tap'></div>
+        <script>
+            avalon.define({
+                $id: "test",
+                $tap: function(e) {
+                    this.innerHTML = e.timeStamp;
+                }
+            });
+        </script>
+    </body>

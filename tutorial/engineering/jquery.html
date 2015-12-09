@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="avalonjs - 迷你简单易用的前端MVVM框架，让你的网站更快更炫更好用">
+        <meta name="keywords" content="MVVM, CSS, JavaScript, framework, avalon, web development">
+        <meta name="author" content="RubyLouvre,司徒正美">
+
+
+        <title>avalon中文文档</title>
+        <script src="//files.cnblogs.com/files/rubylouvre/avalon.shim.js"></script>
+
+        <!-- Bootstrap core CSS -->
+        <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="../../assets/css/patch.css" rel="stylesheet">
+
+        <!-- Documentation extras -->
+
+        <link href="../../assets/css/docs.min.css" rel="stylesheet">
+        <style>
+            body,html{
+               overflow-y: hidden;
+            }
+        </style>
+        <!--[if lt IE 9]><script src="../assets/js/ie8-responsive-file-warning.js"></script>
+        <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+        <![endif]-->
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="icon" href="/favicon.ico">
+
+    </head>
+    <body>
+
+
+
+
+        <div class="container bs-docs-container">
+
+            <div class="row">
+                <div class="col-md-9" role="main">
+
+<h2>与jQuery的混用</h2>
+<p>方法1, 将jquery及jquery的插件放在前面,然后再引用avalon</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;script src='./jquery.js'&gt;
+&lt;/script&gt;
+&lt;script src='./jquery.ui.js'&gt;&lt;/script&gt;
+&lt;script src='./jquery.placehoder.js'&gt;&lt;/script&gt;
+&lt;script src='avalon.js'&gt;&lt;/script&gt;
+&lt;script src='main.js'&gt;&lt;/script&gt;
+&lt;!--main.js为业务代码--&gt;</pre></div>
+<p>方法2，将avalon与jquery放在同一目录下，然后：</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;title&gt;&lt;/title&gt;
+    &lt;script src="avalon.js" type="text/javascript"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+        require.config({
+            paths: {
+                jquery: "jquery.js",
+                avalon: "avalon.js"
+            },
+            shim: {
+                jquery: {
+                    exports: "jQuery"
+                },
+                avalon: {
+                    exports: "avalon"
+                }
+            }
+        })
+        require(["jquery", "avalon"], function($, avalon) {
+            console.log($)
+            console.log(avalon)
+        })
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body ms-controller="test"&gt;
+    TEST
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+<p>方法3，将avalon与jquery与requirejs放在同一目录下</p>
+<p>修改avalon源码 loader: ture  ---> loader: false，然后</p>
+<p>如果换成使用avalon.shim.js，则不用修改avalon源码</p>
+<p>点这里下载&nbsp;<a href="https://github.com/RubyLouvre/avalon/blob/master/min/avalon.shim.js">avalon.shim.js</a></p>
+
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;title&gt;&lt;/title&gt;
+    &lt;script src="require.js" type="text/javascript"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+        require.config({
+            paths: {
+                jquery: "jquery.js",
+                avalon: "avalon.shim.js"
+            },
+            shim: {
+                jquery: {
+                    exports: "jQuery"
+                },
+                avalon: {
+                    exports: "avalon"
+                }
+            }
+        })
+        require(["jquery", "avalon"], function($, avalon) {
+            console.log($)
+            console.log(avalon)
+        })
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body ms-controller="test"&gt;
+    TEST
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+<p>方法4，使用avalon.shim与jquery</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;title&gt;&lt;/title&gt;
+    &lt;script src="jquery.js" type="text/javascript"&gt;&lt;/script&gt;
+    &lt;script src="avalon.shim.js" type="text/javascript"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body ms-controller="test"&gt;
+    TEST
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+
+
+</div>
+<div class="col-md-3" role="complementary">
+
+</div>
+</div>
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="../../assets/highlight/shCore.js"></script>
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>
+

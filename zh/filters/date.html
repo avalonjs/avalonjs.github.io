@@ -1,0 +1,137 @@
+<h2>date</h2>
+<p>对日期进行格式化，date(formats), 目标可能是符合一定格式的字符串，数值，或Date对象。</p>
+<pre ms-skip class="brush:html;gutter:false;toolbar:false">
+&lt;!DOCTYPE html&gt;
+
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;TODO supply a title&lt;/title&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width"&gt;
+        &lt;script src="avalon.js"&gt;&lt;/script&gt;
+        &lt;script&gt;
+            avalon.define({
+                $id: 'testtest',
+                name: "大跃进右",
+                d1: new Date,
+                d2: "2011/07/08",
+                d3: "2011-07-08",
+                d4: "01-01-2000",
+                d5: "03 04,2000",
+                d6: "3 4,2000",
+                d7: 1373021259229,
+                d8: "1373021259229",
+                d9: "2014-12-07T22:50:58+08:00",
+                d10: "\/Date(1373021259229)\/"
+
+            })
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+
+        &lt;div ms-controller="testtest"&gt;
+            &lt;p&gt;生成于{{ d1 | date("yyyy MM dd:HH:mm:ss")}}&lt;/p&gt;
+            &lt;p&gt;生成于{{ d2 | date("yyyy MM dd:HH:mm:ss")}}&lt;/p&gt;
+            &lt;p&gt;生成于{{ d3 | date("yyyy MM dd:HH:mm:ss")}}&lt;/p&gt;
+            &lt;p&gt;生成于{{ d4 | date("yyyy MM dd:HH:mm:ss")}}&lt;/p&gt;
+            &lt;p&gt;生成于{{ d5 | date("yyyy MM dd:HH:mm:ss")}}&lt;/p&gt;
+            &lt;p&gt;生成于{{ d6 | date("yyyy MM dd")}}&lt;/p&gt;
+            &lt;p&gt;生成于{{ d7 | date("yyyy MM dd:HH:mm:ss")}}&lt;/p&gt;
+            &lt;p&gt;生成于{{ d8 | date("yyyy MM dd:HH:mm:ss")}}&lt;/p&gt;
+            &lt;p&gt;生成于{{ d9 | date("yyyy MM dd:HH:mm:ss")}} //这是ISO8601的日期格式&lt;/p&gt;
+            &lt;p&gt;生成于{{ d10| date("yyyy MM dd:HH:mm:ss")}} //这是ASP.NET输出的JSON数据的日期格式&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+
+</pre>
+<p>上面的yyyy, MM, dd其实是一种关键字，用来帮我们格式化日期，详看下表：</p>
+<table class="shim-table">
+    <tr>
+        <td>yyyy</td><td>将当前的年份以4位数输出，如果那一年为300，则补足为0300</td>
+    </tr>
+    <tr>
+        <td>yy</td><td>将当前的年份截取最后两位数输出，如2014变成14， 1999变成99， 2001变成01</td>
+    </tr>
+    <tr>
+        <td>y</td><td>将当前的年份原样输出，如2014变成2014， 399变成399， 1变成1</td>
+    </tr>
+    <tr>
+        <td>MMMM</td><td>在中文中，MMMM与MMM是没有区别，都是"1月"，"2月"……英语则为该月份的单词全拼</td>
+    </tr>
+    <tr>
+        <td>MMM</td><td>在中文中，MMMM与MMM是没有区别，都是"1月"，"2月"……英语则为该月份的单词缩写(前三个字母)</td>
+    </tr>
+    <tr>
+        <td>MM</td><td>将月份以01-12的形式输出(即不到两位数，前面补0)</td>
+    </tr>
+    <tr>
+        <td>M</td><td>将月份以1-12的形式输出</td>
+    </tr>
+    <tr>
+        <td>dd</td><td>以日期以01-31的形式输出(即不到两位数，前面补0)</td>
+    </tr>
+    <tr>
+        <td>d</td><td>以日期以1-31的形式输出</td>
+    </tr>
+    <tr>
+        <td>EEEE</td><td>将当前天的星期几以“星期一”，“星期二”，“星期日”的形式输出，英语则Sunday-Saturday</td>
+    </tr>
+    <tr>
+        <td>EEE</td><td>将当前天的星期几以“周一”，“周二”，“周日”的形式输出，英语则Sun-Sat</td>
+    </tr>
+    <tr>
+        <td>HH</td><td>将当前小时数以00-23的形式输出</td>
+    </tr>
+    <tr>
+        <td>H</td><td>将当前小时数以0-23的形式输出</td>
+    </tr>
+    <tr>
+        <td>hh</td><td>将当前小时数以01-12的形式输出</td>
+    </tr>
+    <tr>
+        <td>h</td><td>将当前小时数以0-12的形式输出</td>
+    </tr>
+    <tr>
+        <td>mm</td><td>将当前分钟数以00-59的形式输出</td>
+    </tr>
+    <tr>
+        <td>m</td><td>将当前分钟数以0-59的形式输出</td>
+    </tr>
+    <tr>
+        <td>ss</td><td>将当前秒数以00-59的形式输出</td>
+    </tr>
+    <tr>
+        <td>s</td><td>将当前秒数以0-59的形式输出</td>
+    </tr>
+    <tr>
+        <td>a</td><td>将当前时间是以“上午”，“下午”的形式输出</td>
+    </tr>
+    <tr>
+        <td>Z</td><td>将当前时间的时区以-1200-+1200的形式输出</td>
+    </tr>
+    <tr>
+        <td>fullDate</td><td>相当于y年M月d日EEEE  2014年12月31日星期三</td>
+    </tr>
+    <tr>
+        <td>longDate</td><td>相当于y年M月d日EEEE  2014年12月31日</td>
+    </tr>
+    <tr>
+        <td>medium</td><td>相当于yyyy-M-d H:mm:ss   2014-12-31 19:02:44</td>
+    </tr>
+    <tr>
+        <td>mediumDate</td><td>相当于yyyy-M-d   2014-12-31</td>
+    </tr>
+    <tr>
+        <td>mediumTime</td><td>相当于H:mm:ss   19:02:44</td>
+    </tr>
+    <tr>
+        <td>short</td><td>相当于yy-M-d ah:mm   14-12-31 下午7:02</td>
+    </tr>
+    <tr>
+        <td>shortDate</td><td>相当于yy-M-d   14-12-31</td>
+    </tr>
+    <tr>
+        <td>shortTime</td><td>相当于ah:mm   下午7:02</td>
+    </tr>
+</table>

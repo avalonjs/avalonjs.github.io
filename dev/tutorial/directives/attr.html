@@ -1,0 +1,170 @@
+
+<h2>属性操作(ms-attr)</h2>
+<p>属性操作是DOM操作很大的一块，它包括类名操作，表单元素的value属性操作，元素固有属性的管理，
+    元素自定义属性的管理，某些元素的一些布尔属性的操作。大多数情况下，元素属性的值是字符串类型，
+    我们称之为字符串属性，但有一些属性的是布尔，也存在是数字类型、节点引用的情况。
+    当前jQuery处理它们就是搞了N个钩子对象，才摆平它们。<a href="https://github.com/RubyLouvre/avalon">avalon</a>为了收拾它们也设置N多绑定，
+    其中类名部分交由<code>ms-class</code>、 <code>ms-hover</code>、
+    <code>ms-active</code>处理，这些其他章节介绍；表单元素的value属性之前也说过，
+    可以用<code>ms-duplex</code>；剩下还有<code>ms-checked</code>、
+    <code>ms-selected</code>、 <code>ms-readonly</code>、
+    <code>ms-disabled</code>、 
+    <code>ms-enabled</code>这五个专门处理表单元素的<b>布尔属性绑定</b>，
+    <code>ms-value</code>、<code>ms-title</code>、 
+    <code>ms-alt</code>、<code>ms-href</code>、
+    <code>ms-src</code>这五个<b>字符串属性绑定</b>，
+    及<code>ms-attr-*</code>这个<span>万能属性绑定</span>。
+    不过， 随着如何判定固有属性的技术的发掘，它们最终都是通过ms-attr-*实现。</p>
+<p><img src="../../assets/css/directives/attr/attr0.jpg"  />
+<p>从宏观来说，ms-attr-*可以代替上面所有指令，但根据专人专办的原则，使用对应的指令其效果更佳，并且还有其他更好的服务。</p>
+<table class="table table-bordered">
+    <tr>
+        <td>ms-class-*="expr"</td> <td>ms-attr-class="expr"</td> <td>建议使用前者(前者更强大)</td>
+    </tr>
+    <tr>
+        <td>ms-value="expr"</td> <td>ms-attr-value="expr"</td> <td>建议使用后者（前者已经废弃），但更建议使用ms-duplex</td>
+    </tr>
+    <tr>
+        <td>ms-alt="expr"</td> <td>ms-attr-alt="expr"</td> <td>建议使用后者（前者已经废弃）</td>
+    </tr>
+    <tr><td>ms-title="expr"</td> <td>ms-attr-title="expr"</td> <td>建议使用后者（前者已经废弃）</td></tr>
+    <tr><td>ms-src="expr"</td> <td>ms-attr-src="expr"</td> <td>建议使用后者</td></tr>
+    <tr><td>ms-href="expr"</td> <td>ms-attr-href="expr"</td> <td>建议使用后者</td></tr>
+    <tr><td>ms-selected="expr"</td> <td>ms-attr-selected="expr"</td> <td>建议使用后者（前者已经废弃）</td></tr>
+    <tr><td>ms-checked="expr"</td> <td>ms-attr-checked="expr"</td> <td>建议使用后者（前者已经废弃）</td></tr>
+    <tr><td>ms-readonly="expr"</td> <td>ms-attr-readonly="expr"</td> <td>建议使用后者（前者已经废弃）</td></tr>
+    <tr><td>ms-disabled="expr"</td> <td>ms-attr-disabled="expr"</td> <td>建议使用后者（前者已经废弃）</td></tr>
+    <tr><td>ms-enabled="expr"</td> <td>ms-attr-disabled="!(expr)"</td> <td>建议使用后者（前者已经废弃）</td> </tr>
+</table>
+<div class="bs-callout bs-callout-warning" >
+    <p>注意， 这个绑定只处理属性，不处理样式，如ms-attr-style="background:red"</p>
+</div>
+
+
+<xmp class="html">
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>ms-attr-*</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width">
+            <script src="avalon.js"></script>
+
+            <script>
+                var vm = avalon.define({
+                    $id: "test",
+                    aaa: true,
+                    click: function () {
+                        vm.aaa = !vm.aaa
+                    },
+                    bbb: "@@@",
+                    ccc: "&&&",
+                    active: "active"
+                })
+
+            </script>
+            <style>
+                .active {
+                    background: goldenrod;
+                }
+                .readonly{
+                    border:1px solid blueviolet;
+                }
+            </style>
+
+        </head>
+        <body>
+            <form method="get" action="aaa.html" ms-controller="test">
+                <input ms-enabled="aaa" name="a1" value="12345"/>
+                <input ms-disabled="aaa" name="a2" value="67890"/>
+                <input ms-readonly="aaa" name="a3" ms-class="readonly: aaa" value="readonly" />
+
+                <input ms-checked="aaa" type="checkbox" value="checkbox" name="a4"/>
+                <select name="a5">
+                    <option>222</option>
+                    <option ms-selected="aaa">555</option>
+                </select>
+                <p>
+                    <input ms-attr-value="其他内容  {{ccc}}" name="a6" value="改"/>
+                    <input ms-attr-value="'其他内容 '+ccc" name="a7" value="改" />
+                    <input ms-value="其他内容  {{ccc}}" name="a8" value="改"/>
+                </p>
+                <button type="button" ms-click="click" ms-attr-class="active">
+                    点我
+                </button>
+                <input type="submit" value="提交" />
+                <svg width="100" height="100">
+                <circle ms-attr-cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" />
+                </svg>
+            </form>
+        </body>
+    </html>
+</xmp>
+<p><img src="../../assets/css/directives/attr/attr2.gif"  />
+<p ms-skip>avalon1.37的属性绑定大屠杀中，所有布尔属性绑定被砍掉(ms-disabled, ms-enabled, ms-selected, ms-checked, ms-readonly), 
+    ms-value, ms-title, ms-alt也被废弃掉，它们需要用ms-attr-*代替。
+
+    因此现在只剩下ms-attr, ms-src, ms-href这三个处理字符串的属性绑定，外加上ms-css, ms-include， 
+    这五个东西都在属性值里面使用{{}}插值表达式。</p>
+
+<xmp class="html">
+    <!DOCTYPE html>
+    <html lang="zh-cn">
+        <head>
+            <meta charset="utf-8">
+            <script src="avalon.js"></script>
+            <script>
+                avalon.define({
+                    $id: "test2",
+                    a: 1111111,
+                    b: 2222222
+                });
+            </script>
+        </head>
+        <body  ms-controller="test2">
+
+            <input ms-attr-value="{id: {{a}}, name: {{b}}}"
+
+        </body>
+    </html>
+</xmp>
+
+<p><img src="../../assets/css/directives/attr/1414746091609-ggggg.jpg" />
+<div class="panel panel-success">
+    <div class="panel-heading">小知识</div>
+    <div class="panel-body">
+        <p>在IE下，需要对属性进行区分，如果是<strong>固有属性</strong>使用elem[name] =
+            value赋值；是<strong>自定义属性</strong>，则直接使用elem.setAttribute(name,
+            value)；标准浏览器没有这么麻烦，全部使用elem.setAttribute(name,
+            value)，比如elem.setAttribute("value", "xxx")会自动同步到elee.value = "xxx"。</p>
+        <xmp class="javascript">
+
+            if (boolMap[attrName]) {
+            var bool = boolMap[attrName]
+            if (typeof elem[bool] === "boolean") {
+            // IE6-11不支持动态设置fieldset的disabled属性，IE11下样式是生效了，
+            // 但无法阻止用户对其底下的input元素进行设值……
+            return elem[bool] = !!val
+            }
+            }
+            var toRemove = (val === false) || (val === null) || (val === void 0)
+            if (!W3C && propMap[attrName]) { //旧式IE下需要进行名字映射
+            attrName = propMap[attrName]
+            }
+            if (toRemove) {
+            return elem.removeAttribute(attrName)
+            }
+            //SVG只能使用setAttribute(xxx, yyy), VML只能使用elem.xxx = yyy ,HTML的固有属性必须elem.xxx = yyy
+            var isInnate = rsvg.test(elem) ? false : (DOC.namespaces && isVML(elem)) ? true : attrName in elem.cloneNode(false)
+            if (isInnate) {
+            elem[attrName] = val
+            } else {
+            elem.setAttribute(attrName, val)
+            }
+        </xmp>
+        <p>有关如何判定自定义属性或固有属性，及其详细推导过程，可以看<a href="http://www.cnblogs.com/rubylouvre/p/3658441.html">我的书《javascript框架设计》</a>的第十章。</p>
+    </div>
+</div>
+
+
+

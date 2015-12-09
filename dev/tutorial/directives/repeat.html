@@ -1,0 +1,518 @@
+<h2>循环绑定(ms-repeat, ms-each, ms-with)</h2>
+<p>avalon最早期从knockout那里引入ms-each用于循环数组， ms-with用于循环对象，
+    它们都是以当前元素的innerHTML作为模板， 生成一整片HTML。</p>
+<p>后来avalon又从angular那里引入ms-repeat，它们自行根据对象的内部，内部执行ms-each或ms-with的逻辑，
+    不过ms-repeat是以当前元素的outerHTML作为模板，生成一整片HTML。
+</p>
+<p>ms-repeat, ms-each, ms-with在循环过程中会生成一个个代理VM对象，这些VM代理允许我们使用一些我们没有定义的属性或方法。</p>
+<table class="table table-bordered">
+    <tr>
+        <th>名字</th>  <th>类型</th><th>说明</th>
+    </tr>
+    <tr>
+        <td>el</td><td>任何类型</td><td>ms-repeat-*, ms-each-*这个*所代表的全小写单词，不存在默认为el，引用着当前循环的元素。</td>
+    </tr>
+    <tr>
+        <td>$index</td><td>Number</td><td>ms-repeat, ms-each， 当前循环元素对应的索引值。</td>
+    </tr>
+    <tr>
+        <td>$first</td><td>Boolean</td><td>ms-repeat, ms-each， 当前循环的元素是否为数组的第一个元素。</td>
+    </tr>
+    <tr>
+        <td>$last</td><td>Boolean</td><td>ms-repeat, ms-each， 当前循环的元素是否为数组的最后一个元素。</td>
+    </tr>
+    <tr>
+        <td>$remove</td><td>Function</td><td>ms-repeat, ms-each， 用于从数组中删除当前循环。</td>
+    </tr>
+    <tr>
+        <td>$key</td><td>String</td><td>ms-repeat, ms-with 当前循环中的某一个键名，此为一个不可监控的属性。</td>
+    </tr>
+    <tr>
+        <td>$val</td><td>任何类型</td><td>ms-repeat, ms-with 当前循环中的某一个键值。</td>
+    </tr>
+</table>
+<xmp class="javascript">
+    for(var i = 0, n = array.length; i < n; i++){  //----> ms-each-el=array
+    var el = array[i] // $index --> i
+    for(var j = 0, k = el.length; j < k; j++){  //---> ms-each-elem=el
+    var elem = el[j] // elem.$outer --->  el
+    }
+    }
+</xmp>
+<p>我们先解说ms-with或ms-repeat的目标为对象的情况，这个比较简单。avalon.define会将一个对象转换为VM，当这个对象的一个属性也为对象时，
+    avalon就会递归地将此属性也转换为VM，俗值子VM。这些子VM就是ms-with, ms-repeat的目标对象。并且，这些子VM的所有键值对，会转换为一个个withProxy对象，
+　　它们都拥有$key, $val, $outer属性与方法。如果我们想更新一个键值对，对不起，不能单个转换，需要将整个子VM重新赋以一个新的对象。
+</p>
+<xmp class="html">
+    <!DOCTYPE HTML>
+    <html>
+        <head>
+            <title>ms-repeat</title>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            <script src="avalon.js" ></script>
+            <script >
+                var model = avalon.define({
+                    $id: "test",
+                    object: {
+                        a: 1,
+                        b: 1,
+                        c: 1,
+                        d: 1
+                    },
+                    text: "初始状态"
+                })
+                setTimeout(function () {
+                    model.text = "修改"
+                    model.object = {
+                        a: 2,
+                        b: 2,
+                        c: 2,
+                        d: 2
+                    }
+                }, 1000)
+                setTimeout(function () {
+                    model.text = "移除"
+                    model.object = {
+                        a: 3,
+                        b: 3
+                    }
+                }, 2000)
+                setTimeout(function () {
+                    model.text = "添加"
+                    model.object = {
+                        a: 3,
+                        b: 3,
+                        f: 4,
+                        g: 4
+                    }
+                }, 3000)
+                setTimeout(function () {
+                    model.text = "排序"
+                    model.object = {
+                        g: 4,
+                        f: 4,
+                        b: 3,
+                        a: 3
+                    }
+                }, 4000)
+            </script>
+
+        </head>
+        <body ms-controller="test" >
+            <p>演示对象循环的对象被整个替换掉的效果</p>
+            <p>{{text}}实验</p>
+            <ul>
+                <li ms-repeat="object">{{$key}}:<strong>{{$val}}</strong>(通过ms-repeat实现)</li>
+            </ul>
+            <ol ms-with="object">
+                <li>{{$key}}:<strong>{{$val}}</strong>(通过ms-with实现)</li>
+            </ol>
+        </body>
+    </html>
+
+</xmp>
+<p><img src="../../assets/css/directives/repeat/repeat1.gif"  /></p>
+<p>接下来我们看ms-repeat, ms-each是如何循环一个数组的。</p>
+<xmp class="html">
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>TODO supply a title</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width">
+            <script src="avalon.js" ></script>
+            <script>
+                avalon.define({
+                    $id: "test",
+                    array: ["葡萄", "椰子", "火龙果", "橙子"]
+                })
+            </script>
+        </head>
+        <body ms-controller="test">
+            <ul>
+                <li ms-repeat="array" ms-click="$remove">{{el}}、{{$index}}、{{$first}}、{{$last}}</li>
+            </ul>
+            <ul ms-each="array">
+                <li ms-click="$remove">{{el}}、{{$index}}、{{$first}}、{{$last}}</li>
+            </ul>
+        </body>
+    </html>
+</xmp>
+<p><img src="../../assets/css/directives/repeat/repeat2.gif"  /></p>
+<p>上面是一个简单的数组（指数组元素都是字符串，布尔，数字这样简单类型），我们再来显示用一个对象数组实现一个切换卡效果吧。</p>
+<xmp class="html">
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>TODO supply a title</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width">
+            <script src="avalon.js"></script>
+            <style>
+                .panel{
+                    width:80%;
+                    height: 100px;
+                    border:1px solid #ccc;
+                }
+            </style>
+            <script>
+                var vm = avalon.define({
+                    $id: "tabs",
+                    array: [{text: "111111111111"}, {text: "2222222222"}, {text: "3333333333"}, {text: "44444444444"}],
+                    toggle: function (i) {
+                        vm.currentIndex = i
+                    },
+                    currentIndex: 0
+                })
+            </script>
+        </head>
+        <body ms-controller="tabs">
+            <button ms-repeat="array" ms-click="toggle($index)" type="button">{{$index}}</button>
+            <div ms-repeat="array" ms-if-loop="$index === currentIndex" class="panel">
+                {{el.text}}
+            </div>
+        </body>
+    </html>
+</xmp>
+<style>
+    .panel{
+        width:80%;
+        height: 100px;
+        border:1px solid #ccc;
+    }
+</style>
+<script>
+    new function () {
+        var vm = avalon.define({
+            $id: "repeattabs",
+            array: [{text: "111111111111"}, {text: "2222222222"}, {text: "3333333333"}, {text: "44444444444"}],
+            toggle: function (i) {
+                vm.currentIndex = i
+            },
+            currentIndex: 0
+        })
+    }
+</script>
+
+<div ms-controller="repeattabs">
+    <button ms-repeat="array" ms-click="toggle($index)" type="button">{{$index}}</button>
+    <div ms-repeat="array" ms-if-loop="$index === currentIndex" class="panel">
+        {{el.text}}
+    </div>
+</div>
+<xmp class="html">
+    <!DOCTYPE HTML>
+    <html>
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <script src="avalon.js" ></script>
+            <script>
+    new function () {
+        if (!Date.now) {//fix 旧式IE
+            Date.now = function () {
+                return new Date - 0;
+            }
+        }
+        var model = avalon.define({
+            $id: "repeatgrid",
+            selected: "name",
+            options: ["name", "size", "date"],
+            trend: 1,
+            data: [
+                {name: "aaa", size: 213, date: Date.now() + 20},
+                {name: "bbb", size: 4576, date: Date.now() - 4},
+                {name: "ccc", size: 563, date: Date.now() - 7},
+                {name: "eee", size: 3713, date: Date.now() + 9},
+                {name: "555", size: 389, date: Date.now() - 20}
+            ]
+        })
+        model.$watch("selected", function (v) {
+            var t = parseFloat(model.trend)
+            model.data.sort(function (a, b) {
+                if (v === "name") {
+                    return t * a[v].toLocaleString(b[v])
+                } else {
+                    var ret = a[v] > b[v] ? 1 : -1
+                    return t * ret
+                }
+            })
+        })
+        model.$watch("trend", function (t) {
+            var v = model.selected, t = parseFloat(t)
+            model.data.sort(function (a, b) {
+                var ret = a[v] > b[v] ? 1 : -1
+                return t * ret
+            })
+        })
+    }
+            </script>
+        </head>
+        <body ms-controller="repeatgrid">
+            <p>
+                <select ms-duplex="selected">
+                    <option  ms-repeat="options">{{el}}</option>
+                </select>
+                <select ms-duplex="trend">
+                    <option value="1">up</option>
+                    <option value="-1">down</option>
+                </select>
+            </p>
+            <table width="500px" border="1">
+                <tbody >
+                    <tr ms-repeat="data">
+                        <td>{{el.name}}</td> <td>{{el.size}}</td> <td>{{el.date}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </body>
+    </html>
+
+</xmp>
+
+<script>
+    new function () {
+        if (!Date.now) {//fix 旧式IE
+            Date.now = function () {
+                return new Date - 0;
+            }
+        }
+        var model = avalon.define({
+            $id: "repeatgrid",
+            selected: "name",
+            options: ["name", "size", "date"],
+            trend: 1,
+            data: [
+                {name: "aaa", size: 213, date: Date.now() + 20},
+                {name: "bbb", size: 4576, date: Date.now() - 4},
+                {name: "ccc", size: 563, date: Date.now() - 7},
+                {name: "eee", size: 3713, date: Date.now() + 9},
+                {name: "555", size: 389, date: Date.now() - 20}
+            ]
+        })
+        model.$watch("selected", function (v) {
+            var t = parseFloat(model.trend)
+            model.data.sort(function (a, b) {
+                if (v === "name") {
+                    return t * a[v].toLocaleString(b[v])
+                } else {
+                    var ret = a[v] > b[v] ? 1 : -1
+                    return t * ret
+                }
+            })
+        })
+        model.$watch("trend", function (t) {
+            var v = model.selected, t = parseFloat(t)
+            model.data.sort(function (a, b) {
+                var ret = a[v] > b[v] ? 1 : -1
+                return t * ret
+            })
+        })
+    }
+</script>
+<div ms-controller="repeatgrid">
+    <p>
+        <select ms-duplex="selected">
+            <option  ms-repeat="options">{{el}}</option>
+        </select>
+        <select ms-duplex="trend">
+            <option value="1">up</option>
+            <option value="-1">down</option>
+        </select>
+    </p>
+    <table class="table table-bordered">
+        <tbody>
+            <tr ms-repeat="data">
+                <td>{{el.name}}</td> <td>{{el.size}}</td> <td>{{el.date}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>监控数组的更新，分两种情况。一种是简单数据类型，它需要用set方法进行更新，另一种是对象类型，直接vm[1].xxx = yyy， vm[1]是你要更新的对象，xxx为此对象已经存在的属性。</p>
+<p>如果大家在想内层循环访问外层循环的变量，可以通过$outer实现，比如$outer.$index, $outer.el, $outer.$outer.$index……</p>
+<xmp class="html">
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>TODO supply a title</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width">
+            <script src="avalon.js"></script>
+            <script>
+    avalon.define({
+        $id: "test",
+        array: [[1, 2, 3, 4], ["a", "b", "c", "d"], [11, 22, 33, 44]]
+    })
+            </script>
+        </head>
+        <body ms-controller="test" >
+            <table border="1" width="800">
+                <tr ms-repeat="array">
+                    <td  ms-repeat-elem="el">{{$outer.$index}}.{{$index}}.{{elem}}</td>
+                </tr>
+            </table>
+        </body>
+    </html>
+</xmp>
+<script>
+    avalon.define({
+        $id: "repeatouter",
+        array: [[1, 2, 3, 4], ["a", "b", "c", "d"], [11, 22, 33, 44]]
+    })
+</script>
+
+<div ms-controller="repeatouter" >
+    <table class="table table-bordered">
+        <tr ms-repeat="array">
+            <td  ms-repeat-elem="el">{{$outer.$index}}.{{$index}}.{{elem}}</td>
+        </tr>
+    </table>
+</div>
+<div class="bs-callout bs-callout-info" >
+    <p>此外，我们还可以通过<code>data-repeat-rendered, data-each-rendered, data-with-rendered</code>
+        来指定这些元素都插入DOM被渲染了后执行的回调，
+        this指向元素节点，有一个参数表示为当前的操作，是add、 del、 move、 index。</p>
+</div>
+
+
+<p>上面我们说了这么有关数组的东西，我们再来看它是如何操作哈希的。
+    对于哈希，ms-repeat内部只会产生$key、 $val、 $outer三个变量，不存在$index什么的。$key就是属性名，$val就是属性值，
+    $outer与之前的讲解相同。如果你想在对象循环时使用$index，可以这样做：</p>
+
+<xmp class="html">
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>TODO supply a title</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width">
+            <script src="avalon.js"></script>
+            <script>
+    var index = 0//1.4.*
+    var model = avalon.define({
+        $id: "test",
+        data: {
+            aaa: 1111,
+            bbb: 2222,
+            ccc: 3333,
+            ddd: 4444
+        },
+        getIndex: function () {
+            return index++
+        }
+    })
+            </script>
+        </head>
+        <body ms-controller="test">
+            <ul>
+                <li ms-repeat="data" >{{getIndex()}}、{{$key}}--{{$val}}</li>
+            </ul>
+        </body>
+    </html>
+</xmp>
+
+<p><img src="../../assets/css/directives/repeat/1409654405940-repeat8.jpg" /></p>
+
+<p>如果我们想控制对象属性的输出顺序，或让某些元素不输出来，那么我们可以使用<code>data-with-sorted</code>回调。
+    它用ms-repeat、ms-with绑定，赶对象渲染之前触发，要求输出一个字符串数组，对象的键值对会根据它依次输出；
+    框架默认会输入原对象的所有键名构成的数组作为参数。</p>
+
+<p>我们改一下上面的例子：</p>
+
+<xmp class="html">
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>TODO supply a title</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width">
+            <script src="avalon.js"></script>
+            <script>
+    var index = 0
+    var model = avalon.define({
+        $id: "test",
+        data: {
+            aaa: 1111,
+            bbb: 2222,
+            ccc: 3333,
+            ddd: 4444
+        },
+        keys: function (a) {
+            console.log(a)
+            console.log(this)
+            return  ["ccc", "ddd", "aaa"]
+        },
+        getIndex: function () {
+            return index++
+        }
+    })
+            </script>
+        </head>
+        <body ms-controller="test">
+            <ul>
+                <li ms-repeat="data" data-with-sorted="keys" >{{getIndex()}}、{{$key}}--{{$val}}</li>
+            </ul>
+        </body>
+    </html>
+</xmp>
+
+<p><img src="../../assets/css/directives/repeat/1409654809239-repeat9.jpg" ></p>
+
+<h4>在删除本地数组的元素的同时也远程同步删除后台数组的元素</h4>
+<p>方法1</p>
+<xmp class="html">
+    <ul>
+        <li ms-repeat="array">
+            内容
+            <button type="button"
+                    ms-click="removeRemote($index, $remove)">x</button>
+        </li>
+    </ul>
+</xmp>
+<br/>
+<xmp class="javascript">
+    avalon.define({
+    $id: "test",
+    array: [1,2,3,4],
+    removeRemote: function($index, $remove){
+    $.ajax({
+    url: url,
+    data: { offset: $index, size: 1},
+    success: function(){
+    $remove()
+    }
+    })
+    }
+    })
+</xmp>
+
+<p>方法2</p>
+
+<xmp class="html">
+    <ul>
+        <li ms-repeat="array" data-repeat-rendered="handle">
+            内容
+            <button type="button" ms-click="$remove">x</button>
+        </li>
+    </ul>
+</xmp>
+<br/>
+<xmp class="javascript">
+    avalon.define({
+    $id: "test",
+    array: [1,2,3,4],
+    handle: function(action, offset, length){
+    switch(action){
+    case "del":
+    $.ajax({
+    url: url,
+    data: { offset: $index, size: 1},
+    success: callback
+    })
+    break;
+    //....
+
+    }
+    })
+</xmp>
+

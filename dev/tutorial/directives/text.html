@@ -1,0 +1,125 @@
+<h2 ms-skip>数据填充(ms-text, ms-html, {{prop}}, {{prop|html}})</h2>
+
+
+<p>本章节介绍<a href="https://github.com/RubyLouvre/avalon">avalon</a>最简单的功能，将数据打印到页面上。
+    这是所有后端模板最基本的功能，然后加上each， if， include等语法，实现更精细的制定。
+    <a href="https://github.com/RubyLouvre/avalon">avalon</a>通过绑定属性，其实将整个页面变成一个动态模板(详看<a href="http://www.html-js.com/article/Mini-MVVM-framework-Avalon-meditation-third-dynamic-template">这里</a>)。将数据输出到页面涉及到以下指令。</p>
+
+<ul ms-skip>
+    <li>{{prop}}</li>
+    <li>{{prop|html}}</li>
+    <li>ms-text</li>
+    <li>ms-html</li>
+    <li>ms-value</li>
+    <li>ms-duplex</li>
+</ul>
+
+<p>{{prop}}是最简单实用的指令，什么hello world用它做最适合了。</p>
+
+<xmp class="html">
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <script src="avalon.js"></script>
+            <script>
+avalon.define({
+    $id: "test",
+    word: "Hello Avalon"
+})
+            </script>
+        </head>
+        <body>
+            <div ms-controller="test">
+                <h1>{{word}}!!!!!</h1>
+            </div>
+        </body>
+    </html>
+</xmp>
+
+<p><img src="../../assets/css/directives/text/1409228882210-text4.jpg" /></p>
+
+<p ms-skip>{{prop | html}}其实是加一个<strong>过滤器</strong>，也只有文本节点中的插值表达式可以加各种过滤器实现各种功能。
+    html过滤器就是将此字符串转换为一个文档碎片再插入当前位置。此 外，这个{{prop|html}}，框架还是对它开了小灶，允许它本来就是一个文档碎片或元素节点或NodeList。
+    如果是一个元素节点，将会将它的子节点然后抽出来，放到一个空文档碎片中。如果是一个NodeList，也会将它的所有元素放到一个空文档碎片中。
+    换言之，殊途同归，都以文档碎片进行操作单元。
+
+</p>
+
+<p ms-skip>ms-text与ms-html其实就是{{prop}}、{{prop|html}}的真身，框架内部都是走同一处理函数。不过ms-text、 ms-html作为一个绑定属性，必须附于元素节点之上，因此没有前者那么方便。</p>
+
+<xmp class="html">
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <script src="avalon.js"></script>
+            <script>
+avalon.define("test", function (vm) {
+    vm.text = "<b> 1111  </b>"
+})
+            </script>
+        </head>
+        <body>
+            <div ms-controller="test">
+                <div><em>用于测试是否被移除</em>xxxx{{text}}yyyy</div>
+                <div><em>用于测试是否被移除</em>xxxx{{text}}yyyy</div>
+                <div ms-text="text"><em>用于测试是否被移除</em>xxxx yyyy</div>
+                <div ms-html="text"><em>用于测试是否被移除</em>xxxx yyyy</div>
+            </div>
+        </body>
+    </html>
+</xmp>
+
+<p><img src="../../assets/css/directives/text/1409224270310-text1.jpg" alt="enter image description here" title /></p>
+
+<p ms-skip>此外，我们还可以通过config方法，更改插值表达式的界定符，因为{{}}可能被其他框架的模板所占用。建议界定符的长度大于1，不要设置为&gt;&gt;这样的位操作符。比如在DOMReady之前，我们调用如下语句：</p>
+
+<xmp class="javascript">
+    avalon.config({
+    interpolate: ["&lt;%", "%&gt;"] //  要求openTag 不等于closeTag就能配置成功
+    })
+</xmp>
+
+<p><img src="../../assets/css/directives/text/1409224391382-text2.jpg" alt="enter image description here" title /></p>
+
+<p>像上面那样，由于网速慢把插值表达式暴露出来的问题， 我们可以定义这样一个样式规则进行处理，这有点类于angularjs的ng-cloak指令，在扫描之前起着羞丑布的作用。当扫描过后，框架会去掉绑定属性，及ms-controller、ms-important这两个类名，它们就显示出来了。</p>
+
+<xmp class="css">
+    .ms-controller, .ms-important{visibility:hidden}
+</xmp>
+<div class="bs-callout bs-callout-success" ms-skip >
+    <p>我们还可以首屏使用ms-text、 ms-html代替{{prop}}、 {{prop|html}}。在1.3.8中，
+        它们也支持<strong>过滤器</strong>了，因此它们四个完全可以互换。</p>
+
+</div>
+<p>上述四种指令是用在文本节点上，但数据还能通过表单元素的value值显示出来，于是有了ms-value指令。ms-value为了应对复杂的显示，也支持插值表达式，但里面不能使用过滤器。</p>
+
+
+<xmp class="html">
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <script src="avalon.js"></script>
+            <script>
+avalon.define({
+    $id: "test",
+    text: "<b> 1111  </b>"
+})
+            </script>
+        </head>
+        <body>
+            <div ms-controller="test">
+                <input ms-value="text"/>
+                <textarea ms-value="xxxxxxxx{{text+'!!'}}yyyyyyyy"/></textarea>
+            </div>
+        </body>
+    </html>
+
+</xmp>
+
+<p><img src="../../assets/css/directives/text/1409224769410-text3.jpg" alt="enter image description here" title /></p>
+
+<p>上面的功能，后端模板与前端模板也能做到，但ms-duplex就逆天了。它是avalon实现双向绑定的一个重要绑定。这个在其他章节详述。</p>
+
