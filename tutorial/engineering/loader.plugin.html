@@ -16,11 +16,11 @@
         <!-- Bootstrap core CSS -->
         <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 
-        <link href="../../assets/css/patch.css" rel="stylesheet">
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/patch.css" rel="stylesheet">
 
         <!-- Documentation extras -->
 
-        <link href="../../assets/css/docs.min.css" rel="stylesheet">
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/docs.min.css" rel="stylesheet">
         <style>
             body,html{
                overflow-y: hidden;
@@ -51,9 +51,16 @@
                 <div class="col-md-9" role="main">
 
 <h2>avalon自带加载器</h2>
-<div ms-include-src="{{userLanguage}}/engineering/loader.menu.html" data-include-replace="true">
+<script>
+    avalon.define({
+        $id: "include",
+        path: "loader.menu.html"
+    })
+</script>
+<div ms-controller="include" ms-include-src="path" data-include-replace="true">
 
 </div>
+
 <h2>常用的资源插件</h2>
 <ul>
     <li>js!， avalon已经内置， 用于加载JS文件，通过生成一个script标签进行加载。默认模块ID如果不存在资源插件前缀， 就当成使用了js!资源插件。</li>
@@ -79,10 +86,13 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-<script src="../../assets/highlight/shCore.js"></script>
+<script src="//avalon-doc-bdda3.coding.io/assets/highlight/shCore.js"></script>
 
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="//avalon-doc-bdda3.coding.io/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+<!-- frame size -->
+<script src="http://avalonjs.github.io/assets/js/iframe.js"></script>
 </body>
 </html>
 

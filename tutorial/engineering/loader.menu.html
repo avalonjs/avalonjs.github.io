@@ -16,11 +16,11 @@
         <!-- Bootstrap core CSS -->
         <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 
-        <link href="../../assets/css/patch.css" rel="stylesheet">
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/patch.css" rel="stylesheet">
 
         <!-- Documentation extras -->
 
-        <link href="../../assets/css/docs.min.css" rel="stylesheet">
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/docs.min.css" rel="stylesheet">
         <style>
             body,html{
                overflow-y: hidden;
@@ -84,7 +84,7 @@
             line-height: 1;
         }
         #cssmenu ul {
-           /* background: #ffffff;*/
+            /* background: #ffffff;*/
         }
         #cssmenu > ul > li {
             float: left;
@@ -151,38 +151,40 @@
         }
     </style>
     <script>
-        avalon.define({
+        var vm = avalon.define({
             $id: "loader.menu",
             array: [{
-                    href: "engineering/loader.html",
+                    href: "loader.html",
                     label: "核心概念"
                 },
                 {
-                    href: "engineering/loader.api.html",
+                    href: "loader.api.html",
                     label: "三大API"
                 },
                 {
-                    href: "engineering/loader.config.html",
+                    href: "loader.config.html",
                     label: "配置项"
                 },
                 {
-                    href: "engineering/loader.plugin.html",
+                    href: "loader.plugin.html",
                     label: "资源插件"
                 },
                 {
-                    href: "engineering/loader.rjs.html",
+                    href: "loader.rjs.html",
                     label: "使用rjs打包"
                 }
             ],
-            isActive: function(href) {
-                var loc = location.href.split("#")[1]
-                return loc.slice( - href.length) === href
+            selectIndex: 0,
+            select: function (el, index) {
+                vm.selectIndex = index
+                top.location.hash = "#tutorial/engineering/" + el.href
             }
         })
+
     </script>
     <div id="cssmenu" ms-controller="loader.menu">
         <ul >
-            <li ms-repeat="array" ms-click="changePath" ms-class="active: isActive(el.href)"><a ms-href="#{{userLanguage}}/{{el.href}}">{{el.label}}</a></li>
+            <li ms-repeat="array" ms-class="active: selectIndex === $index "><a ms-click="select(el,$index)" ms-href="#/{{el.href}}">{{el.label}}</a></li>
         </ul>
     </div>
 </div>
@@ -197,10 +199,13 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-<script src="../../assets/highlight/shCore.js"></script>
+<script src="//avalon-doc-bdda3.coding.io/assets/highlight/shCore.js"></script>
 
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="//avalon-doc-bdda3.coding.io/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+<!-- frame size -->
+<script src="http://avalonjs.github.io/assets/js/iframe.js"></script>
 </body>
 </html>
 

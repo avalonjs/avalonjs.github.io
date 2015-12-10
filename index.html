@@ -23,9 +23,11 @@
         <![endif]-->
 
         <!-- Favicons -->
-        <link rel="apple-touch-icon-precomposed" href="favicon2.png">
-        <link rel="shortcut icon" href="favicon2.png">
-        <link href="./assets/css/docs.min.css" rel="stylesheet">
+        <link rel="apple-touch-icon-precomposed" href="//avalon-doc-bdda3.coding.io/favicon2.png">
+        <link rel="shortcut icon" href="//avalon-doc-bdda3.coding.io/favicon2.png">
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/docs.min.css" rel="stylesheet">
+
+
 
         <script>
         </script>
@@ -100,8 +102,6 @@
                 parent.array = []
                 function hashChange() {
                     var hash = location.hash.replace(/^#/, "")
-
-                    $("iframe").height("0")
                     if (!hash || hash == "home.html") {
                         $(".bs-docs-sidebar").hide()
                         $("iframe").prop("src", "home.html")
@@ -111,11 +111,13 @@
                         $("iframe").prop("src", "api.html")
 
                     } else {
+
                         $(".bs-docs-sidebar").show()
                         if (/\.html/.test(hash)) {
                             $("iframe").prop("src", hash)
                         }
                     }
+
                 }
                 $(window).on("hashchange", hashChange)
                 if(location.hash){
@@ -133,17 +135,15 @@
                     var main = $(".col-md-9", idoc)
                     if (main.length) {
                         var left = main.width() + main.offset().left
-//                        $(".bs-docs-sidebar").css("left", left)
+                        $(".bs-docs-sidebar").css("left", left)
                     }
+
                 }
                 setLeft()
                 $(window).on("resize", setLeft)
-            })
 
-            $("iframe").load(function(){
-                this.style.height = this.contentWindow.document.body.scrollHeight+ 'px';
-            })
 
+            })
         </script>
 
         <!-- 以下是 www.bootcss.com 网站所使用的统计代码，如果你使用本页面作为自己的模板，请将下面的统计代码删掉！！！ -->

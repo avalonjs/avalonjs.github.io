@@ -180,9 +180,6 @@
                 });
             </script>
             <style>
-                .jumbotron:after{
-                    display: none;
-                }
                 .logos {
                     width: 980px;
                     margin: 0 auto;
@@ -193,17 +190,13 @@
 
                 .logos li{
                     float: left;
+                    width: 140px;
+                    height: 140px;
                     margin: 10px;
                     text-align:center;
                     font-size:0;
                     background: #fff;
                     border-radius: 10px;
-                }
-                .logos li a{
-                    display: inline-block;
-                    width: 135px;
-                    height: 135px;
-                    line-height: 135px;;
                 }
 
                 .logos li:after,.logos li span{
@@ -228,12 +221,12 @@
             </style>
             <div class="row jumbotron" >
                 <ul class="logos" ms-controller="logos">
-                    <li ms-repeat="logos" >
-                        <a ms-attr-href="el.link" target="_blank" >
-                        <img ms-src="http://7xp089.com1.z0.glb.clouddn.com/logo_{{el.src}}"/>
-                        <!--[if lt IE 8]><span></span><![endif]-->
-                        </a>
-                    </li>
+                    <a ms-href="el.link" target="_blank" ms-repeat="logos">
+                        <li>
+                            <img ms-src="http://avalon-doc-bdda3.coding.io/assets/css/logos/{{el.src}}"/>
+                            <!--[if lt IE 8]><span></span><![endif]-->
+                        </li>
+                    </a>
                 </ul>
 
             </div>
