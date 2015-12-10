@@ -16,11 +16,11 @@
         <!-- Bootstrap core CSS -->
         <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 
-        <link href="//avalon-doc-bdda3.coding.io/assets/css/patch.css" rel="stylesheet">
+        <link href="../../assets/css/patch.css" rel="stylesheet">
 
         <!-- Documentation extras -->
 
-        <link href="//avalon-doc-bdda3.coding.io/assets/css/docs.min.css" rel="stylesheet">
+        <link href="../../assets/css/docs.min.css" rel="stylesheet">
         <style>
             body,html{
                overflow-y: hidden;
@@ -50,31 +50,25 @@
             <div class="row">
                 <div class="col-md-9" role="main">
 
-<h2>avalon自带加载器</h2>
-<script>
-    avalon.define({
-        $id: "include",
-        path: "loader.menu.html"
-    })
-</script>
-<div ms-controller="include" ms-include-src="path" data-include-replace="true">
+<h2>样板工程</h2>
 
-</div>
-
-<h2>常用的资源插件</h2>
+<p>PC端1.5, webpack ＋gulp ＋jquery ＋purecss ＋oniui的avalon偏工程化的项目模板</p>
+<p><a href="https://github.com/wandergis/avalon-webpack-spa">https://github.com/wandergis/avalon-webpack-spa</a></p>
+<p>avalon移动端的手脚架特指一个叫<a href="https://github.com/pinghe/seedfrontend">seedfrontend</a>开源项目，该开源项目展示了：</p>
 <ul>
-    <li>js!， avalon已经内置， 用于加载JS文件，通过生成一个script标签进行加载。默认模块ID如果不存在资源插件前缀， 就当成使用了js!资源插件。</li>
-    <li>css!， avalon已经内置， 用于加载css文件，通过生成一个link标签进行加载。css!xxx 相当于css!xxx.css，因此不用特意写.css扩展名。
-        <br>打包时，我们需要使用<a href="https://github.com/guybedford/require-css">https://github.com/guybedford/require-css</a>的
-            css.js, normalize.js, css-builder.js帮忙处理。
-    </li>
-    <li>text!， avalon已经内置， 用于加载纯文本文件，返回一个字符串，通过AJAX请求实现，因此有跨域限制。text!xxx.htm，不会添加xxx.htm添加扩展名。
-    <br>打包时，我们需要使用<a href="https://github.com/requirejs/text">https://github.com/requirejs/text</a>的
-            text.js帮忙处理。
-    </li>
-    <li>domReady!，1.4之前的版本为ready!， avalon已经内置，这其实不算一个资源插件，仅表示一种时机，当文档就绪时，就可以执行回调。</li>
+    <li>支持cordova、browser应用，即同一套代码可用于桌面浏览器和各类手机应用。</li>
+    <li>使用avalon MVVM框架</li>
+    <li>使用cordova 用于移动端</li>
+    <li>使用requirejs amd模块加载器</li>
+    <li>使用gulp构建系统</li>
+    <li>展示了页面切分和逻辑模块划分（html、css、js），及如何根据实际切换模块。适用团队分工合作</li>
+    <li>页面路由技术，页面转换的有限状态机应用。</li>
+    <li>支持js、coffee脚本</li>
+    <li>支持css、less、sass 文件</li>
+    <li>支持三种应用场景，浏览器，移动app</li>
+    <li>支持生产环境，即可将js合并压缩成单个js文件，优化css文件，优化html文件</li>
+    <li>支持DevOps</li>
 </ul>
-
 
 </div>
 <div class="col-md-3" role="complementary">
@@ -86,10 +80,10 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-<script src="//avalon-doc-bdda3.coding.io/assets/highlight/shCore.js"></script>
+<script src="../../assets/highlight/shCore.js"></script>
 
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="//avalon-doc-bdda3.coding.io/assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
 
 <!-- frame size -->
 <script src="http://avalonjs.github.io/assets/js/iframe.js"></script>

@@ -32,7 +32,7 @@
             line-height: 1;
         }
         #cssmenu ul {
-           /* background: #ffffff;*/
+            /* background: #ffffff;*/
         }
         #cssmenu > ul > li {
             float: left;
@@ -99,38 +99,40 @@
         }
     </style>
     <script>
-        avalon.define({
+        var vm = avalon.define({
             $id: "loader.menu",
             array: [{
-                    href: "engineering/loader.html",
+                    href: "loader.html",
                     label: "核心概念"
                 },
                 {
-                    href: "engineering/loader.api.html",
+                    href: "loader.api.html",
                     label: "三大API"
                 },
                 {
-                    href: "engineering/loader.config.html",
+                    href: "loader.config.html",
                     label: "配置项"
                 },
                 {
-                    href: "engineering/loader.plugin.html",
+                    href: "loader.plugin.html",
                     label: "资源插件"
                 },
                 {
-                    href: "engineering/loader.rjs.html",
+                    href: "loader.rjs.html",
                     label: "使用rjs打包"
                 }
             ],
-            isActive: function(href) {
-                var loc = location.href.split("#")[1]
-                return loc.slice( - href.length) === href
+            selectIndex: 0,
+            select: function (el, index) {
+                vm.selectIndex = index
+                top.location.hash = "#tutorial/engineering/" + el.href
             }
         })
+
     </script>
     <div id="cssmenu" ms-controller="loader.menu">
         <ul >
-            <li ms-repeat="array" ms-click="changePath" ms-class="active: isActive(el.href)"><a ms-href="#{{userLanguage}}/{{el.href}}">{{el.label}}</a></li>
+            <li ms-repeat="array" ms-class="active: selectIndex === $index "><a ms-click="select(el,$index)" ms-href="#/{{el.href}}">{{el.label}}</a></li>
         </ul>
     </div>
 </div>
