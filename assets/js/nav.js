@@ -310,7 +310,16 @@
                   {
                       href: "tutorial/engineering/weixin.html",
                       name: "在微信中使用"
-                  }
+                  },
+                  {
+                      href: "tutorial/engineering/loader.html",
+                      name: "与requirejs混用"
+                  },
+                  
+                   {
+                      href: "tutorial/engineering/project.html",
+                      name: "样板工程"
+                  },
                 ]
             }
         ]

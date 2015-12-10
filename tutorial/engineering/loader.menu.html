@@ -154,23 +154,23 @@
         avalon.define({
             $id: "loader.menu",
             array: [{
-                    href: "engineering/loader.html",
+                    href: "loader.html",
                     label: "核心概念"
                 },
                 {
-                    href: "engineering/loader.api.html",
+                    href: "loader.api.html",
                     label: "三大API"
                 },
                 {
-                    href: "engineering/loader.config.html",
+                    href: "loader.config.html",
                     label: "配置项"
                 },
                 {
-                    href: "engineering/loader.plugin.html",
+                    href: "loader.plugin.html",
                     label: "资源插件"
                 },
                 {
-                    href: "engineering/loader.rjs.html",
+                    href: "loader.rjs.html",
                     label: "使用rjs打包"
                 }
             ],
@@ -182,7 +182,7 @@
     </script>
     <div id="cssmenu" ms-controller="loader.menu">
         <ul >
-            <li ms-repeat="array" ms-click="changePath" ms-class="active: isActive(el.href)"><a ms-href="#{{userLanguage}}/{{el.href}}">{{el.label}}</a></li>
+            <li ms-repeat="array" ms-click="changePath" ms-class="active: isActive(el.href)"><a ms-href="#/{{el.href}}">{{el.label}}</a></li>
         </ul>
     </div>
 </div>

@@ -51,7 +51,13 @@
                 <div class="col-md-9" role="main">
 
 <h2>avalon自带加载器</h2>
-<div ms-include-src="{{userLanguage}}/engineering/loader.menu.html" data-include-replace="true">
+<script>
+    avalon.define({
+        $id: "include",
+        path: "loader.menu.html"
+    })
+</script>
+<div ms-controller="include" ms-include-src="path" data-include-replace="true">
 
 </div>
 
@@ -69,7 +75,7 @@
     另一个选择是将所有的脚本捆绑打包在一起，但在打包后你仍然需要把它们按照正确的顺序排序。
 </p>
 <p>AMD就是这样一种对模块的定义，使模块和它的依赖可以被异步的加载，但又按照正确的顺序。</p>
-<div><img src="zh/engineering/loader/amd.png"/></div>
+<div><img src="../../assets/css/engineering/loader/amd.png"/></div>
 <h2><strong>选择加载器</strong></h2>
 <p><strong>内置AMD加载器</strong></p>
 <p>avalon内置了AMD加载器，用于与其原创者requirejs一模一样，但更轻量。它主要涉及以下三个函数:</p>
@@ -105,8 +111,7 @@
     <li>如果模块ID在paths配置项里配置了，如果它的值是绝对路径，那么就直接用这个没有什么好说的。
         如果是相对路径，那么先找父模块的路径，没有父模块使用baseUrl。</li>
     <li>如果模块ID在map配置项里配置了，那么它会在当前父模块的URL加文件名进行替换，前面加上<b>baseUrl</b>，注意不是跟parentUrl
-        <pre class="brush:javascript;gutter:false;toolbar:false">
-requirejs.config({
+        <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>requirejs.config({
     map: {
         "old/aaa": { //old/aaa.js或old/aaa/目录下的所有模块如果依赖jquery，则使用1.6.4版本
             'jquery': 'jquery-1.6.4'
@@ -115,17 +120,14 @@ requirejs.config({
             'jquery': 'jquery-1.7.2'
         }
     }
-})
-        </pre>
+})</pre></div>
         <p>相当于</p>
-        <pre class="brush:javascript;gutter:false;toolbar:false">
-               String(parentUrl + parentName).replace("old/aaa/jquery",function(){
-                        curUrl = baseUrl + "/jquery-1.6.4"
-               })
-               String(parentUrl + parentName).replace("new/aaa/jquery", function(){
-                        curUrl = baseUrl + "/jquery-1.7.2"
-                })
-        </pre>
+        <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>String(parentUrl + parentName).replace("old/aaa/jquery", function() {
+    curUrl = baseUrl + "/jquery-1.6.4"
+})
+String(parentUrl + parentName).replace("new/aaa/jquery", function() {
+    curUrl = baseUrl + "/jquery-1.7.2"
+})</pre></div>
 
     </li>
 </ul>

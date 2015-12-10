@@ -51,9 +51,16 @@
                 <div class="col-md-9" role="main">
 
 <h2>avalon自带加载器</h2>
-<div ms-include-src="{{userLanguage}}/engineering/loader.menu.html" data-include-replace="true">
-    
+<script>
+    avalon.define({
+        $id: "include",
+        path: "loader.menu.html"
+    })
+</script>
+<div ms-controller="include" ms-include-src="path" data-include-replace="true">
+
 </div>
+
 <p>配置当然是在require.config。在avalon中，<strong>require.config</strong> = <strong>avalon.config</strong> </p>
 <p>目前avalon直接兼容requirejs的baseUrl, shim, paths, map, packages, urlArgs这几个配置项。</p>
 
@@ -63,73 +70,57 @@
     这是为了与requirejs保持一致。</p>
 
 <p>例子, 见下面目录结构</p>
-<pre class="brush:css;gutter:false;toolbar:false;toolbar:false">
-    avalon.js
-    index.html
-    js/
-       main.js
-       bbb.js
-       aaa/
-          aaa.js
-          bbb.js
-</pre>
-<pre class="brush:html;gutter:false;toolbar:false;">
-&lt;!DOCTYPE html&gt;
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:css;gutter:false;toolbar:false'>avalon.js index.html js/ main.js bbb.js aaa/ aaa.js bbb.js</pre></div>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
-    &lt;head&gt;
-        &lt;title&gt;avalon.js&lt;/title&gt;
-        &lt;meta charset="UTF-8"&gt;
-        &lt;meta name="viewport" content="width=device-width"&gt;
-        &lt;script src="avalon.js" data-main="js/main"&gt;&lt;/script&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;div&gt; 在深层目录结构中的模块使用了 ./与不使用的区别 &lt;/div&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-</pre>
+
+&lt;head&gt;
+    &lt;title&gt;avalon.js&lt;/title&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width"&gt;
+    &lt;script src="avalon.js" data-main="js/main"&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;div&gt; 在深层目录结构中的模块使用了 ./与不使用的区别 &lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
 
 <p>main.js的内容<p>
-<pre class="brush:javascript;gutter:false;toolbar:false;">
-require.config({
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>require.config({
     baseUrl: "js"
 })
-require(["aaa/aaa"], function(){
+require(["aaa/aaa"], function() {
     console.log("加载完毕")
-})
-</pre>
+})</pre></div>
 <p>紧挨着main.js的bbb.js的内容</p>
-<pre class="brush:javascript;gutter:false;toolbar:false;">
-define(function(){
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(function() {
     console.log("不在aaa目录下")
-})
-</pre>
+})</pre></div>
 <p>aaa目录下的aaa.js的内容</p>
-<pre class="brush:javascript;gutter:false;toolbar:false;">
-define(["bbb"],function(){
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(["bbb"], function() {
     console.log("依赖于bbb模块，到底是哪一个呢？")
-})
-</pre>
+})</pre></div>
 <p>aaa目录下的bbb.js的内容</p>
-<pre class="brush:javascript;gutter:false;toolbar:false;">
-define(function(){
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(function() {
     console.log("在aaa目录下")
-})
-</pre>
-<div><img src="zh/engineering/loader/loader0_00.png"/></div>
+})</pre></div>
+<div><img src="../../assets/css/engineering/loader/loader0_00.png"/></div>
 
 <p>我们可以看到aaa模块依赖于bbb模块，但由于bbb模块没有以'./', '../'开头，那么它就根据baseUrl进行查找了。</p>
 
 <p>再看一个例子：</p>
-<div><img src="zh/engineering/loader/loader0_0.png"/></div>
+<div><img src="../../assets/css/engineering/loader/loader0_0.png"/></div>
 <p>主页面的index.html如下:</p>
 <pre class="brush:html;gutter:false;toolbar:false;">
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-    &lt;head lang="en"&gt;
-        &lt;meta charset="UTF-8"&gt;
-        &lt;title&gt;&lt;/title&gt;
-        &lt;script type="text/javascript" src="avalon.js"&gt;&lt;/script&gt;
-        &lt;script type="text/javascript"&gt;
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title></title>
+        <script type="text/javascript" src="avalon.js"></script>
+        <script type="text/javascript">
             require.config({
                 baseUrl: "examples/loader"
             })
@@ -141,272 +132,249 @@ define(function(){
                 avalon.log(a)
                 avalon.scan()
             })
-        &lt;/script&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;div ms-controller="test"&gt;
-            &lt;h1&gt;{{title}}&lt;/h1&gt;
-        &lt;/div&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-</pre>
+        </script>
+    </head>
+    <body>
+        <div ms-controller="test">
+            <h1>{{title}}</h1>
+        </div>
+    </body>
+</html>
+</xmp>
 <p>由于我们设置baseUrl, 当我们加载./aaa模块时, 它的路径就变成./examples/loader/aaa, 再自动加上.js后缀名</p>
 <p>我们再看一下所有JS文件是如何写的:</p>
 <p><strong>aaa.js</strong></p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(["./bbb"], function(){
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(["./bbb"], function() {
     avalon.log("已经加载aaa模块")
     return "aaa"
-})
-</pre>
+})</pre></div>
 <p><strong>bbb.js</strong></p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(["./ccc", "./ddd"], function() {
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(["./ccc", "./ddd"], function() {
     avalon.log("已经加载bbb模块")
     return "bbb"
-})
-</pre>
+})</pre></div>
 <p><strong>ccc.js</strong></p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(function(){
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(function() {
     avalon.log("已经加载ccc模块")
     return "ccc"
-})
-</pre>
+})</pre></div>
 <p><strong>ddd.js</strong></p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(["./eee"], function() {
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(["./eee"], function() {
     avalon.log("已经加载ddd模块")
     return "ddd"
-})
-</pre>
+})</pre></div>
 <p><strong>eee.js</strong></p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(function() {
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(function() {
     avalon.log("已经加载eee模块")
     return "eee"
-})
-</pre>
+})</pre></div>
 <p>如果你使用了NetBeans IDE, 我们直接点击上方的<strong>运行</strong>菜单，设置要运行浏览器，然后直到你的项目，选中你的html页面运行。</p>
-<div><img src="zh/engineering/loader/NetBeans0.jpg"/></div>
-<div><img src="zh/engineering/loader/NetBeans1.jpg"/></div>
+<div><img src="../../assets/css/engineering/loader/NetBeans0.jpg"/></div>
+<div><img src="../../assets/css/engineering/loader/NetBeans1.jpg"/></div>
 <p>最后我们如果打开火狐及其firebug,会看到如下日志：</p>
-<div><img src="zh/engineering/loader/loader0_1.jpg"/></div>
+<div><img src="../../assets/css/engineering/loader/loader0_1.jpg"/></div>
 <p>如果你没有NetBeans，也可以点击server.exe(一个小型的.Net服务器)，在IE11下看到的日志与firebug下差不多</p>
-<div><img src="zh/engineering/loader/loader0_2.jpg"/></div>
-<p>可以点<a href="zh/engineering/loader/loader1.rar" download="loader1.rar">这里</a>下载此例子</p>
+<div><img src="../../assets/css/engineering/loader/loader0_2.jpg"/></div>
+<p>可以点<a href="../../assets/css/engineering/loader/loader1.rar" download="loader1.rar">这里</a>下载此例子</p>
 <br/>
 <h2 style="color:rgb(22,154,128)">paths配置项的使用</h2>
 <p>可以让一些非常长的路径名改成一个单词，然后我们直接在require中引用这些单词就行了。</p>
 <p style="color:red">注意： paths对应的值如果不是一个完整路径，那么它将根据baseUrl进行查找。</p>
 <p>在此例子中，jquery, backbone, underscore都是根据AMD规范来编写的类库，虽然与标准的不太一样，但我们可以直接用avalon或require直接加载。</p>
 <p>jquery.placeholder可以在这里下，<a href="https://github.com/mathiasbynens/jquery-placeholder">https://github.com/mathiasbynens/jquery-placeholder</a></p>
-<div><img src="zh/engineering/loader/loader1_0.jpg"/></div>
+<div><img src="../../assets/css/engineering/loader/loader1_0.jpg"/></div>
 <p>主页面的index.html如下:</p>
-<pre class="brush:html;gutter:false;toolbar:false;">
-&lt;!DOCTYPE html&gt;
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
-    &lt;head lang="en"&gt;
-        &lt;meta charset="UTF-8"&gt;
-        &lt;title&gt;&lt;/title&gt;
-        &lt;script type="text/javascript" src="avalon.js"&gt;&lt;/script&gt;
-        &lt;script type="text/javascript"&gt;
-            require.config({
-                baseUrl: "lib",
-                paths: {
-                    jquery: "jquery-2.1.3",
-                    "jquery.placeholder": "jquery.placeholder",
-                    underscore: "underscore-1.7",
-                    backbone: "backbone"
-                }
+
+&lt;head lang="en"&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;&lt;/title&gt;
+    &lt;script type="text/javascript" src="avalon.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+        require.config({
+            baseUrl: "lib",
+            paths: {
+                jquery: "jquery-2.1.3",
+                "jquery.placeholder": "jquery.placeholder",
+                underscore: "underscore-1.7",
+                backbone: "backbone"
+            }
+        })
+        require(["backbone", "jquery.placeholder"], function(a) {
+            console.log(a, jQuery.fn.placeholder)
+            avalon.define({
+                $id: "test",
+                title: "加载成功"
             })
-            require(["backbone", "jquery.placeholder"], function(a) {
-                console.log(a, jQuery.fn.placeholder)
-                avalon.define({
-                    $id: "test",
-                    title: "加载成功"
-                })
-                avalon.scan()
-            })
-        &lt;/script&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;div ms-controller="test"&gt;
-            &lt;h1&gt;{{title}}&lt;/h1&gt;
-        &lt;/div&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-</pre>
-<div><img src="zh/engineering/loader/loader1_1.jpg"/></div>
-<p>可以点<a href="zh/engineering/loader/loader2.rar" download="loader2.rar">这里</a>下载此例子</p>
+            avalon.scan()
+        })
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;div ms-controller="test"&gt;
+        &lt;h1&gt;{{title}}&lt;/h1&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+<div><img src="../../assets/css/engineering/loader/loader1_1.jpg"/></div>
+<p>可以点<a href="../../assets/css/engineering/loader/loader2.rar" download="loader2.rar">这里</a>下载此例子</p>
 <h2 style="color:rgb(22,154,128)">shim配置项的使用</h2>
 <p>shim是用于将加载那些不符合AMD规范的JS文件, 它拥有两种形态, 数组形态(相当于只配置了deps参数), 对象形态(可配置deps, exports, init这三个参数)</p>
 <p>avalon1.4才完完整整支持此功能。</p>
 
-<pre class="brush:javascript;gutter:false;toolbar:false">
-require.config({
-    shim: {
-        'backbone': {
-            //指定依赖项,必须为数组, 不写时默认为空数组,它们会先于被依赖者加载
-            deps: ['underscore', 'jquery'],
-            exports: 'Backbone'//指定它的命名空间
-        },
-        'underscore': {
-            exports: '_' //指定它的命名空间
-        },
-        'jquery.selectBoxIt': ['jquery'],//指定它的依赖项
-        'backbone.Validation': ['backbone'],//指定它的依赖项
-        "jquery.placeholder": ["jquery"],//指定它的依赖项
-        'foo': {
-            deps: ['bar'],
-            exports: 'Foo',
-            init: function (bar) {
-                //Using a function allows you to call noConflict for
-                //libraries that support it, and do other cleanup.
-                //However, plugins for those libraries may still want
-                //a global. "this" for the function will be the global
-                //object. The dependencies will be passed in as
-                //function arguments. If this function returns a value,
-                //then that value is used as the module export value
-                //instead of the object found via the 'exports' string.
-                return this.Foo.noConflict();
-            }
-        }
-    }
-</pre>
-<div><img src="zh/engineering/loader/loader2_0.jpg"/></div>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>require.config({
+            shim: {
+                'backbone': {
+                    //指定依赖项,必须为数组, 不写时默认为空数组,它们会先于被依赖者加载
+                    deps: ['underscore', 'jquery'],
+                    exports: 'Backbone' //指定它的命名空间
+                },
+                'underscore': {
+                    exports: '_' //指定它的命名空间
+                },
+                'jquery.selectBoxIt': ['jquery'], //指定它的依赖项
+                'backbone.Validation': ['backbone'], //指定它的依赖项
+                "jquery.placeholder": ["jquery"], //指定它的依赖项
+                'foo': {
+                    deps: ['bar'],
+                    exports: 'Foo',
+                    init: function(bar) {
+                        //Using a function allows you to call noConflict for
+                        //libraries that support it, and do other cleanup.
+                        //However, plugins for those libraries may still want
+                        //a global. "this" for the function will be the global
+                        //object. The dependencies will be passed in as
+                        //function arguments. If this function returns a value,
+                        //then that value is used as the module export value
+                        //instead of the object found via the 'exports' string.
+                        return this.Foo.noConflict();
+                    }
+                }
+            }</pre></div>
+<div><img src="../../assets/css/engineering/loader/loader2_0.jpg"/></div>
 <p>主页面的index.html如下:</p>
-<pre class="brush:html;gutter:false;toolbar:flase">
-&lt;!DOCTYPE html&gt;
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
-    &lt;head lang="en"&gt;
-        &lt;meta charset="UTF-8"&gt;
-        &lt;title&gt;require shim机制&lt;/title&gt;
-        &lt;script src="js/lib/avalon.js"&gt;&lt;/script&gt;
-        &lt;script src="js/app.js"&gt;&lt;/script&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;h2&gt;通过shim机制加载那些没有使用AMD风格定义的jquery插件&lt;/h2&gt;
-        &lt;p&gt;如果加载成功一会儿这里下面会多出两行&lt;/p&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-   
-</pre>
+
+&lt;head lang="en"&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;require shim机制&lt;/title&gt;
+    &lt;script src="js/lib/avalon.js"&gt;&lt;/script&gt;
+    &lt;script src="js/app.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;h2&gt;通过shim机制加载那些没有使用AMD风格定义的jquery插件&lt;/h2&gt;
+    &lt;p&gt;如果加载成功一会儿这里下面会多出两行&lt;/p&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
 <p>js/app.js</p>
-<pre class="brush:javascript;gutter:false;toolbar:flase">
-// Place third party dependencies in the lib folder
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>// Place third party dependencies in the lib folder
 // Configure loading modules from the lib directory,
-// except 'app' ones, 
+// except 'app' ones,
 require.config({
     "baseUrl": "js/lib",
     "paths": {
-      "app": "../app"
+        "app": "../app"
     },
     "shim": {
         "jquery.alpha": {
-           deps: ["jquery"],
-           init: function($){
-               console.log($) //这里只是测试init配置项是否生效
-           }
+            deps: ["jquery"],
+            init: function($) {
+                console.log($) //这里只是测试init配置项是否生效
+            }
         },
         "jquery.beta": ["jquery"]
     }
 });
 
 // Load the main app module to start the app
-require(["app/main"]);
-</pre>
+require(["app/main"]);</pre></div>
 <p>js/app/main.js</p>
-<pre class="brush:javascript;gutter:false;toolbar:flase">
-define(["jquery", "jquery.alpha", "jquery.beta"], function($) {
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(["jquery", "jquery.alpha", "jquery.beta"], function($) {
     //the jquery.alpha.js and jquery.beta.js plugins have been loaded.
     $(function() {
         $('body').alpha().beta();
     });
-});
-</pre>
+});</pre></div>
 <p>js/lib/jquery.alpha.js</p>
-<pre class="brush:javascript;gutter:false;toolbar:flase">
-$.fn.alpha = function() {
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>$.fn.alpha = function() {
     return this.append('<p>Alpha is Go!</p>');
-};
-</pre>
+};</pre></div>
 <p>js/lib/jquery.beta.js</p>
-<pre class="brush:javascript;gutter:false;toolbar:flase">
-$.fn.beta = function() {
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>$.fn.beta = function() {
     return this.append('<p>Beta is Go!</p>');
-};
-</pre>
-<div><img src="zh/engineering/loader/loader2_1.jpg"/></div>
-<p>可以点<a href="zh/engineering/loader/loader3.rar" download="loader2.rar">这里</a>下载此例子</p>
+};</pre></div>
+<div><img src="../../assets/css/engineering/loader/loader2_1.jpg"/></div>
+<p>可以点<a href="../../assets/css/engineering/loader/loader3.rar" download="loader2.rar">这里</a>下载此例子</p>
 <h2 style="color:rgb(22,154,128)">urlArgs配置项的使用</h2>
 <p>拥有两个传参方式,一种是传入一个字符串,那么所有要加载的请求都会加上它们,另一种是传入一个对象,让特殊模块才加上指定参数</p>
 <p>该配置项可以用于处理缓存</p>
-<pre class="brush:javascript;gutter:false;toolbar:flase">
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>require.config({
+        urlArgs: "v=" + Math.random()
+    })
+    //相当于
 require.config({
-   urlArgs: "v="+ Math.random() 
-})
-//相当于
-require.config({
-   urlArgs: {
-      "*" :"v="+ Math.random() 
-   }
+    urlArgs: {
+        "*": "v=" + Math.random()
+    }
 })
 require.config({
-   urlArgs: {
-      "jquery" :"username=xxxx&pw=345354" ,
-      "backbone": "username=ewre&pw=356688" ,
-   }
-})
-</pre>
-<div><img src="zh/engineering/loader/loader3_0.jpg"/></div>
+    urlArgs: {
+        "jquery": "username=xxxx&pw=345354",
+        "backbone": "username=ewre&pw=356688",
+    }
+})</pre></div>
+<div><img src="../../assets/css/engineering/loader/loader3_0.jpg"/></div>
 <p>主页面的index.html如下:</p>
-<pre class="brush:html;gutter:false;toolbar:flase">
-&lt;!DOCTYPE html&gt;
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
-    &lt;head lang="en"&gt;
-        &lt;meta charset="UTF-8"&gt;
-        &lt;title&gt;urlArgs&lt;/title&gt;
-        &lt;script src="avalon.js"&gt;&lt;/script&gt;
-        &lt;script&gt;
-            require.config({
-                baseUrl: "./jQuery/",
-                urlArgs: {
-                    "*": "v=" + (new Date - 0),
-                    "jquery": "aaa=333"
-                },
-                "shim": {
-                    "jquery.alpha": ["jquery"],
-                    "jquery.beta": ["jquery"]
-                }
-            })
-            require(["jquery.alpha", "jquery.beta"], function() {
-                $(function() {
-                    $('body').alpha().beta();
-                });
-            })
 
-        &lt;/script&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;h2&gt;使用urlArgs添加参数&lt;/h2&gt;
-        &lt;p&gt;如果加载成功一会儿这里下面会多出两行&lt;/p&gt;
-    &lt;/body&gt;
-&lt;/html&gt
-</pre>
+&lt;head lang="en"&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;urlArgs&lt;/title&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        require.config({
+            baseUrl: "./jQuery/",
+            urlArgs: {
+                "*": "v=" + (new Date - 0),
+                "jquery": "aaa=333"
+            },
+            "shim": {
+                "jquery.alpha": ["jquery"],
+                "jquery.beta": ["jquery"]
+            }
+        })
+        require(["jquery.alpha", "jquery.beta"], function() {
+            $(function() {
+                $('body').alpha().beta();
+            });
+        })
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;h2&gt;使用urlArgs添加参数&lt;/h2&gt;
+    &lt;p&gt;如果加载成功一会儿这里下面会多出两行&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt</pre></div>
 <p>其他与上面的例子一样,运行它在firebug下看到:</p>
-<div><img src="zh/engineering/loader/loader3_1.jpg"/></div>
-<p>可以点<a href="zh/engineering/loader/loader4.rar" download="loader4.rar">这里</a>下载此例子</p>
+<div><img src="../../assets/css/engineering/loader/loader3_1.jpg"/></div>
+<p>可以点<a href="../../assets/css/engineering/loader/loader4.rar" download="loader4.rar">这里</a>下载此例子</p>
 
 <h2 style="color:rgb(22,154,128)">map配置项的使用</h2>
 
 <p>map参数用来解决同一个模块的不同版本问题，这一灵感来自于Dojo的packageMap。有这样的场景：
     开发初期使用了的jquery-1.6.4，后期升级到了1.7.2。但担心有些依赖jquery-1.6.4的代码升级到1.7.2后有问题。
     因此保守的让这部分代码继续使用1.6.4版本。这时map参数将派上用场。比如我们在new/aaa/目录使用jquery1.6.4，在old/aaa/项目下使用jquery1.7.4。</p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-require.config({
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>require.config({
     map: {
-       "*": {
+        "*": {
             'jquery': 'jquery-1.6' //其他目录或文件使用1.6
         },
         "old/aaa": { //old/aaa.js或old/aaa/目录下的所有模块如果依赖jquery，则使用1.6.4版本
@@ -416,134 +384,118 @@ require.config({
             'jquery': 'jquery-1.7.2'
         }
     }
-})
-</pre>
+})</pre></div>
 <p>看下面的例子，其目录结构如下：</p>
-<div><img src="zh/engineering/loader/loader5_0.png"/></div>
+<div><img src="../../assets/css/engineering/loader/loader5_0.png"/></div>
 <p>主页面的index.html如下:</p>
-<pre class="brush:html;gutter:false;toolbar:flase">
-&lt;!DOCTYPE html&gt;
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
-    &lt;head&gt;
-        &lt;title&gt;TODO supply a title&lt;/title&gt;
-        &lt;meta charset="UTF-8"&gt;
-        &lt;meta name="viewport" content="width=device-width"&gt;
-        &lt;script src="avalon.js"&gt;&lt;/script&gt;
-        &lt;script&gt;
-            require.config({
-                baseUrl: "loader",
-                map: {
-                    "old/aaa": {
-                        ddd: "ddd1.0"
-                    },
-                    "new/aaa": {
-                        ddd: "ddd1.2"
-                    },
-                    "*": {
-                        ddd: "ddd1.1"
-                    }
+
+&lt;head&gt;
+    &lt;title&gt;TODO supply a title&lt;/title&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width"&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        require.config({
+            baseUrl: "loader",
+            map: {
+                "old/aaa": {
+                    ddd: "ddd1.0"
+                },
+                "new/aaa": {
+                    ddd: "ddd1.2"
+                },
+                "*": {
+                    ddd: "ddd1.1"
                 }
-            })
-            require(["old/aaa", "new/aaa", "ccc"], function(a, b, c) {
-                alert([a, b, c])
-            })
-        &lt;/script&gt;
+            }
+        })
+        require(["old/aaa", "new/aaa", "ccc"], function(a, b, c) {
+            alert([a, b, c])
+        })
+    &lt;/script&gt;
 
-    &lt;/head&gt;
-    &lt;body&gt;
+&lt;/head&gt;
 
-    &lt;/body&gt;
-&lt;/html&gt;
-</pre>
+&lt;body&gt;
+
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
 <p>ddd1.0.js:</p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(function(){
-   return 1000
-})
-</pre>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(function() {
+    return 1000
+})</pre></div>
 <p>ddd1.1.js:</p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(function(){
-   return 1000
-})
-</pre>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(function() {
+    return 1000
+})</pre></div>
 <p>ddd1.2.js:</p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(function(){
-   return 1000
-})
-</pre>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(function() {
+    return 1000
+})</pre></div>
 <p>new/aaa.js:</p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(["ddd"], function(a){ 
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(["ddd"], function(a) {
     return 100 + a
-})
-</pre>
+})</pre></div>
 <p>old/aaa.js:</p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(["ddd"], function(a){ 
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(["ddd"], function(a) {
     return 456 + a
-})
-</pre>
+})</pre></div>
 <p>ccc.js:</p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(["ddd"], function(a){
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(["ddd"], function(a) {
     return 7890 + a
-})
-</pre>
+})</pre></div>
 
 <p>其他与上面的例子一样,运行它在firebug下看到:</p>
-<div><img src="zh/engineering/loader/loader5_1.png"/></div>
-<p>可以点<a href="zh/engineering/loader/loader5.rar" download="loader5.rar">这里</a>下载此例子</p>
+<div><img src="../../assets/css/engineering/loader/loader5_1.png"/></div>
+<p>可以点<a href="../../assets/css/engineering/loader/loader5.rar" download="loader5.rar">这里</a>下载此例子</p>
 <br/>
 <h2 style="color:rgb(22,154,128)">packages配置项的使用</h2>
 <p>packages配置项用于帮助我们构建更巨型的工程，方便我们直接引入别人的包。</p>
 <p>packages在config里面是一个数组，其元素可以是字符串，也可以是一个对象。不过一个包的定义，应该是一个对象，因此当用户使用字符串形式时，内部也会转换为对象。</p>
 
-<pre class="brush:javascript;gutter:false;toolbar:false">
-{ 
-      name: 'packagename',
-      location: 'path/to/your/package/root',  // default 'packagename'
-      main: 'scriptfileToLoad'                // default 'main' 
-}
-</pre>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>{
+    name: 'packagename',
+    location: 'path/to/your/package/root', // default 'packagename'
+    main: 'scriptfileToLoad' // default 'main'
+}</pre></div>
 <p>最后这个包的加载地址为<strong> pkg.location +"/" + pkg.main + ".js"</strong></p>
 <p>当用户只使用字符串，它会转换为如下的包，比如说这个字符串为kkk</p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-{ 
-      name: 'kkk',
-      location: 'kkk',  // default 'packagename'
-      main: 'main'                // default 'main' 
-}
-</pre>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>{
+    name: 'kkk',
+    location: 'kkk', // default 'packagename'
+    main: 'main' // default 'main'
+}</pre></div>
 <p>最后这个包的加载地址为<strong> "kkk/main.js" </strong></p>
 <p>我们看下面例子</p>
-<div><img src="zh/engineering/loader/loader6_0.png"/></div>
-<pre class="brush:html;gutter:false;toolbar:false">
- &lt;!DOCTYPE html&gt;
+<div><img src="../../assets/css/engineering/loader/loader6_0.png"/></div>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
-    &lt;head&gt;
-        &lt;title&gt;TODO supply a title&lt;/title&gt;
-        &lt;meta charset="UTF-8"&gt;
-        &lt;meta name="viewport" content="width=device-width"&gt;
-        &lt;script src="avalon.js" data-main="main"&gt;&lt;/script&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;div&gt;packages配置项&lt;/div&gt;
-        &lt;p&gt;参考自&lt;a href="http://jonathancreamer.com/require-js-packages-for-building-large-scale-angular-applications/"&gt;
+
+&lt;head&gt;
+    &lt;title&gt;TODO supply a title&lt;/title&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width"&gt;
+    &lt;script src="avalon.js" data-main="main"&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;div&gt;packages配置项&lt;/div&gt;
+    &lt;p&gt;参考自&lt;a href="http://jonathancreamer.com/require-js-packages-for-building-large-scale-angular-applications/"&gt;
             http://jonathancreamer.com/require-js-packages-for-building-large-scale-angular-applications/
             &lt;/a&gt;&lt;/p&gt;
-        &lt;ul ms-controller="pkg"&gt;
-            &lt;li&gt;{{a}}&lt;/li&gt;
-            &lt;li&gt;{{b}}&lt;/li&gt;
-            &lt;li&gt;{{c}}&lt;/li&gt;
-        &lt;/ul&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-</pre>
+    &lt;ul ms-controller="pkg"&gt;
+        &lt;li&gt;{{a}}&lt;/li&gt;
+        &lt;li&gt;{{b}}&lt;/li&gt;
+        &lt;li&gt;{{c}}&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
 <p>main.js</p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-require.config({
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>require.config({
     packages: ["cat"]
 })
 
@@ -555,45 +507,34 @@ require(["./dog/aaa", "./dog/bbb", "cat", "domReady!"], function(a, b, c) {
         c: c
     })
     avalon.scan()
-})
-</pre>
+})</pre></div>
 <p>dog/aaa.js</p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(function(){
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(function() {
     console.log("dog1")
     return "dog1"
-})
-</pre>
+})</pre></div>
 <p>dog/bbb.js</p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(function(){
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(function() {
     console.log("dog2")
     return "dog2"
-})
-</pre>
+})</pre></div>
 
 <p>cat/main.js</p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(["./aaa","./bbb"], function (a, b) {  
-   console.log(a + b)
-   return a + b
-})
-</pre>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(["./aaa", "./bbb"], function(a, b) {
+    console.log(a + b)
+    return a + b
+})</pre></div>
 <p>cat/aaa.js</p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(function() {
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(function() {
     return 7
-})
-</pre>
+})</pre></div>
 <p>cat/bbb.js</p>
-<pre class="brush:javascript;gutter:false;toolbar:false">
-define(function() {
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(function() {
     return 8
-})
-</pre>
+})</pre></div>
 <p>效果图</p>
-<div><img src="zh/engineering/loader/loader6_1.png"/></div>
-<p>可以点<a href="zh/engineering/loader/loader6.rar" download="loader6.rar">这里</a>下载此例子</p>
+<div><img src="../../assets/css/engineering/loader/loader6_1.png"/></div>
+<p>可以点<a href="../../assets/css/engineering/loader/loader6.rar" download="loader6.rar">这里</a>下载此例子</p>
 
 
 </div>

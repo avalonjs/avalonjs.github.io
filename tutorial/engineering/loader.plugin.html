@@ -51,9 +51,16 @@
                 <div class="col-md-9" role="main">
 
 <h2>avalon自带加载器</h2>
-<div ms-include-src="{{userLanguage}}/engineering/loader.menu.html" data-include-replace="true">
+<script>
+    avalon.define({
+        $id: "include",
+        path: "loader.menu.html"
+    })
+</script>
+<div ms-controller="include" ms-include-src="path" data-include-replace="true">
 
 </div>
+
 <h2>常用的资源插件</h2>
 <ul>
     <li>js!， avalon已经内置， 用于加载JS文件，通过生成一个script标签进行加载。默认模块ID如果不存在资源插件前缀， 就当成使用了js!资源插件。</li>
