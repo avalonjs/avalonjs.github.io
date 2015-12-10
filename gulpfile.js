@@ -59,12 +59,25 @@ gulp.task('combo', function () {
                     }))
                     .pipe(gulp.dest(file.replace("/dev", "").replace(fileName, "")))
         })
-
-
+        console.log('task combo结束')
     })
 })
 
-gulp.task('default', ['combo'], function () {
+// 资源引用全部指向conding.net
+var path = {
+    'src': path.join(__dirname, '/tutorial'),
+    'dest': path.join(__dirname, '/tutorial')
+}
+gulp.task('cdn', ['combo'], function(){
+    var cdnUrl = "avalon-doc-bdda3.coding.io",
+        replaceStr = "src=\"//" + cdnUrl + "/assets"
+
+    gulp.src([path.src + '/**/*.html'])
+        .pipe(replace(/src="[.\/]+assets/g, replaceStr))
+        .pipe(gulp.dest(path.dest));
+    console.log('资源已打到' + cdnUrl)
+})
+
+gulp.task('default', ['combo', 'cdn'], function () {
     console.log('合并完毕')
 });
-

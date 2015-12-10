@@ -26,8 +26,8 @@
                overflow-y: hidden;
             }
         </style>
-        <!--[if lt IE 9]><script src="../assets/js/ie8-responsive-file-warning.js"></script>
-        <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+        <!--[if lt IE 9]><script src="//avalon-doc-bdda3.coding.io/assets/js/ie8-responsive-file-warning.js"></script>
+        <script src="//avalon-doc-bdda3.coding.io/assets/js/ie-emulation-modes-warning.js"></script>
         <![endif]-->
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -93,7 +93,7 @@
 &lt;/body&gt;
 
 &lt;/html&gt;</pre></div>
-<div><img src="../../assets/css/configuration/images/config01.png"> </div>
+<div><img src="//avalon-doc-bdda3.coding.io/assets/css/configuration/images/config01.png"> </div>
 <p>双花括号也默认是python一些著名模板的界定符，为了防止冲突，我们有更换界定符的需求。这时我们可以这样做</p>
 
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
@@ -136,9 +136,9 @@
 
 <p>我们再看下一个有用的配置项，debug。<a href="https://github.com/RubyLouvre/avalon">avalon</a>默认是在控制台下打印没有调试消息的，上线时我们不愿用户看到它们，可以这样关掉它们。
 </p>
-<div><img src="../../assets/css/configuration/images/config02.jpg"  /></div>
-<div><img src="../../assets/css/configuration/images/config03.jpg" /></div>
-<div><img src="../../assets/css/configuration/images/config04.jpg"/></div>
+<div><img src="//avalon-doc-bdda3.coding.io/assets/css/configuration/images/config02.jpg"  /></div>
+<div><img src="//avalon-doc-bdda3.coding.io/assets/css/configuration/images/config03.jpg" /></div>
+<div><img src="//avalon-doc-bdda3.coding.io/assets/css/configuration/images/config04.jpg"/></div>
 
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>avalon.config({
     debug: false
@@ -165,7 +165,7 @@
 <div class="bs-callout bs-callout-danger" >
     <h4>dettachVModels</h4>
     <p>dettachVModels是决定在事件绑定的this对象上添加$vmodels、 $vmodel属性。以前是默认添加的，现在是默认不添加，这是出于CG回收的考虑。并且在IE6-8下，为元素添加$vmodels属性不知为何会抛异常。看源码：
-    <div><img src="../../assets/css/configuration/images/config05.jpg" /></div>
+    <div><img src="//avalon-doc-bdda3.coding.io/assets/css/configuration/images/config05.jpg" /></div>
     <p>$vmodels、 $vmodel应该鲜为人知，大家不要管它们就是。此配置项也将在1.36中去掉。</p>
 </div>
 
