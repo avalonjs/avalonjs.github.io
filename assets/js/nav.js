@@ -315,7 +315,10 @@
                       href: "tutorial/engineering/loader.html",
                       name: "与requirejs混用"
                   },
-                  
+                   {
+                      href: "tutorial/engineering/webpack.html",
+                      name: "使用webpack打包"
+                  },
                    {
                       href: "tutorial/engineering/project.html",
                       name: "样板工程"
