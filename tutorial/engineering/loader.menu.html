@@ -84,7 +84,7 @@
             line-height: 1;
         }
         #cssmenu ul {
-           /* background: #ffffff;*/
+            /* background: #ffffff;*/
         }
         #cssmenu > ul > li {
             float: left;
@@ -151,7 +151,7 @@
         }
     </style>
     <script>
-        avalon.define({
+        var vm = avalon.define({
             $id: "loader.menu",
             array: [{
                     href: "loader.html",
@@ -174,15 +174,17 @@
                     label: "使用rjs打包"
                 }
             ],
-            isActive: function(href) {
-                var loc = location.href.split("#")[1]
-                return loc.slice( - href.length) === href
+            selectIndex: 0,
+            select: function (el, index) {
+                vm.selectIndex = index
+                top.location.hash = "#tutorial/engineering/" + el.href
             }
         })
+
     </script>
     <div id="cssmenu" ms-controller="loader.menu">
         <ul >
-            <li ms-repeat="array" ms-click="changePath" ms-class="active: isActive(el.href)"><a ms-href="#/{{el.href}}">{{el.label}}</a></li>
+            <li ms-repeat="array" ms-class="active: selectIndex === $index "><a ms-click="select(el,$index)" ms-href="#/{{el.href}}">{{el.label}}</a></li>
         </ul>
     </div>
 </div>

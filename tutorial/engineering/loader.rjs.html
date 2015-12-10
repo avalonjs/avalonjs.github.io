@@ -70,7 +70,7 @@
     <li><a href="https://github.com/requirejs/domReady">domReady.js </a>domReady!资源插件,判定是否domReady</li>
 </ul>
 <p>我们先来一个简单的例子：</p>
-<div><img src="zh/engineering/loader/build0_0.jpg"/></div>
+<div><img src="../../assets/css/engineering/loader/build0_0.jpg"/></div>
 <p>这里有一坨坨文件，其中有一半是从combo目录拷贝过来，此外还有avalon.js，只有index.html, main.js， aaa.js, aaa.html, aaa.css及图片是用户自己的。</p>
 <p>index.html</p>
 <pre class="brush:html;gutter:false;toolbar:false">
@@ -88,18 +88,15 @@
 </html>
 </xmp>
 <p>aaa.html，它是一个模板文件，不是一个子页面。当然你也可以改名为aaa.txt, aaa.string，反正都是用AJAX加载的。</p>
-<pre class="brush:html;gutter:false;toolbar:false">
-<div id="news">
-    <div class="Q-tpList">
-        <a target="_blank" class="pic" href="/a/20150209/003871.htm">
-            <img class="picto" src="116337024.jpg"></a>
-        <em class="f14 l24"><a target="_blank" class="linkto" href="/a/20150209/003871.htm">南昌一小学仅2名老师8名学生 靠杂草生火取暖</a></em>
-        <p class="l22">招贤镇牛岭小学距湾里城区22公里，是湾里区最偏远、落后的小学之一，
-            现在拥有8个学生，2个老师。学生居住分散，上学路途遥远，
-            离校最远的学生要走上2个多小时的山路。</p>
-    </div>
-</div>
-</xmp>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;div id="news"&gt;
+    &lt;div class="Q-tpList"&gt;
+        &lt;a target="_blank" class="pic" href="/a/20150209/003871.htm"&gt;
+            &lt;img class="picto" src="116337024.jpg"&gt;&lt;/a&gt;
+        &lt;em class="f14 l24"&gt;&lt;a target="_blank" class="linkto" href="/a/20150209/003871.htm"&gt;南昌一小学仅2名老师8名学生 靠杂草生火取暖&lt;/a&gt;&lt;/em&gt;
+        &lt;p class="l22"&gt;招贤镇牛岭小学距湾里城区22公里，是湾里区最偏远、落后的小学之一， 现在拥有8个学生，2个老师。学生居住分散，上学路途遥远， 离校最远的学生要走上2个多小时的山路。
+        &lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre></div>
 <p>aaa.css，这个也是用avalon.js的加载器动态引入的。</p>
 <pre class="brush:css;gutter:false;toolbar:false">
 #news .Q-tpList {

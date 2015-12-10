@@ -320,6 +320,10 @@
                       href: "tutorial/engineering/project.html",
                       name: "样板工程"
                   },
+                    {
+                      href: "tutorial/engineering/seo.html",
+                      name: "SEO"
+                  }
                 ]
             }
         ]

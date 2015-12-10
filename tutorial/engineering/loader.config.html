@@ -113,34 +113,35 @@ require(["aaa/aaa"], function() {
 <p>再看一个例子：</p>
 <div><img src="../../assets/css/engineering/loader/loader0_0.png"/></div>
 <p>主页面的index.html如下:</p>
-<pre class="brush:html;gutter:false;toolbar:false;">
-<!DOCTYPE html>
-<html>
-    <head lang="en">
-        <meta charset="UTF-8">
-        <title></title>
-        <script type="text/javascript" src="avalon.js"></script>
-        <script type="text/javascript">
-            require.config({
-                baseUrl: "examples/loader"
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head lang="en"&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;&lt;/title&gt;
+    &lt;script type="text/javascript" src="avalon.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+        require.config({
+            baseUrl: "examples/loader"
+        })
+        require(["./aaa"], function(a) {
+            avalon.define({
+                $id: "test",
+                title: "加载成功"
             })
-            require(["./aaa"], function(a){
-                avalon.define({
-                    $id: "test",
-                    title: "加载成功"
-                })
-                avalon.log(a)
-                avalon.scan()
-            })
-        </script>
-    </head>
-    <body>
-        <div ms-controller="test">
-            <h1>{{title}}</h1>
-        </div>
-    </body>
-</html>
-</xmp>
+            avalon.log(a)
+            avalon.scan()
+        })
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;div ms-controller="test"&gt;
+        &lt;h1&gt;{{title}}&lt;/h1&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
 <p>由于我们设置baseUrl, 当我们加载./aaa模块时, 它的路径就变成./examples/loader/aaa, 再自动加上.js后缀名</p>
 <p>我们再看一下所有JS文件是如何写的:</p>
 <p><strong>aaa.js</strong></p>
