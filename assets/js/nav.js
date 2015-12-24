@@ -321,7 +321,11 @@
                   },
                    {
                       href: "tutorial/engineering/project.html",
-                      name: "样板工程"
+                      name: "webpack+avalon"
+                  },
+                   {
+                      href: "tutorial/engineering/fis.html",
+                      name: "fis3+avalon"
                   },
                     {
                       href: "tutorial/engineering/seo.html",
