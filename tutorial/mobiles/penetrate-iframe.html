@@ -50,46 +50,61 @@
             <div class="row">
                 <div class="col-md-9" role="main">
 
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>点击穿透测试</title>
+        <meta name="viewport" content="width=device-width">
+        <script src="../../static/script/avalon.mobile.js"></script>
 
-<h1>工程化</h1>
-<p>比如说， 与其他库共存，上线打包等</p>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <style type="text/css">
+            #divTapAbove,#divClickUnder{position: absolute;top: 30px;left: 0;}
 
+            #divClickUnder{width: 300px;height: 50px;background: blue;  z-index: 90}
+            #divTapAbove{width: 200px;height: 75px;background: red; z-index: 100}
+            #output{position: absolute;top: 100px;left:0;border: 1px solid #000;width:200px;min-height:100px;}
+        </style>
+    </head>
+    <body ms-controller="test">
+        <div><a target="top" href="">新窗口打开</a></div>
 
+        <div id="divTapAbove" ms-on-tap="tap"></div>
+        <div id="divClickUnder" ms-on-click="click"></div>
+        <div id="output" ms-text="text"></div>
+        <script>
+            var vm = avalon.define({
+                $id: "test",
+                tap: function() {
+                    vm.text = vm.text + " tap "
+                    this.style.display = "none"
 
-<ul>
-    <li><a href="http://as.baidu.com/a/item?docid=4474290&amp;pre=web_am_se&amp;f=web_alad@next&amp;qq-pf-to=pcqq.group" target="_blank">移动应用：读酷</a></li>
-    <li><a href="https://chrome.google.com/webstore/detail/prefix/gjpcbbbopajjjnkbkeaflldnocoppcpc" target="_blank">chrome插件：饭否客户端</a></li>
-    <li><a href="https://note.wiz.cn/login?redirectUrl=https%3A%2F%2Fnote.wiz.cn%2Fweb" target="_blank">为知笔记</a></li>
-    <li><a href="https://vip.wps.cn/" target="_blank">金山WPS office 会员中心</a></li>
-    <li><a href="http://www.docer.com/" target="_blank">稻売儿</a></li>
-    <li><a href="http://www.sangxiazichan.com/" target="_blank">桑夏资产官网</a></li>
-    <li><a href="https://github.com/zhangchunlin/avalon-uliweb-examples" target="_blank">uliweb Python框架与avalon的组合示例</a></li>
-    <li><a href="https://github.com/darkbluegood/domain" target="_blank">avalon+jQuery实现域名注册查询</a></li>
-    <li><a href="http://wvovo.com/avalon/" target="_blank">路由器示例</a></li>
-    <li><a href="http://5233.wiisocl.com/" target="_blank">记者考试题</a></li>
-    <li><a href="http://oarc.mokylin.com:10100/" target="_blank">墨麒OA (user: linwei, password: 123456)</a></li>
-    <li><a href="http://ued.qunar.com/oniui/home.htm" target="_blank">OinUI库</a> </li>
-    <li><a href="http://lihuanghe.github.io/avalon-easyui-demo/jqueryUIwrapper.html" target="_blank">jqueryUIwrapper</a> </li>
-    <li><a href="http://md.tansuyun.cn/#!/" target="_blank">markdown编辑器</a></li>
-    <li><a href="http://qiangtou.github.io/js/2014/05/09/2048/" target="_blank">2048游戏</a></li>
-    <li><a href="https://console.ustack.com/login?next=/" target="_blank">UOS公有云</a></li>
-    <li><a href="http://www.cnblogs.com/TheViper/p/4026462.html" target="_blank">瀑布流</a></li>
-    <li><a href="https://github.com/RubyLouvre/avalon/issues/46#issuecomment-28468529" target="_blank">无限树</a></li>
-    
-    <li><a href="http://lihuanghe.github.io/avalontest/#" target="_blank">http://lihuanghe.github.io/avalontest/#</a></li>
-   
-    <li><a href="http://www.jinpai.com/" target="_blank">金牌拍卖</a></li>
-<li><a href="http://vphotos.cn/#!/" target="_blank">http://vphotos.cn/#!/</a></li>
-    
+                },
+                click: function() {
 
-    <li>银联钱包的App ios和安卓的应用</li>
-</ul>
-<div>
-    
-    <span><a href="http://www.htyou.com/" style="background: url(./static/logo/htyou_logo.png) -260px 0px no-repeat;
-             width:149px;height:69px;display:inline-block"></a></span>
-</div>
+                    vm.text = vm.text + " click "
+                },
+                text: ""
+            })
 
+        </script>
+        <!--        <script>
+                    $(function() {
+                        var $output = $('#output')
+                                , $divTapAbove = $('#divTapAbove')
+                        $('#divClickUnder').on('click', function() {
+                            $output.html($output.html() + ' click<br/>')
+                        })
+                        $divTapAbove.on('click', function() {
+                            $divTapAbove.hide() // 注意，该div被tap触发后会隐藏自己
+                            $output.html($output.html() + ' tap<br/>')
+                        })
+                    })
+                </script>-->
+
+    </body>
+</html>
 
 </div>
 <div class="col-md-3" role="complementary">

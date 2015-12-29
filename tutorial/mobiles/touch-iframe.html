@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="avalonjs - 迷你简单易用的前端MVVM框架，让你的网站更快更炫更好用">
+        <meta name="keywords" content="MVVM, CSS, JavaScript, framework, avalon, web development">
+        <meta name="author" content="RubyLouvre,司徒正美">
+
+
+        <title>avalon中文文档</title>
+        <script src="//files.cnblogs.com/files/rubylouvre/avalon.shim.js"></script>
+
+        <!-- Bootstrap core CSS -->
+        <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/patch.css" rel="stylesheet">
+
+        <!-- Documentation extras -->
+
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/docs.min.css" rel="stylesheet">
+        <style>
+            body,html{
+               overflow-y: hidden;
+            }
+        </style>
+        <!--[if lt IE 9]><script src="//avalon-doc-bdda3.coding.io/assets/js/ie8-responsive-file-warning.js"></script>
+        <script src="//avalon-doc-bdda3.coding.io/assets/js/ie-emulation-modes-warning.js"></script>
+        <![endif]-->
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="icon" href="/favicon.ico">
+
+    </head>
+    <body>
+
+
+
+
+        <div class="container bs-docs-container">
+
+            <div class="row">
+                <div class="col-md-9" role="main">
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="../../static/script/avalon.mobile.js"></script>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <style>
+            .box{
+                width:200px;
+                height: 200px;
+                background: #ea9e00;
+                float:left;
+                color:#000;
+                margin:20px;
+                margin-bottom:20px;
+
+                -webkit-touch-callout: none;
+                user-select: none;
+                -moz-user-select:none;
+                -webkit-user-select: none;
+            }
+
+        </style>
+        <script>
+
+            avalon.ready(function() {
+
+                avalon.define({
+                    $id: "touch",
+                    tap:function(e) {
+                        this.innerHTML = "轻触" + Date.now() + e.type
+                    },
+              
+                    doubletap: function(e) {
+                        this.innerHTML = "双触 " + Date.now() + e.type
+                    },
+            
+                    longtap: function(e) {
+                        this.innerHTML = "长摁" + Date.now() + e.type
+                    },
+                    swipeleft: function(e) {
+                        this.innerHTML = "向左划← " + Date.now() + e.type
+                    },
+                    swiperight: function(e) {
+                        this.innerHTML = "向右划→ " + Date.now() + e.type
+                    },
+                    swipeup: function(e) {
+                        this.innerHTML = "向上划↑ " + Date.now() + e.type
+                    },
+                    swipedown: function(e) {
+                        this.innerHTML = "向下划↓ " + Date.now() + e.type
+                    },
+
+
+                    array: avalon.range(0, 400)
+
+                })
+                avalon.scan()
+            })
+
+
+        </script>
+
+    </head>
+    <body ms-controller="touch">
+        <div><a href="" target="top">在新窗口打开</a></div>
+        <div ms-on-click='tap' class='box'>
+            轻触
+        </div>
+      
+       
+        <div ms-on-doubletap='doubletap' class='box' style="background: orchid">
+            双触
+        </div>
+        
+        <div ms-on-longtap='longtap' class='box' style="background: purple">
+            长按
+        </div>
+        <div ms-on-swipeleft='swipeleft' class='box' style="background: #39b3d7">
+            向左划
+        </div>
+        <div ms-on-swiperight='swiperight' class='box' style="background: yellow">
+            向右划
+        </div>
+        <div ms-on-swipeup='swipeup' class='box' style="background: #5cb85c">
+            向上划
+        </div>
+        <div ms-on-swipedown='swipedown' class='box' style="background: #ed9c28">
+            向下划
+        </div>
+        <br clear="both"/>
+        <div>
+            【手指动作】thumb up:赞 pinch:捏/拧/掐 pluck:采摘/拔 rip:拆开/撕掉 scratch:抓/挠/刮/划 snap:打响指 flip:掷（硬币）click:点击 press:按/压 point to:指向 squeeze out:挤出/拧出 show the middle finger竖起中指 flick dust:弹掉灰尘 wipe:擦拭 strum:弹拨 grip:抓住 clench:握紧
+        </div>
+        <div style="height:400px"></div>
+    </body>
+</html>
+
+
+</div>
+<div class="col-md-3" role="complementary">
+
+</div>
+</div>
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="//avalon-doc-bdda3.coding.io/assets/highlight/shCore.js"></script>
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="//avalon-doc-bdda3.coding.io/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+<!-- frame size -->
+<script src="http://avalonjs.github.io/assets/js/iframe.js"></script>
+</body>
+</html>
+
