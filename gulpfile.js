@@ -86,18 +86,6 @@ gulp.task('git', ['cdn'], function(){
     gulp.src(['./']).pipe(shell([
       'git add .',
       "git commit -m 'auto update'",
-  ]))
-
-    // gulp.src('./')
-    // .pipe(git.add())
-    // .pipe(git.commit('auto update'))
-    // .pipe(git.pull('cdn', 'master'))
-    // .pipe(git.push('cdn', 'master'))
-    console.log('git同步成功')
-})
-
-gulp.task('git_push', ['git'], function(){
-    gulp.src(['./']).pipe(shell([
       'git pull cdn master',
       'git push -u cdn master'
   ]))
