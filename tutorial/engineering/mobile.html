@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="avalonjs - 迷你简单易用的前端MVVM框架，让你的网站更快更炫更好用">
+        <meta name="keywords" content="MVVM, CSS, JavaScript, framework, avalon, web development">
+        <meta name="author" content="RubyLouvre,司徒正美">
+
+
+        <title>avalon中文文档</title>
+        <script src="//files.cnblogs.com/files/rubylouvre/avalon.shim.js"></script>
+
+        <!-- Bootstrap core CSS -->
+        <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/patch.css" rel="stylesheet">
+
+        <!-- Documentation extras -->
+
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/docs.min.css" rel="stylesheet">
+        <style>
+            body,html{
+               overflow-y: hidden;
+            }
+        </style>
+        <!--[if lt IE 9]><script src="//avalon-doc-bdda3.coding.io/assets/js/ie8-responsive-file-warning.js"></script>
+        <script src="//avalon-doc-bdda3.coding.io/assets/js/ie-emulation-modes-warning.js"></script>
+        <![endif]-->
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="icon" href="/favicon.ico">
+
+    </head>
+    <body>
+
+
+
+
+        <div class="container bs-docs-container">
+
+            <div class="row">
+                <div class="col-md-9" role="main">
+
+<h2>移动支持</h2>
+<p>这个的资料有点零散,但绝对够用</p>
+<ul>
+    <li>核心可以选择:avalon.mobile.js或avalon.mobile.shim.js, 它们添加了触屏事件支持</li>
+    <li>移动端所需要的重力感应, 滚动条修复, 可以到<a href="https://github.com/RubyLouvre/avalon.oniui/tree/master/touch">这里</a>找到</li>
+    <li>强大的手脚架支持,详见下面介绍</li>
+</ul>
+<p>avalon移动端的手脚架特指一个叫<a href="https://github.com/pinghe/seedfrontend">seedfrontend</a>开源项目，该开源项目展示了：</p>
+<ul>
+    <li>支持cordova、browser应用，即同一套代码可用于桌面浏览器和各类手机应用。</li>
+    <li>使用avalon MVVM框架</li>
+    <li>使用cordova 用于移动端</li>
+    <li>使用requirejs amd模块加载器</li>
+    <li>使用gulp构建系统</li>
+    <li>展示了页面切分和逻辑模块划分（html、css、js），及如何根据实际切换模块。适用团队分工合作</li>
+    <li>页面路由技术，页面转换的有限状态机应用。</li>
+    <li>支持js、coffee脚本</li>
+    <li>支持css、less、sass 文件</li>
+    <li>支持三种应用场景，浏览器，移动app</li>
+    <li>支持生产环境，即可将js合并压缩成单个js文件，优化css文件，优化html文件</li>
+    <li>支持DevOps</li>
+</ul>
+<p>使用了avalon.mobile,可以用以下指令</p>
+<ul>
+    <li>ms-on-tap</li>
+    <li>ms-on-swipe</li>
+    <li>ms-on-swipeleft</li>
+    <li>ms-on-swiperight</li>
+    <li>ms-on-swiperup</li>
+    <li>ms-on-swipedown</li>
+    <li>ms-on-longtap</li>
+    <li>ms-on-doubletap</li>
+</ul>
+<p>在<a href="https://github.com/RubyLouvre/avalon2/tree/master/component/gesture">
+        
+        这里</a>还有touch.drag, touch.pinch, touch.rotate模块, 它们还另外添加了
+        rotate, rotateright, rotateleft, pinch, pinchstart, 
+        pinchend, pinchout, pinchin, dragstart, dragend, drag等事件</p>
+
+</div>
+<div class="col-md-3" role="complementary">
+
+</div>
+</div>
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="//avalon-doc-bdda3.coding.io/assets/highlight/shCore.js"></script>
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="//avalon-doc-bdda3.coding.io/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+<!-- frame size -->
+<script src="http://avalonjs.github.io/assets/js/iframe.js"></script>
+</body>
+</html>
+

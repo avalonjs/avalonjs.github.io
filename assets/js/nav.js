@@ -311,14 +311,25 @@
                       href: "tutorial/engineering/weixin.html",
                       name: "在微信中使用"
                   },
+                   {
+                      href: "tutorial/engineering/mobile.html",
+                      name: "在移动端使用"
+                  },
                   {
                       href: "tutorial/engineering/loader.html",
                       name: "与requirejs混用"
                   },
-                  
+                   {
+                      href: "tutorial/engineering/webpack.html",
+                      name: "使用webpack打包"
+                  },
                    {
                       href: "tutorial/engineering/project.html",
-                      name: "样板工程"
+                      name: "webpack+avalon"
+                  },
+                   {
+                      href: "tutorial/engineering/fis.html",
+                      name: "fis3+avalon"
                   },
                     {
                       href: "tutorial/engineering/seo.html",

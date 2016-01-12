@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="avalonjs - 迷你简单易用的前端MVVM框架，让你的网站更快更炫更好用">
+        <meta name="keywords" content="MVVM, CSS, JavaScript, framework, avalon, web development">
+        <meta name="author" content="RubyLouvre,司徒正美">
+
+
+        <title>avalon中文文档</title>
+        <script src="//files.cnblogs.com/files/rubylouvre/avalon.shim.js"></script>
+
+        <!-- Bootstrap core CSS -->
+        <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/patch.css" rel="stylesheet">
+
+        <!-- Documentation extras -->
+
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/docs.min.css" rel="stylesheet">
+        <style>
+            body,html{
+               overflow-y: hidden;
+            }
+        </style>
+        <!--[if lt IE 9]><script src="//avalon-doc-bdda3.coding.io/assets/js/ie8-responsive-file-warning.js"></script>
+        <script src="//avalon-doc-bdda3.coding.io/assets/js/ie-emulation-modes-warning.js"></script>
+        <![endif]-->
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="icon" href="/favicon.ico">
+
+    </head>
+    <body>
+
+
+
+
+        <div class="container bs-docs-container">
+
+            <div class="row">
+                <div class="col-md-9" role="main">
+
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>点击穿透测试</title>
+        <meta name="viewport" content="width=device-width">
+        <script src="../../static/script/avalon.mobile.js"></script>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <style type="text/css">
+            #divTapAbove,#divClickUnder{position: absolute;top: 30px;left: 0;}
+
+            #divClickUnder{width: 300px;height: 50px;background: blue;  z-index: 90}
+            #divTapAbove{width: 200px;height: 75px;background: red; z-index: 100}
+            #output{position: absolute;top: 100px;left:0;border: 1px solid #000;width:200px;min-height:100px;}
+        </style>
+    </head>
+    <body ms-controller="test">
+        <div><a target="top" href="">新窗口打开</a></div>
+
+        <div id="divTapAbove" ms-on-tap="tap"></div>
+        <div id="divClickUnder" ms-on-click="click"></div>
+        <div id="output" ms-text="text"></div>
+        <script>
+            var vm = avalon.define({
+                $id: "test",
+                tap: function() {
+                    vm.text = vm.text + " tap "
+                    this.style.display = "none"
+
+                },
+                click: function() {
+
+                    vm.text = vm.text + " click "
+                },
+                text: ""
+            })
+
+        </script>
+        <!--        <script>
+                    $(function() {
+                        var $output = $('#output')
+                                , $divTapAbove = $('#divTapAbove')
+                        $('#divClickUnder').on('click', function() {
+                            $output.html($output.html() + ' click<br/>')
+                        })
+                        $divTapAbove.on('click', function() {
+                            $divTapAbove.hide() // 注意，该div被tap触发后会隐藏自己
+                            $output.html($output.html() + ' tap<br/>')
+                        })
+                    })
+                </script>-->
+
+    </body>
+</html>
+
+</div>
+<div class="col-md-3" role="complementary">
+
+</div>
+</div>
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="//avalon-doc-bdda3.coding.io/assets/highlight/shCore.js"></script>
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="//avalon-doc-bdda3.coding.io/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+<!-- frame size -->
+<script src="http://avalonjs.github.io/assets/js/iframe.js"></script>
+</body>
+</html>
+

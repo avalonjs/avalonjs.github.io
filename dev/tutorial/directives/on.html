@@ -2,7 +2,9 @@
 <p>之前的章节许多示例代码也或多或少地展示了如何使用ms-click来绑定事件了。能直接在模板上绑定是事件，这也是静态模板与动态绑定的一大区别。ms-click不是简单的onclick的别名，它在内部屏蔽了浏览器的差异，并且对许多浏览器暂时不支持的事件做了兼容处理。</p>
 
 <p>总的来说，事件绑定是使用ms-on-☆绑定来实现，但avalon也提供了许多快捷方式，让用户能直接以ms-eventName调用那些常用事件，如下</p>
-
+<p>ms-on-click="fn"可以写成ms-click="fn",默认fn的第一个参数就是事件对象,如果想传更多参数,
+可以改成这样ms-click="fn(111,aaa,$event)".
+</p>
 <blockquote>
     <p>animationend、  blur、  change、  input、 click、 dblclick、 focus、 keydown、 keypress、 keyup、 mousedown、 mouseenter、 mouseleave、 mousemove、 mouseout、 mouseover、 mouseup、 scan、 scroll、 submit</p>
 </blockquote>
