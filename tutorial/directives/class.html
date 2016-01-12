@@ -26,8 +26,8 @@
                overflow-y: hidden;
             }
         </style>
-        <!--[if lt IE 9]><script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie8-responsive-file-warning.js"></script>
-        <script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie-emulation-modes-warning.js"></script>
+        <!--[if lt IE 9]><script src="../assets/js/ie8-responsive-file-warning.js"></script>
+        <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
         <![endif]-->
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -182,7 +182,7 @@
 
 &lt;/html&gt;</pre></div>
 
-<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/class/1409556779440-class2.gif"  /></p>
+<p><img src="../../assets/css/directives/class/1409556779440-class2.gif"  /></p>
 
 <p>此外还有两个绑定，ms-active、 ms-hover。它们分别是用来摸拟:active, :hover效果，用法与ms-class一样，都分新旧风格。ms-active只在点击的那一瞬间有效果，ms-hover只在掠过时有效果，失去焦点或离开目标元素就会移除刚才添加的类名。</p>
 
@@ -247,7 +247,7 @@
 
 &lt;/html&gt;</pre></div>
 
-<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/class/1409563260672-class3.gif" /></p>
+<p><img src="../../assets/css/directives/class/1409563260672-class3.gif" /></p>
 
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
@@ -294,7 +294,7 @@
 
 &lt;/html&gt;</pre></div>
 
-<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/class/1409638303629-toggle.gif"  /></p>
+<p><img src="../../assets/css/directives/class/1409638303629-toggle.gif"  /></p>
 
 <p>ms-class、 ms-hover、 ms-active涵盖了所有与类名相应的需求，并且使用上比jQuery还简单。最后看一下用它实现斑马线的效果吧。</p>
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
@@ -347,7 +347,7 @@
 &lt;/html&gt;</pre></div>
 
 
-<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/class/1409564192080-class4.gif" /></p>
+<p><img src="../../assets/css/directives/class/1409564192080-class4.gif" /></p>
 <p ms="skip">我们再比较一下ms-class新风格与ms-attr-class的区别吧。ms-class新风格不会试图将类名部分转换为变量，
     只有当出现{{}}才只会将里面的东西作为表达式求值。而ms-attr-class总是会尝试将整个属性值变成一个变量，
     如ms-attr-class="aaa"相当于ms-attr-class="{{aaa}}"，ms-attr-class="{{aaa}}222"相当于ms-attr-class="aaa+'222'"。
