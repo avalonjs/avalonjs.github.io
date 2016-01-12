@@ -92,9 +92,9 @@ gulp.task('git', ['cdn'], function(){
     }
     gulp.src(['./']).pipe(shell([
         'git pull cdn master',
-        'git push -u cdn master'
+        'git push cdn master'
     ]))
-    console.log("git同步成功");
+    console.log("git 同步成功");
 })
 
 gulp.task('default', ['git'], function () {
