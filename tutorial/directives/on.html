@@ -26,8 +26,8 @@
                overflow-y: hidden;
             }
         </style>
-        <!--[if lt IE 9]><script src="//avalon-doc-bdda3.coding.io/assets/js/ie8-responsive-file-warning.js"></script>
-        <script src="//avalon-doc-bdda3.coding.io/assets/js/ie-emulation-modes-warning.js"></script>
+        <!--[if lt IE 9]><script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie8-responsive-file-warning.js"></script>
+        <script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie-emulation-modes-warning.js"></script>
         <![endif]-->
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -152,7 +152,7 @@
 &lt;/html&gt;
 &lt;/code&gt;</pre></div>
 
-<p><img src="//avalon-doc-bdda3.coding.io/assets/css/directives/on/1409902096503-click.gif"  /></p>
+<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/on/1409902096503-click.gif"  /></p>
 
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE HTML&gt;
 &lt;html&gt;
@@ -197,7 +197,7 @@
 &lt;/html&gt;
 &lt;/code&gt;</pre></div>
 
-<p><img src="//avalon-doc-bdda3.coding.io/assets/css/directives/on/1409902480576-click2.gif"  /></p>
+<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/on/1409902480576-click2.gif"  /></p>
 
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE HTML&gt;
 &lt;html&gt;
@@ -231,7 +231,7 @@
 &lt;/html&gt;
 &lt;/code&gt;</pre></div>
 
-<p><img src="//avalon-doc-bdda3.coding.io/assets/css/directives/on/1409902782256-click3.gif" /></p>
+<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/on/1409902782256-click3.gif" /></p>
 <div class="alert alert-success" role="alert">
     <p>avalon已经对ms-mouseenter, ms-mouseleave进行修复，可以在<a href="http://bl.ocks.org/mbostock/5247027">这里</a>与<a href="http://stackoverflow.com/questions/6130737/mouseenter-without-jquery">这里</a>了解这两个事件。到chrome30时，所有浏览器都原生支持这两个事件。</p>
 </div>
@@ -267,7 +267,7 @@
 &lt;/html&gt;
 &lt;/code&gt;</pre></div>
 
-<p><img src="//avalon-doc-bdda3.coding.io/assets/css/directives/on/1409903572570-click4.gif"  /></p>
+<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/on/1409903572570-click4.gif"  /></p>
 <div class="alert alert-success" role="alert">
     <p>最后是mousewheel事件的修改，主要问题是出现firefox上，它死活也不愿意支持mousewheel，在avalon里是用DOMMouseScroll或wheel实现模拟的。我们在事件对象通过wheelDelta属性是否为正数判定它在向上滚动。</p>
 </div>
@@ -299,7 +299,7 @@
 &lt;/html&gt;
 &lt;/code&gt;</pre></div>
 
-<p><img src="//avalon-doc-bdda3.coding.io/assets/css/directives/on/1409904002238-click5.gif" /></p>
+<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/on/1409904002238-click5.gif" /></p>
 
 <div class="bs-callout bs-callout-info" id="callout-alerts-dismiss-use-button">
     <h4>如何解除ms-on-*, ms-click等绑定的事件回调?</h4>
@@ -339,7 +339,7 @@
 &lt;/body&gt;
 
 &lt;/html&gt;</pre></div>
-<p><img src="//avalon-doc-bdda3.coding.io/assets/css/directives/on/click6.gif"  /></p>
+<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/on/click6.gif"  /></p>
 <p>换言之，你想解除某个事件，就直接将VM中对应的函数置换为<code>空函数</code>就行了！</p>
 <p>此外avalon还对input，animationend事件进行修复，大家也可以直接用avalon.bind, avalon.fn.bind来绑定这些事件。但建议都用ms-on绑定来处理。</p>
 

@@ -2,6 +2,8 @@ var gulp = require('gulp')
 var path = require('path')
 var concat = require('gulp-concat')
 var replace = require('gulp-replace')
+var git = require('gulp-git');
+var shell = require('gulp-shell')
 var js_beautify = require("./assets/js/beautify").js_beautify
 var html_beautify = require("./assets/js/beautify-html").html_beautify
 var css_beautify = require("./assets/js/beautify-css").css_beautify
@@ -68,16 +70,33 @@ var path = {
     'src': path.join(__dirname, '/tutorial'),
     'dest': path.join(__dirname, '/tutorial')
 }
+
 gulp.task('cdn', ['combo'], function(){
-    var cdnUrl = "avalon-doc-bdda3.coding.io",
+    var cdnUrl = "coding.net/u/roscoe054/p/avalon.doc/git/raw/master",
         replaceStr = "src=\"//" + cdnUrl + "/assets"
 
     gulp.src([path.src + '/**/*.html'])
         .pipe(replace(/src="[.\/]+assets/g, replaceStr))
+        .pipe(replace(/src="http:\/\/avalon-doc-bdda3.coding.io/g, replaceStr))
         .pipe(gulp.dest(path.dest));
-    console.log('资源已打到' + cdnUrl)
+    console.log('src已修改为' + cdnUrl)
 })
 
-gulp.task('default', ['combo', 'cdn'], function () {
+gulp.task('git', ['cdn'], function(){
+    try {
+        git.addRemote('cdn', 'https://git.coding.net/roscoe054/avalon.doc.git', function (err) {
+            console.log("has add remote cdn");
+        });
+    } catch (e) {
+        console.log(e);
+    }
+    gulp.src(['./']).pipe(shell([
+        'git pull cdn master',
+        'git push cdn master'
+    ]))
+    console.log("git 同步成功");
+})
+
+gulp.task('default', ['git'], function () {
     console.log('合并完毕')
 });

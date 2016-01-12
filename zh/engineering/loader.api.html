@@ -1,0 +1,43 @@
+<h2>avalon自带加载器</h2>
+<div ms-include-src="{{userLanguage}}/engineering/loader.menu.html" data-include-replace="true">
+    
+</div>
+<p>一般而言， 我们只在页面上引入一个JS文件，不用说那个JS文件就是avalon.js。然后在对应的script标签上定义一个data-main属性，
+    值为一个入口文件的路径。<strong style="color:red">注意，它不能使用.js扩展名</strong>。</p>
+<pre class="brush:html;gutter:false;toolbar:false;">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;avalon.js&lt;/title&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;meta name="viewport" content="width=device-width"&gt;
+        &lt;script src="avalon.js" data-main="js/main"&gt;&lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div&gt;TODO write content&lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p>比如上面的入口文件应为js/main.js，它是放在avalon.js所在目录的js子目录下。</p>
+<p>入口文件主要做两件事，使用require.config进行配置，使用require加载你的业务代码。</p>
+<p><strong>main.js</strong></p>
+<pre class="brush:javascript;gutter:false;toolbar:false">
+require.config({
+    baseUrl: "js", 
+    paths: {
+        jquery: 'js/jQuery/jquery-1.12' //jQuery目录是放置各种jQuery的版本及其插件的
+    }
+})
+//html与js与style是位于同一目录，
+//js是放置JS模块及组件，
+//html是放置同名模块对应的模板，
+//style是放置同名模块对应的样式
+//当然这只是其中一种组织形式
+require(["./aaa", "text!../html/aaa.html", "css!../style/aaa","jquery"], function(a, b, c, d) {
+    //.....
+})
+</pre>
+<p>最后是各个JS模块，以define方法进行定义了。注意，define方法有三个参数，第一个参数是模块ID，通常不用写， 在打包时，r.js会根据它与baseUrl的位置
+    算出其可用的模块ID名。第二个参数是依赖列表，./, ../应该是相对于其父模块进行设置。第三个是fatory函数，亦即模块本身。
+</p>
+<p>总结一下，加载器的三个核心API的定义与使用顺序为 require.config --> require --> define。</p>
