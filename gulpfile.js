@@ -82,20 +82,20 @@ gulp.task('cdn', ['combo'], function(){
     console.log('src已修改为' + cdnUrl)
 })
 
-gulp.task('git', ['cdn'], function(){
-  //   gulp.src(['./']).pipe(shell([
-  //     'git add .',
-  //     "git commit -m 'auto update'",
-  //     'git pull cdn master',
-  //     'git push -u cdn master'
-  // ]))
+gulp.task('git', [], function(){
+    gulp.src(['./']).pipe(shell([
+      'git add .',
+      "git commit -m 'auto update'",
+      'git pull cdn master',
+      'git push -u cdn master'
+  ]))
 
-    gulp.src('./')
-    .pipe(git.add())
-    .pipe(git.commit('auto update'))
-    .pipe(git.pull('cdn', 'master'))
-    .pipe(git.push('cdn', 'master'))
-    console.log('git同步成功')
+    // gulp.src('./')
+    // .pipe(git.add())
+    // .pipe(git.commit('auto update'))
+    // .pipe(git.pull('cdn', 'master'))
+    // .pipe(git.push('cdn', 'master'))
+    // console.log('git同步成功')
 })
 
 gulp.task('default', ['combo', 'cdn'], function () {
