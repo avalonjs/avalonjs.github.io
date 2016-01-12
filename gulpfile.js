@@ -82,22 +82,21 @@ gulp.task('cdn', ['combo'], function(){
     console.log('src已修改为' + cdnUrl)
 })
 
-gulp.task('git', [], function(){
+gulp.task('git', ['cdn'], function(){
+    try {
+        git.addRemote('cdn', 'https://git.coding.net/roscoe054/avalon.doc.git', function (err) {
+            console.log("has add remote cdn");
+        });
+    } catch (e) {
+        console.log(e);
+    }
     gulp.src(['./']).pipe(shell([
-      'git add .',
-      "git commit -m 'auto update'",
-      'git pull cdn master',
-      'git push -u cdn master'
-  ]))
-
-    // gulp.src('./')
-    // .pipe(git.add())
-    // .pipe(git.commit('auto update'))
-    // .pipe(git.pull('cdn', 'master'))
-    // .pipe(git.push('cdn', 'master'))
-    // console.log('git同步成功')
+        'git pull cdn master',
+        'git push -u cdn master'
+    ]))
+    console.log("git同步成功");
 })
 
-gulp.task('default', ['combo'], function () {
+gulp.task('default', ['git'], function () {
     console.log('合并完毕')
 });
