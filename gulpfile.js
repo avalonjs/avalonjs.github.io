@@ -98,6 +98,6 @@ gulp.task('git', [], function(){
     // console.log('git同步成功')
 })
 
-gulp.task('default', ['combo', 'cdn'], function () {
+gulp.task('default', ['combo'], function () {
     console.log('合并完毕')
 });

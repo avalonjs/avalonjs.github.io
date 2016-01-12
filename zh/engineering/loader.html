@@ -1,63 +1,5 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-    <head>
-        <!-- Meta, title, CSS, favicons, etc. -->
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="avalonjs - 迷你简单易用的前端MVVM框架，让你的网站更快更炫更好用">
-        <meta name="keywords" content="MVVM, CSS, JavaScript, framework, avalon, web development">
-        <meta name="author" content="RubyLouvre,司徒正美">
-
-
-        <title>avalon中文文档</title>
-        <script src="//files.cnblogs.com/files/rubylouvre/avalon.shim.js"></script>
-
-        <!-- Bootstrap core CSS -->
-        <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-
-        <link href="//avalon-doc-bdda3.coding.io/assets/css/patch.css" rel="stylesheet">
-
-        <!-- Documentation extras -->
-
-        <link href="//avalon-doc-bdda3.coding.io/assets/css/docs.min.css" rel="stylesheet">
-        <style>
-            body,html{
-               overflow-y: hidden;
-            }
-        </style>
-        <!--[if lt IE 9]><script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie8-responsive-file-warning.js"></script>
-        <script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie-emulation-modes-warning.js"></script>
-        <![endif]-->
-        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-          <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-          <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
-
-        <!-- Favicons -->
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-        <link rel="icon" href="/favicon.ico">
-
-    </head>
-    <body>
-
-
-
-
-        <div class="container bs-docs-container">
-
-            <div class="row">
-                <div class="col-md-9" role="main">
-
 <h2>avalon自带加载器</h2>
-<script>
-    avalon.define({
-        $id: "include",
-        path: "loader.menu.html"
-    })
-</script>
-<div ms-controller="include" ms-include-src="path" data-include-replace="true">
+<div ms-include-src="{{userLanguage}}/engineering/loader.menu.html" data-include-replace="true">
 
 </div>
 
@@ -75,7 +17,7 @@
     另一个选择是将所有的脚本捆绑打包在一起，但在打包后你仍然需要把它们按照正确的顺序排序。
 </p>
 <p>AMD就是这样一种对模块的定义，使模块和它的依赖可以被异步的加载，但又按照正确的顺序。</p>
-<div><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/engineering/loader/amd.png"/></div>
+<div><img src="zh/engineering/loader/amd.png"/></div>
 <h2><strong>选择加载器</strong></h2>
 <p><strong>内置AMD加载器</strong></p>
 <p>avalon内置了AMD加载器，用于与其原创者requirejs一模一样，但更轻量。它主要涉及以下三个函数:</p>
@@ -111,7 +53,8 @@
     <li>如果模块ID在paths配置项里配置了，如果它的值是绝对路径，那么就直接用这个没有什么好说的。
         如果是相对路径，那么先找父模块的路径，没有父模块使用baseUrl。</li>
     <li>如果模块ID在map配置项里配置了，那么它会在当前父模块的URL加文件名进行替换，前面加上<b>baseUrl</b>，注意不是跟parentUrl
-        <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>requirejs.config({
+        <pre class="brush:javascript;gutter:false;toolbar:false">
+requirejs.config({
     map: {
         "old/aaa": { //old/aaa.js或old/aaa/目录下的所有模块如果依赖jquery，则使用1.6.4版本
             'jquery': 'jquery-1.6.4'
@@ -120,14 +63,17 @@
             'jquery': 'jquery-1.7.2'
         }
     }
-})</pre></div>
-        <p>相当于</p>
-        <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>String(parentUrl + parentName).replace("old/aaa/jquery", function() {
-    curUrl = baseUrl + "/jquery-1.6.4"
 })
-String(parentUrl + parentName).replace("new/aaa/jquery", function() {
-    curUrl = baseUrl + "/jquery-1.7.2"
-})</pre></div>
+        </pre>
+        <p>相当于</p>
+        <pre class="brush:javascript;gutter:false;toolbar:false">
+               String(parentUrl + parentName).replace("old/aaa/jquery",function(){
+                        curUrl = baseUrl + "/jquery-1.6.4"
+               })
+               String(parentUrl + parentName).replace("new/aaa/jquery", function(){
+                        curUrl = baseUrl + "/jquery-1.7.2"
+                })
+        </pre>
 
     </li>
 </ul>
@@ -141,26 +87,4 @@ String(parentUrl + parentName).replace("new/aaa/jquery", function() {
 <p>当然对于一个非内置的资源插件，它会先加载资源插件再加载JS模块。</p>
 
 
-
-
-
-</div>
-<div class="col-md-3" role="complementary">
-
-</div>
-</div>
-</div>
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-<script src="//avalon-doc-bdda3.coding.io/assets/highlight/shCore.js"></script>
-
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="//avalon-doc-bdda3.coding.io/assets/js/ie10-viewport-bug-workaround.js"></script>
-
-<!-- frame size -->
-<script src="http://avalonjs.github.io/assets/js/iframe.js"></script>
-</body>
-</html>
 
