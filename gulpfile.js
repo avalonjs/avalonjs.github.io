@@ -84,11 +84,9 @@ gulp.task('cdn', ['combo'], function(){
 
 gulp.task('git', ['cdn'], function(){
     gulp.src(['./']).pipe(shell([
-
       'git add .',
-      "git commit -m 'auto update'",
-      'git pull cdn master',
-      'git push -u cdn master']))
+      "git commit -m 'auto update'"
+    ]))
     console.log('git同步成功')
 })
 
