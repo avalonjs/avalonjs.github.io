@@ -93,9 +93,9 @@
 <xmp class="html">
     <div ms-repeat=array><ms:button ms-attr-config="opts{{$index}}"></div>
 </xmp>
-<p>如果你嫌这样麻烦，不想在VM上加这配置属性，还可以使用ms-data-button-a来生成这个值。</p>
+<p>如果你嫌这样麻烦，不想在VM上加这配置属性，还可以使用ms-attr-button-a来生成这个值。</p>
 <xmp class="html">
-    <div ms-repeat=array><ms:button ms-data-button-a="$index+ 10"></div>
+    <div ms-repeat=array><ms:button ms-attr-button-a="$index+ 10"></div>
 </xmp>
 <p>如果你连这个也不想，那么框架就会在已有的VM链上寻找<b>默认配置对象</b>。比如你的自定义签标的tagName为&lt;ms:dropdown&gt;，
     那你在已有VM上定义一个叫ms:dropdown的对象就行了。如果你的自定义标签存在横线，比如ms:color-picker,那么它的默认配置对象
