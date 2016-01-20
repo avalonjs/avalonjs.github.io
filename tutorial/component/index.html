@@ -26,8 +26,8 @@
                overflow-y: hidden;
             }
         </style>
-        <!--[if lt IE 9]><script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie8-responsive-file-warning.js"></script>
-        <script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie-emulation-modes-warning.js"></script>
+        <!--[if lt IE 9]><script src="../assets/js/ie8-responsive-file-warning.js"></script>
+        <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
         <![endif]-->
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -134,9 +134,9 @@
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;div ms-repeat=array&gt;
     &lt;ms:button ms-attr-config="opts{{$index}}"&gt;
 &lt;/div&gt;</pre></div>
-<p>如果你嫌这样麻烦，不想在VM上加这配置属性，还可以使用ms-data-button-a来生成这个值。</p>
+<p>如果你嫌这样麻烦，不想在VM上加这配置属性，还可以使用ms-attr-button-a来生成这个值。</p>
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;div ms-repeat=array&gt;
-    &lt;ms:button ms-data-button-a="$index+ 10"&gt;
+    &lt;ms:button ms-attr-button-a="$index+ 10"&gt;
 &lt;/div&gt;</pre></div>
 <p>如果你连这个也不想，那么框架就会在已有的VM链上寻找<b>默认配置对象</b>。比如你的自定义签标的tagName为&lt;ms:dropdown&gt;，
     那你在已有VM上定义一个叫ms:dropdown的对象就行了。如果你的自定义标签存在横线，比如ms:color-picker,那么它的默认配置对象
@@ -208,7 +208,7 @@
 &lt;/body&gt;
 
 &lt;/html&gt;</pre></div>
-<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/component/component01.png" /></p>
+<p><img src="../../assets/css/component/component01.png" /></p>
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 
@@ -246,7 +246,7 @@
 &lt;/body&gt;
 
 &lt;/html&gt;</pre></div>
-<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/component/component03.png" /></p>
+<p><img src="../../assets/css/component/component03.png" /></p>
 
 
 <p>注意,$refs只保存其子组件的VM，不保存其子组件的子组件的VM！
@@ -298,7 +298,7 @@
 &lt;/body&gt;
 
 &lt;/html&gt;</pre></div>
-<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/component/component02.png" /></p>
+<p><img src="../../assets/css/component/component02.png" /></p>
 <h2 id="slot">插入点的使用</h2>
 <p>我们可以在代表组件的自定义标签的内部,添加一些带slot属性的标签,它们会自动赋给组件VM的同名属性中.</p>
 
@@ -354,9 +354,9 @@
     之后,这些插入元素会根据slot值进行分类,放到一个个文档碎片对象上.
     然后这些文档碎片将插入到$template中的<strong ms-skip>{{xxx|html}}</strong>位置上.
 </p>
-<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/component/slot01.png" width="50%" height="50%"/></p>
-<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/component/slot02.png" width="50%" height="50%" /></p>
-<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/component/slot03.png" width="50%" height="50%"/></p>
+<p><img src="../../assets/css/component/slot01.png" width="50%" height="50%"/></p>
+<p><img src="../../assets/css/component/slot02.png" width="50%" height="50%" /></p>
+<p><img src="../../assets/css/component/slot03.png" width="50%" height="50%"/></p>
 
 <p>插入元素的定义有严格的要求,它必须是自定义元素的直接子节点. 如果这些节点中没有 slot 属性,并且你没有指定$slot的值 ,那么就没有插入点,
     如果你指定了slot属性,并且也指定了$slot,那么除了那些指定了slot属性的节点,其他子节点都是$slot的
