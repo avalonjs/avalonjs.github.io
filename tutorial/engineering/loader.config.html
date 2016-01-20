@@ -26,8 +26,8 @@
                overflow-y: hidden;
             }
         </style>
-        <!--[if lt IE 9]><script src="../assets/js/ie8-responsive-file-warning.js"></script>
-        <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+        <!--[if lt IE 9]><script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie8-responsive-file-warning.js"></script>
+        <script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie-emulation-modes-warning.js"></script>
         <![endif]-->
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -106,12 +106,12 @@ require(["aaa/aaa"], function() {
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(function() {
     console.log("在aaa目录下")
 })</pre></div>
-<div><img src="../../assets/css/engineering/loader/loader0_00.png"/></div>
+<div><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/engineering/loader/loader0_00.png"/></div>
 
 <p>我们可以看到aaa模块依赖于bbb模块，但由于bbb模块没有以'./', '../'开头，那么它就根据baseUrl进行查找了。</p>
 
 <p>再看一个例子：</p>
-<div><img src="../../assets/css/engineering/loader/loader0_0.png"/></div>
+<div><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/engineering/loader/loader0_0.png"/></div>
 <p>主页面的index.html如下:</p>
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
@@ -170,12 +170,12 @@ require(["aaa/aaa"], function() {
     return "eee"
 })</pre></div>
 <p>如果你使用了NetBeans IDE, 我们直接点击上方的<strong>运行</strong>菜单，设置要运行浏览器，然后直到你的项目，选中你的html页面运行。</p>
-<div><img src="../../assets/css/engineering/loader/NetBeans0.jpg"/></div>
-<div><img src="../../assets/css/engineering/loader/NetBeans1.jpg"/></div>
+<div><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/engineering/loader/NetBeans0.jpg"/></div>
+<div><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/engineering/loader/NetBeans1.jpg"/></div>
 <p>最后我们如果打开火狐及其firebug,会看到如下日志：</p>
-<div><img src="../../assets/css/engineering/loader/loader0_1.jpg"/></div>
+<div><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/engineering/loader/loader0_1.jpg"/></div>
 <p>如果你没有NetBeans，也可以点击server.exe(一个小型的.Net服务器)，在IE11下看到的日志与firebug下差不多</p>
-<div><img src="../../assets/css/engineering/loader/loader0_2.jpg"/></div>
+<div><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/engineering/loader/loader0_2.jpg"/></div>
 <p>可以点<a href="../../assets/css/engineering/loader/loader1.rar" download="loader1.rar">这里</a>下载此例子</p>
 <br/>
 <h2 style="color:rgb(22,154,128)">paths配置项的使用</h2>
@@ -183,7 +183,7 @@ require(["aaa/aaa"], function() {
 <p style="color:red">注意： paths对应的值如果不是一个完整路径，那么它将根据baseUrl进行查找。</p>
 <p>在此例子中，jquery, backbone, underscore都是根据AMD规范来编写的类库，虽然与标准的不太一样，但我们可以直接用avalon或require直接加载。</p>
 <p>jquery.placeholder可以在这里下，<a href="https://github.com/mathiasbynens/jquery-placeholder">https://github.com/mathiasbynens/jquery-placeholder</a></p>
-<div><img src="../../assets/css/engineering/loader/loader1_0.jpg"/></div>
+<div><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/engineering/loader/loader1_0.jpg"/></div>
 <p>主页面的index.html如下:</p>
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
@@ -220,7 +220,7 @@ require(["aaa/aaa"], function() {
 &lt;/body&gt;
 
 &lt;/html&gt;</pre></div>
-<div><img src="../../assets/css/engineering/loader/loader1_1.jpg"/></div>
+<div><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/engineering/loader/loader1_1.jpg"/></div>
 <p>可以点<a href="../../assets/css/engineering/loader/loader2.rar" download="loader2.rar">这里</a>下载此例子</p>
 <h2 style="color:rgb(22,154,128)">shim配置项的使用</h2>
 <p>shim是用于将加载那些不符合AMD规范的JS文件, 它拥有两种形态, 数组形态(相当于只配置了deps参数), 对象形态(可配置deps, exports, init这三个参数)</p>
@@ -255,7 +255,7 @@ require(["aaa/aaa"], function() {
                     }
                 }
             }</pre></div>
-<div><img src="../../assets/css/engineering/loader/loader2_0.jpg"/></div>
+<div><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/engineering/loader/loader2_0.jpg"/></div>
 <p>主页面的index.html如下:</p>
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
@@ -310,7 +310,7 @@ require(["app/main"]);</pre></div>
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>$.fn.beta = function() {
     return this.append('<p>Beta is Go!</p>');
 };</pre></div>
-<div><img src="../../assets/css/engineering/loader/loader2_1.jpg"/></div>
+<div><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/engineering/loader/loader2_1.jpg"/></div>
 <p>可以点<a href="../../assets/css/engineering/loader/loader3.rar" download="loader2.rar">这里</a>下载此例子</p>
 <h2 style="color:rgb(22,154,128)">urlArgs配置项的使用</h2>
 <p>拥有两个传参方式,一种是传入一个字符串,那么所有要加载的请求都会加上它们,另一种是传入一个对象,让特殊模块才加上指定参数</p>
@@ -330,7 +330,7 @@ require.config({
         "backbone": "username=ewre&pw=356688",
     }
 })</pre></div>
-<div><img src="../../assets/css/engineering/loader/loader3_0.jpg"/></div>
+<div><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/engineering/loader/loader3_0.jpg"/></div>
 <p>主页面的index.html如下:</p>
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
@@ -365,7 +365,7 @@ require.config({
 &lt;/body&gt;
 &lt;/html&gt</pre></div>
 <p>其他与上面的例子一样,运行它在firebug下看到:</p>
-<div><img src="../../assets/css/engineering/loader/loader3_1.jpg"/></div>
+<div><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/engineering/loader/loader3_1.jpg"/></div>
 <p>可以点<a href="../../assets/css/engineering/loader/loader4.rar" download="loader4.rar">这里</a>下载此例子</p>
 
 <h2 style="color:rgb(22,154,128)">map配置项的使用</h2>
@@ -387,7 +387,7 @@ require.config({
     }
 })</pre></div>
 <p>看下面的例子，其目录结构如下：</p>
-<div><img src="../../assets/css/engineering/loader/loader5_0.png"/></div>
+<div><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/engineering/loader/loader5_0.png"/></div>
 <p>主页面的index.html如下:</p>
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
@@ -450,7 +450,7 @@ require.config({
 })</pre></div>
 
 <p>其他与上面的例子一样,运行它在firebug下看到:</p>
-<div><img src="../../assets/css/engineering/loader/loader5_1.png"/></div>
+<div><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/engineering/loader/loader5_1.png"/></div>
 <p>可以点<a href="../../assets/css/engineering/loader/loader5.rar" download="loader5.rar">这里</a>下载此例子</p>
 <br/>
 <h2 style="color:rgb(22,154,128)">packages配置项的使用</h2>
@@ -471,7 +471,7 @@ require.config({
 }</pre></div>
 <p>最后这个包的加载地址为<strong> "kkk/main.js" </strong></p>
 <p>我们看下面例子</p>
-<div><img src="../../assets/css/engineering/loader/loader6_0.png"/></div>
+<div><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/engineering/loader/loader6_0.png"/></div>
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 
@@ -534,7 +534,7 @@ require(["./dog/aaa", "./dog/bbb", "cat", "domReady!"], function(a, b, c) {
     return 8
 })</pre></div>
 <p>效果图</p>
-<div><img src="../../assets/css/engineering/loader/loader6_1.png"/></div>
+<div><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/engineering/loader/loader6_1.png"/></div>
 <p>可以点<a href="../../assets/css/engineering/loader/loader6.rar" download="loader6.rar">这里</a>下载此例子</p>
 
 
