@@ -26,8 +26,8 @@
                overflow-y: hidden;
             }
         </style>
-        <!--[if lt IE 9]><script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie8-responsive-file-warning.js"></script>
-        <script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie-emulation-modes-warning.js"></script>
+        <!--[if lt IE 9]><script src="../assets/js/ie8-responsive-file-warning.js"></script>
+        <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
         <![endif]-->
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -132,7 +132,7 @@
 &lt;/body&gt;
 
 &lt;/html&gt;</pre></div>
-<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/duplex/duplex2.gif" ></p>
+<p><img src="../../assets/css/directives/duplex/duplex2.gif" ></p>
 <p>ms-duplex拥有一个叫data-duplex-changed的辅助指令，要求属性值对应VM中的一个函数，注意只能是函数名，不能写括号，不能传参。
     它们将当前转换好的element.value传给你（如ms-duplex-number会将值转换为数字），this对应当前元素节点。</p>
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
@@ -183,7 +183,7 @@
 &lt;/body&gt;
 
 &lt;/html&gt;</pre></div>
-<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/duplex/duplex3.gif"  /></p>
+<p><img src="../../assets/css/directives/duplex/duplex3.gif"  /></p>
 <p>在avalon1.3.7中，添加了avalon.duplexHooks钩子对象。上面放置了一个个包含set, get, init方法的对象，我称之为拦截器。
     我们的衔生绑定，如ms-duplex-string，其实就是对应其中string拦截器，此外，ms-duplex上面可以添加<code>N个拦截器</code>，
     如ms-duplex-aaa-bbb-ccc。
@@ -336,7 +336,7 @@
 &lt;/body&gt;
 
 &lt;/html&gt;</pre></div>
-<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/duplex/duplex4.gif" /></p>
+<p><img src="../../assets/css/directives/duplex/duplex4.gif" /></p>
 <p>注意上面第三个文本域，当它输入了false，就会同步到ms-data-duplex-observe，于是就中止继续监听了。</p>
 
 <p>下一个例子，演示ms-duplex如何与循环绑定生成的代理VM的属性配合使用。</p>
