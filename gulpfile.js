@@ -93,6 +93,7 @@ gulp.task('git', ['cdn'], function(){
     gulp.src(['./']).pipe(shell([
         'git add .',
         'git commit -m "auto update"',
+        'git push',
         'git pull cdn master',
         'git push cdn master'
     ]))
