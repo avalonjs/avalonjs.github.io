@@ -26,8 +26,8 @@
                overflow-y: hidden;
             }
         </style>
-        <!--[if lt IE 9]><script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie8-responsive-file-warning.js"></script>
-        <script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie-emulation-modes-warning.js"></script>
+        <!--[if lt IE 9]><script src="../assets/js/ie8-responsive-file-warning.js"></script>
+        <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
         <![endif]-->
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -96,7 +96,7 @@
 
 &lt;/html&gt;</pre></div>
 
-<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/include/1409809489146-include.gif" /></p>
+<p><img src="../../assets/css/directives/include/1409809489146-include.gif" /></p>
 <p>ms-include与ms-include-src的属性值可以添加插值表达式，见下面例子，不过注意需要打开服务器，因为用到AJAX请求。</p>
 
 <p>有四个页面，一个主页面与三个独立的子模板，它们都放在一起，内容分别如下。</p>
@@ -177,7 +177,7 @@
     &lt;input ms-keypress="add"&gt;
 &lt;/p&gt;</pre></div>
 
-<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/include/1409809507647-include2.gif"  /></p>
+<p><img src="../../assets/css/directives/include/1409809507647-include2.gif"  /></p>
 
 <p>如果大家想在模板加载后，加工一下模板，可以使用data-include-loaded来指定回调的名字。</p>
 
@@ -227,7 +227,7 @@
 
 &lt;/html&gt;</pre></div>
 
-<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/include/1409810730376-include3.png" /></p>
+<p><img src="../../assets/css/directives/include/1409810730376-include3.png" /></p>
 
 <p>我们看<code>avalon.templateCache</code>，所有ms-include-src加载的模板都会缓存在这里，从而有效地减少请求数。
   并且这个东西还有一个额外的好处，我们的JS与CSS最终会压缩合并，对于这些模板我们也想把它们合并到JS文件里面，
@@ -266,7 +266,7 @@
 
 &lt;/html&gt;</pre></div>
 
-<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/include/1409812441030-include4.gif"  /></p>
+<p><img src="../../assets/css/directives/include/1409812441030-include4.gif"  /></p>
 <div class="bs-callout bs-callout-info" >
   <p>在avalon1.3.7中添加一个辅助指令data-include-replace，当其值为真，它就会加载模板后自动替代掉其原父容器节点。
   主页面</p>
@@ -321,7 +321,7 @@
 &lt;p class="bp"&gt;bbbbbbbbbbb&lt;/p&gt;
 &lt;p class="bp"&gt;ccccccccccc&lt;/p&gt;</pre></div>
 
-<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/include/1414724133046-include-replace.gif" /></p>
+<p><img src="../../assets/css/directives/include/1414724133046-include-replace.gif" /></p>
 <p>我们结合data-include-rendered, ms-repeat, ms-include实现一个网易式的评论呈现树吧</p>
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
@@ -415,7 +415,7 @@
 &lt;/body&gt;
 
 &lt;/html&gt;</pre></div>
-<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/include/include2.png"  /></p>
+<p><img src="../../assets/css/directives/include/include2.png"  /></p>
 <p>avalon1.4.2中，添加了data-include-cache="true"辅助指令，它会保存之前的模板被扫描后的DOM节点。</p>
 <xml class="html">
 <!DOCTYPE html>
