@@ -52,7 +52,7 @@
 
 
 <div class="bs-docs-section">
-    <h1 class="page-header">下载<h2 style="visibility: hidden" id="home-download"></h2></h1>
+    <h1 class="page-header">下载test<h2 style="visibility: hidden" id="home-download"></h2></h1>
 
     <p><b><a href="https://github.com/RubyLouvre/avalon">avalon</a></b>根据兼并容浏览器或平台的不同划分为三个版本。</p>
 
@@ -111,7 +111,7 @@
             <li>avalon1.5不再使用<code>avalon.bindingHandlers</code>,<code>avalon.bindingExecutors</code>来创建新指令，再改用更方便的avalon.directive方法</li>
             <li>avalon在循环对象时，以前需要自己计算索引值，现在它与循环数组一样，存在<strong>$index变量</strong>了!</li>
         </ul>
-    </div>   
+    </div>
     <h2 id="home-10">10 秒钟看懂 avalon</h2>
     <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
@@ -149,10 +149,10 @@
 </div>
 <h2 id="home-origin">avalon的起源</h2>
 <p><a href="https://github.com/RubyLouvre/avalon">avalon</a>是一个简单易用迷你的MVVM框架，它最早发布于2012.09.15，
-    为解决同一业务逻辑存在各种视图呈现而开发出来的。 
+    为解决同一业务逻辑存在各种视图呈现而开发出来的。
     事实上，这问题其实也可以简单地利用一般的前端模板加jQuery 事件委托 搞定，
     但随着业务的膨胀， 代码就充满了各种选择器与事件回调，难以维护。
-    因此彻底的将业务与逻辑分离，就只能求助于架构。 
+    因此彻底的将业务与逻辑分离，就只能求助于架构。
     最初想到的是MVC，尝试过backbone，但代码不降反升，很偶尔的机会，碰上微软的WPF，
     优雅的MVVM架构立马吸引住我，我觉得这就是我一直寻找的解决之道。</p>
 <p>avalon将所有前端代码彻底分成两部分，视图的处理通过绑定实现（angular有个更炫酷的名词叫指令），
@@ -161,14 +161,10 @@
     感谢上帝，IE8最早引入这东西（<code>Object.defineProperty</code>），可惜有BUG，但带动了其他浏览器实现它，
     IE9+便能安全使用它。 对于老式IE，我找了好久，实在没有办法，使用<code>VBScript</code>实现了。</p>
 
-<p><code>Object.defineProperty</code>或<code>VBS</code>的作用是将对象的某一个属性，转换一个setter与getter， 
+<p><code>Object.defineProperty</code>或<code>VBS</code>的作用是将对象的某一个属性，转换一个setter与getter，
     我们只要劫持这两个方法，通过Pub/Sub模式就能偷偷操作视图。为了纪念WPF的指引，
     我将此项目以WPF最初的开发代号avalon来命名。 它真的能让前端人员脱离DOM的苦海，来到数据的乐园中！</p>
 <p>avalon的所有指令都是以ms-*命名,ms是用纪念我之前的一个框架<code>mass Framework</code>!</p>
-
-
-
-
 
 
 </div>

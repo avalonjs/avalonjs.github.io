@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="avalonjs - 迷你简单易用的前端MVVM框架，让你的网站更快更炫更好用">
+        <meta name="keywords" content="MVVM, CSS, JavaScript, framework, avalon, web development">
+        <meta name="author" content="RubyLouvre,司徒正美">
+
+
+        <title>avalon中文文档</title>
+        <script src="//hotelued.qunar.com/oniui/avalon.js"></script>
+
+        <!-- Bootstrap core CSS -->
+        <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/patch.css" rel="stylesheet">
+
+        <!-- Documentation extras -->
+
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/docs.min.css" rel="stylesheet">
+        <style>
+            body,html{
+               overflow-y: hidden;
+            }
+        </style>
+        <!--[if lt IE 9]><script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie8-responsive-file-warning.js"></script>
+        <script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie-emulation-modes-warning.js"></script>
+        <![endif]-->
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="icon" href="/favicon.ico">
+
+    </head>
+    <body>
+
+
+
+
+        <div class="container bs-docs-container">
+
+            <div class="row">
+                <div class="col-md-9" role="main">
+
+<h1 class="page-header">回调</h1>
+<p>这里的回调是各种指令的辅助指令,用户无法为它们传参,即data-include-rendered="aaa(xxx)"这是错误的.</p>
+<div class="bs-callout bs-callout-danger" >
+    <p>data-xxx-yyy的值只能是VM中的第一层对象的函数名,不能为VM的子对象的函数名.</p>
+  </div>
+
+<ol id="data-callback">
+    <li>data-include-loaded，用于ms-include-src绑定，模板加载后触发，可以在这里修改模板<br/>
+        参数: tmpl，vmodel1, vmodel2 ...
+    </li>
+    <li>data-include-rendered，用于ms-include, ms-include-src绑定，模板渲染好后触发；<br/>没参数
+    </li>
+    <li>data-repeat-rendered，用ms-repeat绑定，当监控数组发生添加，删除，重排等操作时触发；<br/>
+        参数：当前操作名（"add","del","move","append"）
+    </li>
+    <li>data-with-sorted，用ms-repeat, ms-with绑定，赶对象渲染之前触发，要求输出一个字符串数组，对象的键值对会根据它依次输出；<br/>
+        参数：原对象的所有键名构成的数组
+    </li>
+    <li>data-with-rendered，用ms-with绑定，当目标对象输出页面后触发；<br/>
+        参数：当前操作名（"append"）
+    </li>
+    <li>data-each-rendered，用ms-each绑定，当监控数组发生添加，删除，重排等操作时触发；<br/>
+        参数：当前操作名（"add","del","move"）
+    </li>
+    <li>data-duplex-changed，用于ms-duplex绑定，值改变后触发(不建议使用了，avalon1.3.7使用ms-duplex2的拦截器)<br/>
+        参数：当前元素的值
+    </li>
+</ol>
+
+
+</div>
+<div class="col-md-3" role="complementary">
+
+</div>
+</div>
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="//avalon-doc-bdda3.coding.io/assets/highlight/shCore.js"></script>
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="//avalon-doc-bdda3.coding.io/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+<!-- frame size -->
+<script src="http://avalonjs.github.io/assets/js/iframe.js"></script>
+</body>
+</html>
+

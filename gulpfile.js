@@ -96,9 +96,33 @@ gulp.task('git', ['cdn'], function(){
         'git pull cdn master',
         'git push cdn master'
     ]))
-    console.log("git 同步成功");
+    console.log("git add remote");
 })
 
-gulp.task('default', ['git'], function () {
+gulp.task('add', ['git'], function(){
+    console.log('git add .');
+    return gulp.src('./*').pipe(git.add());
+});
+
+gulp.task('commit', ['add'], function(){
+    console.log('git commit');
+    return gulp.src('./*').pipe(git.commit('auto commit'));
+});
+
+gulp.task('pull', ['commit'], function(){
+    console.log('git pull');
+    git.pull('cdn', 'master', function(err) {
+        if (err) throw err;
+    });
+});
+
+gulp.task('push', ['pull'], function(){
+    console.log('git push');
+    git.push('cdn', 'master', {args: " -f"}, function (err) {
+      if (err) throw err;
+    });
+});
+
+gulp.task('default', ['push'], function () {
     console.log('合并完毕')
 });
