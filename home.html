@@ -203,9 +203,10 @@
                     float: left;
                     width: 140px;
                     height: 140px;
+                    line-height: 140px;
+                    overflow: hidden;
                     margin: 24px;
                     text-align:center;
-                    font-size:0;
                     background: #fff;
                     border-radius: 10px;
                 }
@@ -229,6 +230,14 @@
                     font-size:16px;
                     width: 120px;
                 }
+                .jumbotron a{
+                    display: inline-block;
+                    width: 100%;
+                    height: 100%;
+                }
+                .jumbotron:after{
+                    position: static;
+                }
             </style>
             <div class="row jumbotron" >
                 <ul class="logos" ms-controller="logos">
@@ -239,7 +248,7 @@
                             <!--[if lt IE 8]><span></span><![endif]-->
                         </a>
                     </li>
-                   
+
                 </ul>
 
             </div>
