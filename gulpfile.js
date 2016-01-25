@@ -124,6 +124,6 @@ gulp.task('push', ['pull'], function(){
     });
 });
 
-gulp.task('default', ['push'], function () {
+gulp.task('default', ['change src'], function () {
     console.log('合并完毕')
 });
