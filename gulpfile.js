@@ -3,6 +3,7 @@ var path = require('path')
 var concat = require('gulp-concat')
 var replace = require('gulp-replace')
 var git = require('gulp-git');
+var wait = require('gulp-wait')
 var shell = require('gulp-shell')
 var js_beautify = require("./assets/js/beautify").js_beautify
 var html_beautify = require("./assets/js/beautify-html").html_beautify
@@ -71,7 +72,7 @@ var path = {
     'dest': path.join(__dirname, '/tutorial')
 }
 
-gulp.task('cdn', ['combo'], function(){
+gulp.task('change src', ['combo'], function(){
     var cdnUrl = "coding.net/u/roscoe054/p/avalon.doc/git/raw/master",
         replaceStr = "src=\"//" + cdnUrl + "/assets"
 
@@ -82,7 +83,7 @@ gulp.task('cdn', ['combo'], function(){
     console.log('src已修改为' + cdnUrl)
 })
 
-gulp.task('git', ['cdn'], function(){
+gulp.task('add remote', ['change src'], function(){
     try {
         git.addRemote('cdn', 'https://git.coding.net/roscoe054/avalon.doc.git', function (err) {
             console.log("has add remote cdn");
@@ -93,13 +94,36 @@ gulp.task('git', ['cdn'], function(){
     gulp.src(['./']).pipe(shell([
         'git add .',
         'git commit -m "auto update"',
-        'git push',
         'git pull cdn master',
         'git push cdn master'
     ]))
-    console.log("git 同步成功");
+    console.log("git add remote");
 })
 
-gulp.task('default', ['git'], function () {
+gulp.task('add', ['add remote'], function(){
+    console.log('git add .');
+    return gulp.src('./*').pipe(wait(1500)).pipe(git.add());
+});
+
+gulp.task('commit', ['add'], function(){
+    console.log('git commit');
+    return gulp.src('./*').pipe(wait(1500)).pipe(git.commit('auto commit'));
+});
+
+gulp.task('pull', ['commit'], function(){
+    console.log('git pull');
+    git.pull('cdn', 'master', function(err) {
+        if (err) throw err;
+    });
+});
+
+gulp.task('push', ['pull'], function(){
+    console.log('git push');
+    git.push('cdn', 'master', {args: " -f"}, function (err) {
+      if (err) throw err;
+    });
+});
+
+gulp.task('default', ['push'], function () {
     console.log('合并完毕')
 });
