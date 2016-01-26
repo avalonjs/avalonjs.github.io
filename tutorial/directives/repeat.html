@@ -305,7 +305,7 @@
                 var t = parseFloat(model.trend)
                 model.data.sort(function(a, b) {
                     if (v === "name") {
-                        return t * a[v].toLocaleString(b[v])
+                        return t * a[v].localeCompare(b[v])
                     } else {
                         var ret = a[v] &gt; b[v] ? 1 : -1
                         return t * ret
@@ -371,7 +371,7 @@
             var t = parseFloat(model.trend)
             model.data.sort(function (a, b) {
                 if (v === "name") {
-                    return t * a[v].toLocaleString(b[v])
+                    return t * a[v].localeCompare(b[v])
                 } else {
                     var ret = a[v] > b[v] ? 1 : -1
                     return t * ret
