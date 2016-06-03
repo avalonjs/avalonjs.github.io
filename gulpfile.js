@@ -78,7 +78,7 @@ gulp.task('change src', ['combo'], function(){
 
     gulp.src([path.src + '/**/*.html'])
         .pipe(replace(/src="[.\/]+assets/g, replaceStr))
-        .pipe(replace(/src="http:\/\/avalon-doc-bdda3.coding.io/g, replaceStr))
+        .pipe(replace(/src="http:\/\/roscoe054.coding.me/avalon.doc//g, replaceStr))
         .pipe(gulp.dest(path.dest));
     console.log('src已修改为' + cdnUrl)
 })
