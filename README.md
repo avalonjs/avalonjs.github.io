@@ -1,4 +1,4 @@
-roscoe054.coding.me/avalon.doc/
+avalonjs.github.io
 ==================
 
 这是第二版
