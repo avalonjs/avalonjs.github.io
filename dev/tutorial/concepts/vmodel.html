@@ -87,7 +87,42 @@
 <div class="bs-callout bs-callout-info">
     <p>为了性能起见，请确保你的对象结构足够扁平，套嵌层次不能太深，里面的数组不能太长。</p>
 </div>
-<fieldset><legend><b>VM能监控它的属性被用户改动的秘密</b></legend>
+<div class="bs-callout bs-callout-info">
+    <h4>新旧风格</h4>
+    <p>avalon在<code>1.3</code>引入新风格. 旧风格是指定义VM时需传入ID与回调, 新风格是指定义VM时需传入一个对象</p>
+    <xmp class="javascript">
+        //旧风格
+        avalon.define("test",function(vm){
+        vm.aaa = 1
+        vm.bbb = "2"
+        })
+        //新风格
+        avalon.define({
+        $id: "test",
+        aaa: 1,
+        bbb: "2"
+        })
+
+
+
+    </xmp>
+    <p> 这样就可以避开旧风格的三大陷阱</p>
+    <xmp class="javascript">
+        var array = []
+        var vmodel = avalon.define(id, function(vm){//1你要区分vm与vmodel的区别，vm只能用于定义属性，vmodel只能更新里面的属性或执行它的方法
+        vm.aa = 1
+        array.push(10) //2这里会执行两次，你会发现array = [10,10]
+        avalon.mix(vm, {
+        aa: 2,//3这里在IE6-8下会报重复定义错误
+        cc: 3
+        })
+        vm.bb = 3
+        vm.$watch("bb", callback)
+        })
+    </xmp>
+    <p>强烈建议大家都尽快升级到最新版，使用新风格定义VM。本教程从一开始也是使用新风格进行教学的！</p>
+</div>
+<blockquote><h4>VM能监控它的属性被用户改动的秘密</h4>
     <p>我们定义VM时，是通过define方法，无论是新风格还是旧风格，你最初添加的属性从这方法出来，已经不是原来的属性了。
         这些能监控的属性在JS里有个一专门的术语叫<strong>访问器属性</strong>    </p>
     <p>javascript一共用三种属性</p>
@@ -160,14 +195,15 @@
         avalon.define生成的VM就是一个包含了是访问器属性的魔术对象。 avalon会在它们的setter,getter方法做依赖收集与同步视图等工作，
         从来让我们就算不写一行有关DOM操作的代码，也能做jQuery那种灵活操作DOM的效果。
     </p>
-    <div class="bs-callout bs-callout-warning">
-        <p>值得注意的是，avalon只会转换预先定义好的属性为访问器属性，对后来添加的属性无动于衷。
-            因此大家要养成“先定义后使用”的习惯。</p>
-    </div>
+</blockquote>
+<div class="bs-callout bs-callout-warning">
+    <p>值得注意的是，avalon只会转换预先定义好的属性为访问器属性，对后来添加的属性无动于衷。
+        因此大家要养成“先定义后使用”的习惯。</p>
+</div>
 
-    <div class="bs-callout bs-callout-danger">
-        <p>注意，IE6-8是使用VBScript生成的对象，是一种特殊的对象，
-            如果访问没有定义过的属性或方法会报错。
-            这个千万要小心。</p>
-    </div>
-</fieldset>
+
+<div class="bs-callout bs-callout-danger">
+    <p>注意，IE6-8是使用VBScript生成的对象，是一种特殊的对象，
+        如果访问没有定义过的属性或方法会报错。
+        这个千万要小心。</p>
+</div>

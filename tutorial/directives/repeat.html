@@ -11,24 +11,24 @@
 
 
         <title>avalon中文文档</title>
-        <script src="../../assets/js/avalon.shim.js"></script>
+        <script src="//hotelued.qunar.com/oniui/avalon.js"></script>
 
         <!-- Bootstrap core CSS -->
         <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 
-        <link href="../../assets/css/patch.css" rel="stylesheet">
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/patch.css" rel="stylesheet">
 
         <!-- Documentation extras -->
 
-        <link href="../../assets/css/docs.min.css" rel="stylesheet">
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/docs.min.css" rel="stylesheet">
         <style>
             body,html{
                overflow-y: hidden;
             }
         </style>
-        <!--[if lt IE 9]><script src="../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-        <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
-
+        <!--[if lt IE 9]><script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie8-responsive-file-warning.js"></script>
+        <script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie-emulation-modes-warning.js"></script>
+        <![endif]-->
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
           <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -161,7 +161,7 @@
 &lt;/body&gt;
 
 &lt;/html&gt;</pre></div>
-<p><img src="../../assets/css/directives/repeat/repeat1.gif"  /></p>
+<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/repeat/repeat1.gif"  /></p>
 <p>接下来我们看ms-repeat, ms-each是如何循环一个数组的。</p>
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
@@ -189,7 +189,7 @@
 &lt;/body&gt;
 
 &lt;/html&gt;</pre></div>
-<p><img src="../../assets/css/directives/repeat/repeat2.gif"  /></p>
+<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/repeat/repeat2.gif"  /></p>
 <p>上面是一个简单的数组（指数组元素都是字符串，布尔，数字这样简单类型），我们再来显示用一个对象数组实现一个切换卡效果吧。</p>
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
@@ -398,7 +398,7 @@
         </select>
     </p>
     <table class="table table-bordered">
-        <tbody >
+        <tbody>
             <tr ms-repeat="data">
                 <td>{{el.name}}</td> <td>{{el.size}}</td> <td>{{el.date}}</td>
             </tr>
@@ -407,39 +407,43 @@
 </div>
 <p>监控数组的更新，分两种情况。一种是简单数据类型，它需要用set方法进行更新，另一种是对象类型，直接vm[1].xxx = yyy， vm[1]是你要更新的对象，xxx为此对象已经存在的属性。</p>
 <p>如果大家在想内层循环访问外层循环的变量，可以通过$outer实现，比如$outer.$index, $outer.el, $outer.$outer.$index……</p>
-<xml class="html">
-    <!DOCTYPE html>
-    <html>
-        <head>
-            <title>TODO supply a title</title>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width">
-            <script src="avalon.js"></script>
-            <script>
-      avalon.define({
-          $id: "test",
-          array: [[1, 2, 3, 4], ["a", "b", "c", "d"], [11, 22, 33, 44]]
-      })
-            </script>
-        </head>
-        <body ms-controller="test" >
-            <table border="1" width="800">
-                <tr ms-repeat="array">
-                    <td  ms-repeat-elem="el">{{$outer.$index}}.{{$index}}.{{elem}}</td>
-                </tr>
-            </table>
-        </body>
-    </html>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
 
-</xmp>
+&lt;head&gt;
+    &lt;title&gt;TODO supply a title&lt;/title&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width"&gt;
+    &lt;script src="avalon.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        avalon.define({
+            $id: "test",
+            array: [
+                [1, 2, 3, 4],
+                ["a", "b", "c", "d"],
+                [11, 22, 33, 44]
+            ]
+        })
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body ms-controller="test"&gt;
+    &lt;table border="1" width="800"&gt;
+        &lt;tr ms-repeat="array"&gt;
+            &lt;td ms-repeat-elem="el"&gt;{{$outer.$index}}.{{$index}}.{{elem}}&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
 <script>
     avalon.define({
         $id: "repeatouter",
         array: [[1, 2, 3, 4], ["a", "b", "c", "d"], [11, 22, 33, 44]]
     })
 </script>
-</head>
-<div ms-controller="repeatouter"  >
+
+<div ms-controller="repeatouter" >
     <table class="table table-bordered">
         <tr ms-repeat="array">
             <td  ms-repeat-elem="el">{{$outer.$index}}.{{$index}}.{{elem}}</td>
@@ -447,7 +451,7 @@
     </table>
 </div>
 <div class="bs-callout bs-callout-info" >
-    <p>此外，我们还可以通过<strong>data-repeat-rendered, data-each-rendered, data-with-rendered</strong>
+    <p>此外，我们还可以通过<code>data-repeat-rendered, data-each-rendered, data-with-rendered</code>
         来指定这些元素都插入DOM被渲染了后执行的回调，
         this指向元素节点，有一个参数表示为当前的操作，是add、 del、 move、 index。</p>
 </div>
@@ -466,7 +470,7 @@
     &lt;meta name="viewport" content="width=device-width"&gt;
     &lt;script src="avalon.js"&gt;&lt;/script&gt;
     &lt;script&gt;
-        var index = 0
+        var index = 0 //1.4.*
         var model = avalon.define({
             $id: "test",
             data: {
@@ -490,9 +494,9 @@
 
 &lt;/html&gt;</pre></div>
 
-<p><img src="../../assets/css/directives/repeat/1409654405940-repeat8.jpg" /></p>
+<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/repeat/1409654405940-repeat8.jpg" /></p>
 
-<p>如果我们想控制对象属性的输出顺序，或让某些元素不输出来，那么我们可以使用<strong>data-with-sorted</strong>回调。
+<p>如果我们想控制对象属性的输出顺序，或让某些元素不输出来，那么我们可以使用<code>data-with-sorted</code>回调。
     它用ms-repeat、ms-with绑定，赶对象渲染之前触发，要求输出一个字符串数组，对象的键值对会根据它依次输出；
     框架默认会输入原对象的所有键名构成的数组作为参数。</p>
 
@@ -536,18 +540,18 @@
 
 &lt;/html&gt;</pre></div>
 
-<p><img src="../../assets/css/directives/repeat/1409654809239-repeat9.jpg"  /></p>
+<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/repeat/1409654809239-repeat9.jpg" ></p>
 
 <h4>在删除本地数组的元素的同时也远程同步删除后台数组的元素</h4>
 <p>方法1</p>
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;ul&gt;
-    &lt;li ms-repeat="array"&gt;内容
-        &lt;button type="button" ms-click="removeRemote($index, $remove)"&gt;x
-            &lt;button&gt;
+    &lt;li ms-repeat="array"&gt;
+        内容
+        &lt;button type="button" ms-click="removeRemote($index, $remove)"&gt;x&lt;/button&gt;
     &lt;/li&gt;
 &lt;/ul&gt;</pre></div>
-                    <br/>
-                    <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>avalon.define({
+<br/>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>avalon.define({
     $id: "test",
     array: [1, 2, 3, 4],
     removeRemote: function($index, $remove) {
@@ -564,14 +568,16 @@
     }
 })</pre></div>
 
-                    <p>方法2</p>
-                    <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;ul&gt;
-    &lt;li ms-repeat="array" data-repeat-rendered="handle"&gt;内容
-        &lt;button type="button" ms-click="$remove"&gt;x
-            &lt;button&gt;
+<p>方法2</p>
+
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;ul&gt;
+    &lt;li ms-repeat="array" data-repeat-rendered="handle"&gt;
+        内容
+        &lt;button type="button" ms-click="$remove"&gt;x&lt;/button&gt;
     &lt;/li&gt;
 &lt;/ul&gt;</pre></div>
-                                        <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>avalon.define({
+<br/>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>avalon.define({
             $id: "test",
             array: [1, 2, 3, 4],
             handle: function(action, offset, length) {
@@ -592,6 +598,7 @@
             })</pre></div>
 
 
+
 </div>
 <div class="col-md-3" role="complementary">
 
@@ -602,11 +609,13 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-<script src="../../assets/highlight/shCore.js"></script>
+<script src="//avalon-doc-bdda3.coding.io/assets/highlight/shCore.js"></script>
 
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
-<script src="../../assets/js/iframe.js"></script>
+<script src="//avalon-doc-bdda3.coding.io/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+<!-- frame size -->
+<script src="http://avalonjs.github.io/assets/js/iframe.js"></script>
 </body>
 </html>
 

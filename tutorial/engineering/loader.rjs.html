@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="avalonjs - 迷你简单易用的前端MVVM框架，让你的网站更快更炫更好用">
+        <meta name="keywords" content="MVVM, CSS, JavaScript, framework, avalon, web development">
+        <meta name="author" content="RubyLouvre,司徒正美">
+
+
+        <title>avalon中文文档</title>
+        <script src="//hotelued.qunar.com/oniui/avalon.js"></script>
+
+        <!-- Bootstrap core CSS -->
+        <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/patch.css" rel="stylesheet">
+
+        <!-- Documentation extras -->
+
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/docs.min.css" rel="stylesheet">
+        <style>
+            body,html{
+               overflow-y: hidden;
+            }
+        </style>
+        <!--[if lt IE 9]><script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie8-responsive-file-warning.js"></script>
+        <script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie-emulation-modes-warning.js"></script>
+        <![endif]-->
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="icon" href="/favicon.ico">
+
+    </head>
+    <body>
+
+
+
+
+        <div class="container bs-docs-container">
+
+            <div class="row">
+                <div class="col-md-9" role="main">
+
+<h2>avalon自带加载器</h2>
+<script>
+    avalon.define({
+        $id: "include",
+        path: "loader.menu.html"
+    })
+</script>
+<div ms-controller="include" ms-include-src="path" data-include-replace="true">
+
+</div>
+
+<p>我们是使用requirejs自带的r.js进行合并的，因为r.js已经足够健壮强大，我们不需要重复造轮子。 不过除了r.js，我们还需要其原来的text.js, css.js等插件,
+    这些我已经合并放到avalon仓库下的combo目录下了。</p>
+<ul>
+    <li><a href="https://github.com/jrburke/r.js/tree/master/dist">r.js</a>, 打包用的主程序</li>
+    <li><a href="https://github.com/guybedford/require-css">css.js css-builder.js normalize.js </a>css!资源插件及其打包用程序</li>
+    <li><a href="https://github.com/requirejs/text">text.js </a>text!资源插件,它本身就整合打包逻辑</li>
+    <li><a href="https://github.com/requirejs/domReady">domReady.js </a>domReady!资源插件,判定是否domReady</li>
+</ul>
+<p>我们先来一个简单的例子：</p>
+<div><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/engineering/loader/build0_0.jpg"/></div>
+<p>这里有一坨坨文件，其中有一半是从combo目录拷贝过来，此外还有avalon.js，只有index.html, main.js， aaa.js, aaa.html, aaa.css及图片是用户自己的。</p>
+<p>index.html</p>
+<pre class="brush:html;gutter:false;toolbar:false">
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="avalon.js" id="aaa" data-main="main"></script>
+    </head>
+    <body>
+
+    </body>
+</html>
+</xmp>
+<p>aaa.html，它是一个模板文件，不是一个子页面。当然你也可以改名为aaa.txt, aaa.string，反正都是用AJAX加载的。</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;div id="news"&gt;
+    &lt;div class="Q-tpList"&gt;
+        &lt;a target="_blank" class="pic" href="/a/20150209/003871.htm"&gt;
+            &lt;img class="picto" src="116337024.jpg"&gt;&lt;/a&gt;
+        &lt;em class="f14 l24"&gt;&lt;a target="_blank" class="linkto" href="/a/20150209/003871.htm"&gt;南昌一小学仅2名老师8名学生 靠杂草生火取暖&lt;/a&gt;&lt;/em&gt;
+        &lt;p class="l22"&gt;招贤镇牛岭小学距湾里城区22公里，是湾里区最偏远、落后的小学之一， 现在拥有8个学生，2个老师。学生居住分散，上学路途遥远， 离校最远的学生要走上2个多小时的山路。
+        &lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre></div>
+<p>aaa.css，这个也是用avalon.js的加载器动态引入的。</p>
+<pre class="brush:css;gutter:false;toolbar:false">
+#news .Q-tpList {
+    border: 1px solid #f0f0f0;
+    position: relative;
+    width:800px;
+    padding-bottom: 14px;
+}
+#news a{
+    color:black;
+    text-decoration: none;
+}
+#news .Q-tpList .pic {
+    margin: 13px 19px 0 0;
+    width: 120px;
+    height: 80px;
+    position: relative;
+}
+#news .Q-tpList em {
+    font: 20px/35px "微软雅黑","simhei";
+    margin: 8px 0 0;
+    display: inline-block;
+}
+</xmp>
+<p>aaa.js是我们JS模块，是用来写业务逻辑。作为一个例子，就随便写点东西吧。所有业务模块都应该用define函数进行定义与组织。</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(function() {
+    return function(text) {
+        var div = document.createElement("div")
+        div.innerHTML = text
+        return div
+    }
+})</pre></div>
+<p>main.js是入口文件，学过C的都知道，main代表当前程序的最先执行的函数。在这里我们可以用require.config进行各种配置，
+    并用require函数牵动整个程序运行。</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>require.config({
+    baseUrl: "."
+})
+
+require(["aaa", "text!aaa.html", "css!aaa", "domReady!"], function(a, b) {
+    document.body.appendChild(a(b))
+})</pre></div>
+<p>启动服务器,打开index.html,我们就会发现可以运行了!!</p>
+<div><img src="zh/engineering/loader/build0_1.jpg"/></div>
+<p>好了,我们看一下如何打包.在当前目录下建一个build.js。里面的内容有点类似JSON, 需要两边用小括号括起来，里面还可以写注释。</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>({
+    name: "main",
+    out: "main-built.js"
+})</pre></div>
+<div><img src="zh/engineering/loader/build0_2.jpg"/></div>
+<p>然后改一下index.html中的script标签的data-main的属性值，main改成main-built，运行： </p>
+<div><img src="zh/engineering/loader/build0_3.png"/></div>
+<p>可以点<a href="zh/engineering/loader/build0.rar" download="build0.rar">这里</a>下载此例子</p>
+<br>
+<p><b>例子2</b></p>
+<p>上面的例子就是一个玩具。通常我们是不会把所有东西放在一个目录下，我们将上面的例子稍加改造。
+我们分两个文件放置我们的代码， combo目录是放合并用到的JS模块及一些基础库(avalon.js)，
+    另一个modules是放置业务代码, 按模块划分, 目前只有aaa模块,里面是它用到JS,模板,样式与图片。
+</p>
+<div><img src="zh/engineering/loader/build1_0.jpg"/></div>
+<p>index.html改成这样</p>
+<pre class="brush:html;gutter:false;toolbar:false">
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <script src="combo/avalon.js" id="aaa" data-main="modules/aaa/main"></script>
+    </head>
+    <body>
+
+    </body>
+</html>
+</xmp>
+<p>main.js的内容:</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>require.config({
+    baseUrl: "modules/aaa",
+    paths: {
+        text: "../../combo/text",
+        css: "../../combo/css",
+        domReady: "../../combo/domReady"
+    }
+})
+
+require(["aaa", "text!aaa.html", "css!aaa", "domReady!"], function(a, b) {
+    document.body.appendChild(a(b))
+})</pre></div>
+<p>aaa.html的内容也要改一下图片路径:</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;div id="news"&gt;
+    &lt;div class="Q-tpList"&gt;
+        &lt;a target="_blank" class="pic" href="/a/20150209/003871.htm"&gt;
+            &lt;img class="picto" src="modules/aaa/116337024.jpg"&gt;&lt;/a&gt;
+        &lt;em class="f14 l24"&gt;&lt;a target="_blank" class="linkto" href="/a/20150209/003871.htm"&gt;南昌一小学仅2名老师8名学生 靠杂草生火取暖&lt;/a&gt;&lt;/em&gt;
+        &lt;p class="l22"&gt;招贤镇牛岭小学距湾里城区22公里，是湾里区最偏远、落后的小学之一， 现在拥有8个学生，2个老师。学生居住分散，上学路途遥远， 离校最远的学生要走上2个多小时的山路。
+        &lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre></div>
+
+<p>运行如下:</p>
+<div><img src="zh/engineering/loader/build1_1.jpg"/></div>
+<p>好了，我们看一下如何合并吧。在combo目录下建立一个build.js。</p>
+
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>({
+    baseUrl: "../modules/aaa", //找到main.js文件的目录
+    paths: {
+        text: "../../combo/text", //由于分居两个目录，因此路径都需要处理一下
+        css: "../../combo/css",
+        "css-builder": "../../combo/css-builder",
+        "normalize": "../../combo/normalize",
+        domReady: "../../combo/domReady"
+    },
+    name: "main", //如果从哪一个文件开始合并
+    out: "../modules/aaa/main-built.js" //确定要生成的文件路径及名字
+})</pre></div>
+<p>接着执行命令，然后将data-main的属性改一下， <b>modules/aaa/main</b> --< <b>modules/aaa/main-built</b></p>
+<div><img src="zh/engineering/loader/build1_3.jpg"/></div>
+<p>可以点<a href="zh/engineering/loader/build1.rar" download="build1.rar">这里</a>下载此例子</p>
+<br>
+<p><strong>例3</strong></p>
+<p>通常把我们自己工作的环境叫做发展环境， 上线的环境叫生产坏境，将它们分开是非常有好处的。看下面目录</p>
+<div><img src="zh/engineering/loader/build2_0.png"/></div>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;meta charset="utf-8" /&gt;
+    &lt;title&gt;My App&lt;/title&gt;
+    &lt;link rel="stylesheet" type="text/css" href="css/main.css"&gt;
+    &lt;script data-main="develop/main" src="develop/avalon.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;h1&gt;My App&lt;/h1&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre></div>
+<p>one.js</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(["two"], function(a) {
+    return "<h2>合并示例</h2>" + a
+})</pre></div>
+<p>two.js</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(function() {
+    return "<p>built by avalon.js  + r.js</p>"
+})</pre></div>
+
+<p>sub/three.js</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>define(function() {
+    return "<p>另外一行</p>"
+})</pre></div>
+<p>main.js</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>require.config({
+    paths: {
+        jquery: "jquery/jquery-1.11.2"
+    }
+})
+require(["one", "sub/three", "jquery"], function(one, three, $) {
+    $("body").append(one + three)
+});</pre></div>
+<div><img src="zh/engineering/loader/build2_1.jpg"/></div>
+<p>我们再看如何编写构建脚本, build.js如下, 用了一个dir配置项:</p>
+<div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>({
+    baseUrl: ".",
+    paths: {
+        jquery: "jquery/jquery-1.11.2"
+    },
+    dir: "../production",
+    name: "main"
+})</pre></div>
+<div><img src="zh/engineering/loader/build2_2.jpg"/></div>
+<p>发现production目录生成出来了， 里面的文件好像一模一样，但其中main.js体积增大不少，已经将其依赖全部合并进去。上线时使用production目录，我们有两个办法，
+    1自己修改或通过脚本修改index.html引用脚本的路径，2后端配置一下，对请求进行重定向，我们通常是使用后面一种。</p>
+<div><img src="zh/engineering/loader/build2_3.jpg"/></div>
+<p>可以点<a href="zh/engineering/loader/build2.rar" download="build2.rar">这里</a>下载此例子</p>
+<p><a href="http://tech.pro/blog/1639/using-rjs-to-optimize-your-requirejs-project">http://tech.pro/blog/1639/using-rjs-to-optimize-your-requirejs-project</a></p>
+
+
+</div>
+<div class="col-md-3" role="complementary">
+
+</div>
+</div>
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="//avalon-doc-bdda3.coding.io/assets/highlight/shCore.js"></script>
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="//avalon-doc-bdda3.coding.io/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+<!-- frame size -->
+<script src="http://avalonjs.github.io/assets/js/iframe.js"></script>
+</body>
+</html>
+

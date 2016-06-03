@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="avalonjs - 迷你简单易用的前端MVVM框架，让你的网站更快更炫更好用">
+        <meta name="keywords" content="MVVM, CSS, JavaScript, framework, avalon, web development">
+        <meta name="author" content="RubyLouvre,司徒正美">
+
+
+        <title>avalon中文文档</title>
+        <script src="//hotelued.qunar.com/oniui/avalon.js"></script>
+
+        <!-- Bootstrap core CSS -->
+        <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/patch.css" rel="stylesheet">
+
+        <!-- Documentation extras -->
+
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/docs.min.css" rel="stylesheet">
+        <style>
+            body,html{
+               overflow-y: hidden;
+            }
+        </style>
+        <!--[if lt IE 9]><script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie8-responsive-file-warning.js"></script>
+        <script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie-emulation-modes-warning.js"></script>
+        <![endif]-->
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="icon" href="/favicon.ico">
+
+    </head>
+    <body>
+
+
+
+
+        <div class="container bs-docs-container">
+
+            <div class="row">
+                <div class="col-md-9" role="main">
+
+<h2>与富本文编辑器的整合</h2>
+<h1>tinymce</h1>
+
+<script type="text/javascript">
+    //使用requirejs风格的AMD加载器配置tinymce
+    require.config({
+        paths: {
+            tinymce: "//tinymce.cachefly.net/4.1/tinymce.min.js"
+        },
+        shim: {
+            tinymce: {
+                exports: "tinymce"//这是原来jQuery库的命名空间，必须写上
+            }
+        }
+    })
+
+    //由于tinymce体积超大,需要等到它存在时,才给它实例化
+    require(["tinymce", "ready!"], function(tinymce) {
+        //参看这里http://www.tinymce.com/tryit/basic.php
+        tinymce.PluginManager.load('moxiemanager', 'http://www.tinymce.com/js/moxiemanager/plugin.min.js');
+        tinymce.init({
+            selector: "textarea.only_tinymce", //
+            plugins: [
+                "advlist autolink lists link image charmap print preview anchor",
+                "searchreplace visualblocks code fullscreen",
+                "insertdatetime media table contextmenu paste moxiemanager"
+            ],
+            setup: function(ed) {
+                function sync(e) {
+                    //最重要的方法,http://www.tinymce.com/wiki.php/api4:method.tinymce.Editor.getContent
+                    //得到富文本编辑器生成的iframe里面的内容,然后通过事件回调同步到VM
+                    avalon.vmodels.tinymce.text = ed.getContent()
+                }
+                ed.on("keydown", sync);
+                ed.on("blur", sync);
+            },
+            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+        });
+    })
+
+</script>
+<script>
+    avalon.define({
+        $id: "tinymce",
+        text: ""
+    })
+</script>
+<form method="post" action="somepage" ms-controller="tinymce">
+    <textarea name="content" style="width:100%" class="only_tinymce" ms-duplex="text"></textarea>
+    <fieldset><legend>输出内容</legend>
+        {{text}}
+    </fieldset>
+</form>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;script type="text/javascript"&gt;
+    //使用requirejs风格的AMD加载器配置tinymce
+    require.config({
+        paths: {
+            tinymce: "//tinymce.cachefly.net/4.1/tinymce.min.js"
+        },
+        shim: {
+            tinymce: {
+                exports: "tinymce"
+            }
+        }
+    })
+
+    //由于tinymce体积超大,需要等到它存在时,才给它实例化
+    require(["tinymce", "ready!"], function() {
+        //参看这里http://www.tinymce.com/tryit/basic.php
+        tinymce.PluginManager.load('moxiemanager', 'http://www.tinymce.com/js/moxiemanager/plugin.min.js');
+        tinymce.init({
+             //http://www.tinymce.com/wiki.php/Configuration:selector tinymce编辑器的选择器引擎弱爆了，只能类名或标签名
+            selector: "textarea.only_tinymce",
+            plugins: [
+                "advlist autolink lists link image charmap print preview anchor",
+                "searchreplace visualblocks code fullscreen",
+                "insertdatetime media table contextmenu paste moxiemanager"
+            ],
+            setup: function(ed) {
+                function sync(e) {
+                    //最重要的方法,http://www.tinymce.com/wiki.php/api4:method.tinymce.Editor.getContent
+                    //得到富文本编辑器生成的iframe里面的内容,然后通过事件回调同步到VM
+                    avalon.vmodels.tinymce.text = ed.getContent()
+                }
+                ed.on("keydown", sync);
+                ed.on("blur", sync);
+            },
+            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+        });
+    })
+   avalon.define({
+        $id: "tinymce",
+        text: ""
+    })
+&lt;/script&gt;
+&lt;form method="post" action="somepage" ms-controller="tinymce"&gt;
+    &lt;textarea name="content" style="width:100%" class="only_tinymce" ms-duplex="text"&gt;&lt;/textarea&gt;
+    &lt;fieldset&gt;&lt;legend&gt;输出内容&lt;/legend&gt;
+        {{text}}
+    &lt;/fieldset&gt;
+&lt;/form&gt;
+</pre>
+<h1>kindeditor</h1>
+
+<script type="text/javascript">
+    //使用requirejs风格的AMD加载器配置kindeditor
+    require.config({
+        paths: {
+            kindeditor: "http://kindeditor.net/ke4/kindeditor-min.js",
+            kindezh: "http://kindeditor.net/ke4/lang/zh_CN.js"//语言包
+        },
+        shim: {
+            kindeditor: {
+                exports: "KindEditor"
+            },
+            kindezh: {
+                exports: "KindEditor"
+            }
+        }
+    })
+
+    //http://kindeditor.net/docs/usage.html
+    require(["kindeditor"], function(K) {
+        require(["kindezh"], function() {//加载中文语言包，必须等到上面的加载回来
+            var editor = K.create("#kindeditor")
+            console.log(editor)
+            var iframe = editor.container[0].getElementsByTagName("iframe")[0]
+
+            var iframeWindow = iframe.contentWindow || iframe.contentDocument.parentWindow
+            function sync(e) {
+                avalon.vmodels.kindeditor.text = editor.html()
+            }
+            avalon.bind(iframeWindow, "keydown", sync)
+            avalon.bind(iframeWindow, "blur", sync)
+
+        })
+
+    })
+    avalon.define({
+        $id: "kindeditor",
+        text: ""
+    })
+</script>
+<form method="post" action="somepage" ms-controller="kindeditor">
+    <textarea name="content" style="width:100%" id="kindeditor" ms-duplex="text"></textarea>
+    <fieldset><legend>输出内容</legend>
+        {{text}}
+    </fieldset>
+</form>
+<pre class="brush:html;gutter:false;toolbar:false">
+&lt;script type="text/javascript"&gt;
+    //使用requirejs风格的AMD加载器配置kindeditor
+    require.config({
+        paths: {
+            kindeditor: "http://kindeditor.net/ke4/kindeditor-min.js",
+            kindezh: "http://kindeditor.net/ke4/lang/zh_CN.js"//语言包
+        },
+        shim: {
+            kindeditor: {
+                exports: "KindEditor"
+            },
+            kindezh: {
+                exports: "KindEditor"
+            }
+        }
+    })
+
+    //http://kindeditor.net/docs/usage.html
+    require(["kindeditor", "ready!"], function(K) {
+        require(["kindezh"], function() {//加载中文语言包，必须等到上面的加载回来
+            var editor = K.create("#kindeditor")
+            var iframe = editor.container[0].getElementsByTagName("iframe")[0]
+
+            var iframeWindow = iframe.contentWindow || iframe.contentDocument.parentWindow
+            function sync(e) {
+                avalon.vmodels.kindeditor.text = editor.html()
+            }
+            avalon.bind(iframeWindow, "keydown", sync)
+            avalon.bind(iframeWindow, "blur", sync)
+
+        })
+
+    })
+    avalon.define({
+        $id: "kindeditor",
+        text: ""
+    })
+&lt;/script&gt;
+&lt;form method="post" action="somepage" ms-controller="kindeditor"&gt;
+    &lt;textarea name="content" style="width:100%" id="kindeditor" ms-duplex="text"&gt;&lt;/textarea&gt;
+    &lt;fieldset&gt;&lt;legend&gt;输出内容&lt;/legend&gt;
+        {{text}}
+    &lt;/fieldset&gt;
+&lt;/form&gt;
+</pre>
+
+
+
+</div>
+<div class="col-md-3" role="complementary">
+
+</div>
+</div>
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="//avalon-doc-bdda3.coding.io/assets/highlight/shCore.js"></script>
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="//avalon-doc-bdda3.coding.io/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+<!-- frame size -->
+<script src="http://avalonjs.github.io/assets/js/iframe.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="avalonjs - 迷你简单易用的前端MVVM框架，让你的网站更快更炫更好用">
+        <meta name="keywords" content="MVVM, CSS, JavaScript, framework, avalon, web development">
+        <meta name="author" content="RubyLouvre,司徒正美">
+
+
+        <title>avalon中文文档</title>
+        <script src="//hotelued.qunar.com/oniui/avalon.js"></script>
+
+        <!-- Bootstrap core CSS -->
+        <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/patch.css" rel="stylesheet">
+
+        <!-- Documentation extras -->
+
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/docs.min.css" rel="stylesheet">
+        <style>
+            body,html{
+               overflow-y: hidden;
+            }
+        </style>
+        <!--[if lt IE 9]><script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie8-responsive-file-warning.js"></script>
+        <script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie-emulation-modes-warning.js"></script>
+        <![endif]-->
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="icon" href="/favicon.ico">
+
+    </head>
+    <body>
+
+
+
+
+        <div class="container bs-docs-container">
+
+            <div class="row">
+                <div class="col-md-9" role="main">
+
+<div class="content">
+    <style>
+        @import url(http://fonts.googleapis.com/css?family=Raleway);
+        #cssmenu,
+        #cssmenu ul,
+        #cssmenu ul li,
+        #cssmenu ul li a {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            list-style: none;
+            line-height: 1;
+            display: block;
+            position: relative;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        #cssmenu:after,
+        #cssmenu > ul:after {
+            content: ".";
+            display: block;
+            clear: both;
+            visibility: hidden;
+            line-height: 0;
+            height: 0;
+        }
+        #cssmenu {
+            width: auto;
+            border-bottom: 3px solid #47c9af;
+            font-family: Raleway, sans-serif;
+            line-height: 1;
+        }
+        #cssmenu ul {
+            /* background: #ffffff;*/
+        }
+        #cssmenu > ul > li {
+            float: left;
+        }
+        #cssmenu.align-center > ul {
+            font-size: 0;
+            text-align: center;
+        }
+        #cssmenu.align-center > ul > li {
+            display: inline-block;
+            float: none;
+        }
+        #cssmenu.align-right > ul > li {
+            float: right;
+        }
+        #cssmenu.align-right > ul > li > a {
+            margin-right: 0;
+            margin-left: -4px;
+        }
+        #cssmenu > ul > li > a {
+            z-index: 2;
+            padding: 18px 25px 12px 25px;
+            font-size: 15px;
+            font-weight: 400;
+            text-decoration: none;
+            color: #444444;
+            -webkit-transition: all .2s ease;
+            -moz-transition: all .2s ease;
+            -ms-transition: all .2s ease;
+            -o-transition: all .2s ease;
+            transition: all .2s ease;
+            margin-right: -4px;
+        }
+        #cssmenu > ul > li.active > a,
+        #cssmenu > ul > li:hover > a,
+        #cssmenu > ul > li > a:hover {
+            color: #ffffff;
+        }
+        #cssmenu > ul > li > a:after {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            z-index: -1;
+            width: 100%;
+            height: 120%;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            content: "";
+            -webkit-transition: all .2s ease;
+            -o-transition: all .2s ease;
+            transition: all .2s ease;
+            -webkit-transform: perspective(5px) rotateX(2deg);
+            -webkit-transform-origin: bottom;
+            -moz-transform: perspective(5px) rotateX(2deg);
+            -moz-transform-origin: bottom;
+            transform: perspective(5px) rotateX(2deg);
+            transform-origin: bottom;
+        }
+        #cssmenu > ul > li.active > a:after,
+        #cssmenu > ul > li:hover > a:after,
+        #cssmenu > ul > li > a:hover:after {
+            background: #47c9af;
+        }
+    </style>
+    <script>
+        var vm = avalon.define({
+            $id: "loader.menu",
+            array: [{
+                    href: "loader.html",
+                    label: "核心概念"
+                },
+                {
+                    href: "loader.api.html",
+                    label: "三大API"
+                },
+                {
+                    href: "loader.config.html",
+                    label: "配置项"
+                },
+                {
+                    href: "loader.plugin.html",
+                    label: "资源插件"
+                },
+                {
+                    href: "loader.rjs.html",
+                    label: "使用rjs打包"
+                }
+            ],
+            selectIndex: 0,
+            select: function (el, index) {
+                vm.selectIndex = index
+                top.location.hash = "#tutorial/engineering/" + el.href
+            }
+        })
+
+    </script>
+    <div id="cssmenu" ms-controller="loader.menu">
+        <ul >
+            <li ms-repeat="array" ms-class="active: selectIndex === $index "><a ms-click="select(el,$index)" ms-href="#/{{el.href}}">{{el.label}}</a></li>
+        </ul>
+    </div>
+</div>
+
+</div>
+<div class="col-md-3" role="complementary">
+
+</div>
+</div>
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="//avalon-doc-bdda3.coding.io/assets/highlight/shCore.js"></script>
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="//avalon-doc-bdda3.coding.io/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+<!-- frame size -->
+<script src="http://avalonjs.github.io/assets/js/iframe.js"></script>
+</body>
+</html>
+

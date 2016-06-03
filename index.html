@@ -11,9 +11,9 @@
         <title>avalon中文官网</title>
 
         <!-- Site CSS -->
-        <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
-        <link href="http://cdn.bootcss.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-        <link href="http://static.bootcss.com/www/assets/css/site.min.css?v5" rel="stylesheet">
+        <link href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+        <link href="//cdn.bootcss.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="//static.bootcss.com/www/assets/css/site.min.css?v5" rel="stylesheet">
 
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -23,9 +23,9 @@
         <![endif]-->
 
         <!-- Favicons -->
-        <link rel="apple-touch-icon-precomposed" href="http://static.bootcss.com/www/assets/ico/apple-touch-icon-precomposed.png">
-        <link rel="shortcut icon" href="http://static.bootcss.com/www/assets/ico/favicon.png">
-        <link href="./assets/css/docs.min.css" rel="stylesheet">
+        <link rel="apple-touch-icon-precomposed" href="//avalon-doc-bdda3.coding.io/favicon2.png">
+        <link rel="shortcut icon" href="//avalon-doc-bdda3.coding.io/favicon2.png">
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/docs.min.css" rel="stylesheet">
 
 
 
@@ -53,7 +53,7 @@
                         <li><a href="http://www.avalon.org.cn/" target="_blank" >论坛</a></li>
                         <li><a href="http://www.cnblogs.com/rubylouvre/" target="_blank" >博客</a></li>
                         <li><a href="https://github.com/RubyLouvre/avalon" target="_blank" >Github</a></li>
-                        <li><a href="http://expo.bootcss.com" target="_blank" >提问 </a></li>
+                        <li><a href="https://github.com/RubyLouvre/avalon/issues" target="_blank" >提问 </a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right hidden-sm">
                         <li><a href="#about">关于</a></li>
@@ -63,7 +63,8 @@
         </div>
 
 
-        <iframe src="home.html" frameborder=0 style="width:100%;height:100%;border:0 none" seamless="seamless"></iframe>
+       <iframe src="home.html" frameborder=0 style="width:100%;height:100%;border:0 none" seamless="seamless"></iframe>
+
         <!-- /.container -->
         <div class="bs-docs-sidebar" ms-controller="nav">
             <ul class="nav bs-docs-sidenav">
@@ -83,23 +84,24 @@
         <style>
             .bs-docs-sidebar{
                 display: none;
-                width:200px;
                 position: fixed;
-                right:40px;
-                height:200px;
-                top:52px;
+                right: 40px;
+                top: 43px;
+                width: 200px;
+                padding-bottom: 10px;
+                background-color: #fff;
             }
         </style>
 
 
-        <script src="./assets/js/avalon.shim.js"></script>
-        <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+        <script src="//hotelued.qunar.com/oniui/avalon.js"></script>
+        <script src="//cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
 
         <script>
             $(function () {
 
                 parent.array = []
-                $(window).on("hashchange", function () {
+                function hashChange() {
                     var hash = location.hash.replace(/^#/, "")
                     if (!hash || hash == "home.html") {
                         $(".bs-docs-sidebar").hide()
@@ -117,21 +119,23 @@
                         }
                     }
 
-                })
+                }
+                $(window).on("hashchange", hashChange)
+                if(location.hash){
+                   hashChange()
+                }
+
                 $("a[data-toggle='iframe']").click(function (e) {
                     $('html,body').animate({scrollTop: 0}, 500)
                 })
 
 
                 function setLeft() {
-                    return
                     var iframe = $("iframe")[0]
                     var idoc = iframe.contentDocument || idoc.contentWindow.document
                     var main = $(".col-md-9", idoc)
-                    console.log(main[0])
                     if (main.length) {
                         var left = main.width() + main.offset().left
-
                         $(".bs-docs-sidebar").css("left", left)
                     }
 
@@ -150,5 +154,3 @@
 
         <!-- 上面是 www.bootcss.com 网站所使用的统计代码，如果你使用本页面作为自己的模板，请将上面面的统计代码删掉！！！ -->  </body>
 </html>
-
-

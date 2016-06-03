@@ -11,24 +11,24 @@
 
 
         <title>avalon中文文档</title>
-        <script src="../../assets/js/avalon.shim.js"></script>
+        <script src="//hotelued.qunar.com/oniui/avalon.js"></script>
 
         <!-- Bootstrap core CSS -->
         <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 
-        <link href="../../assets/css/patch.css" rel="stylesheet">
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/patch.css" rel="stylesheet">
 
         <!-- Documentation extras -->
 
-        <link href="../../assets/css/docs.min.css" rel="stylesheet">
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/docs.min.css" rel="stylesheet">
         <style>
             body,html{
                overflow-y: hidden;
             }
         </style>
-        <!--[if lt IE 9]><script src="../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-        <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
-
+        <!--[if lt IE 9]><script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie8-responsive-file-warning.js"></script>
+        <script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie-emulation-modes-warning.js"></script>
+        <![endif]-->
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
           <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -68,12 +68,12 @@
 
 </p>
 
-<p><strong>ms-controller</strong>在页面上表现为一个特殊的属性，其属性值为ViewModel的$id，表示将在此元素或其子孙元素上圈定它的作用域范围，
+<p><code>ms-controller</code>在页面上表现为一个特殊的属性，其属性值为ViewModel的$id，表示将在此元素或其子孙元素上圈定它的作用域范围，
     但如果这些HTML存在它没有的属性，它可以向上查找上一级的ViewModel的属性。
     换言之，ms-controller可以互相套嵌的。 </p>
 
-<p><strong>ms-important</strong>的用法与ms-controller差不多，但它不会向上查找。</p>
-<p ms-skip>ms-skip注明这块区域不应用任何的ViewModel的属性，它里面的任何指令（绑定属性）都会失效。
+<p><code>ms-important</code>的用法与ms-controller差不多，但它不会向上查找。</p>
+<p ms-skip><code>ms-skip</code>注明这块区域不应用任何的ViewModel的属性，它里面的任何指令（绑定属性）都会失效。
     因为{{}}也算一种指令，而任何指令在被扫描后都会被移除，如果我们想保留某个区域的{{}}，就需要用到ms-skip。</p>
 
 <p>我们看下面的例子：</p>
@@ -119,7 +119,7 @@ avalon.ready(function() {　　
 })</pre></div>
 
 <fieldset>
-    <div><img src="../../assets/css/directives/controller/controller.png"/></div>
+    <div><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/controller/controller.png"/></div>
     <script>
         avalon.ready(function () {
             var a = avalon.define({
@@ -201,11 +201,13 @@ avalon.ready(function() {　　
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-<script src="../../assets/highlight/shCore.js"></script>
+<script src="//avalon-doc-bdda3.coding.io/assets/highlight/shCore.js"></script>
 
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
-<script src="../../assets/js/iframe.js"></script>
+<script src="//avalon-doc-bdda3.coding.io/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+<!-- frame size -->
+<script src="http://avalonjs.github.io/assets/js/iframe.js"></script>
 </body>
 </html>
 

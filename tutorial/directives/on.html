@@ -11,24 +11,24 @@
 
 
         <title>avalon中文文档</title>
-        <script src="../../assets/js/avalon.shim.js"></script>
+        <script src="//hotelued.qunar.com/oniui/avalon.js"></script>
 
         <!-- Bootstrap core CSS -->
         <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 
-        <link href="../../assets/css/patch.css" rel="stylesheet">
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/patch.css" rel="stylesheet">
 
         <!-- Documentation extras -->
 
-        <link href="../../assets/css/docs.min.css" rel="stylesheet">
+        <link href="//avalon-doc-bdda3.coding.io/assets/css/docs.min.css" rel="stylesheet">
         <style>
             body,html{
                overflow-y: hidden;
             }
         </style>
-        <!--[if lt IE 9]><script src="../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-        <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
-
+        <!--[if lt IE 9]><script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie8-responsive-file-warning.js"></script>
+        <script src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/js/ie-emulation-modes-warning.js"></script>
+        <![endif]-->
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
           <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -54,7 +54,9 @@
 <p>之前的章节许多示例代码也或多或少地展示了如何使用ms-click来绑定事件了。能直接在模板上绑定是事件，这也是静态模板与动态绑定的一大区别。ms-click不是简单的onclick的别名，它在内部屏蔽了浏览器的差异，并且对许多浏览器暂时不支持的事件做了兼容处理。</p>
 
 <p>总的来说，事件绑定是使用ms-on-☆绑定来实现，但avalon也提供了许多快捷方式，让用户能直接以ms-eventName调用那些常用事件，如下</p>
-
+<p>ms-on-click="fn"可以写成ms-click="fn",默认fn的第一个参数就是事件对象,如果想传更多参数,
+可以改成这样ms-click="fn(111,aaa,$event)".
+</p>
 <blockquote>
     <p>animationend、  blur、  change、  input、 click、 dblclick、 focus、 keydown、 keypress、 keyup、 mousedown、 mouseenter、 mouseleave、 mousemove、 mouseout、 mouseover、 mouseup、 scan、 scroll、 submit</p>
 </blockquote>
@@ -150,7 +152,7 @@
 &lt;/html&gt;
 &lt;/code&gt;</pre></div>
 
-<p><img src="../../assets/css/directives/on/1409902096503-click.gif"  /></p>
+<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/on/1409902096503-click.gif"  /></p>
 
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE HTML&gt;
 &lt;html&gt;
@@ -195,7 +197,7 @@
 &lt;/html&gt;
 &lt;/code&gt;</pre></div>
 
-<p><img src="../../assets/css/directives/on/1409902480576-click2.gif"  /></p>
+<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/on/1409902480576-click2.gif"  /></p>
 
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;!DOCTYPE HTML&gt;
 &lt;html&gt;
@@ -229,7 +231,7 @@
 &lt;/html&gt;
 &lt;/code&gt;</pre></div>
 
-<p><img src="../../assets/css/directives/on/1409902782256-click3.gif" /></p>
+<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/on/1409902782256-click3.gif" /></p>
 <div class="alert alert-success" role="alert">
     <p>avalon已经对ms-mouseenter, ms-mouseleave进行修复，可以在<a href="http://bl.ocks.org/mbostock/5247027">这里</a>与<a href="http://stackoverflow.com/questions/6130737/mouseenter-without-jquery">这里</a>了解这两个事件。到chrome30时，所有浏览器都原生支持这两个事件。</p>
 </div>
@@ -265,7 +267,7 @@
 &lt;/html&gt;
 &lt;/code&gt;</pre></div>
 
-<p><img src="../../assets/css/directives/on/1409903572570-click4.gif"  /></p>
+<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/on/1409903572570-click4.gif"  /></p>
 <div class="alert alert-success" role="alert">
     <p>最后是mousewheel事件的修改，主要问题是出现firefox上，它死活也不愿意支持mousewheel，在avalon里是用DOMMouseScroll或wheel实现模拟的。我们在事件对象通过wheelDelta属性是否为正数判定它在向上滚动。</p>
 </div>
@@ -297,7 +299,7 @@
 &lt;/html&gt;
 &lt;/code&gt;</pre></div>
 
-<p><img src="../../assets/css/directives/on/1409904002238-click5.gif" /></p>
+<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/on/1409904002238-click5.gif" /></p>
 
 <div class="bs-callout bs-callout-info" id="callout-alerts-dismiss-use-button">
     <h4>如何解除ms-on-*, ms-click等绑定的事件回调?</h4>
@@ -337,7 +339,7 @@
 &lt;/body&gt;
 
 &lt;/html&gt;</pre></div>
-<p><img src="../../assets/css/directives/on/click6.gif"  /></p>
+<p><img src="//coding.net/u/roscoe054/p/avalon.doc/git/raw/master/assets/css/directives/on/click6.gif"  /></p>
 <p>换言之，你想解除某个事件，就直接将VM中对应的函数置换为<code>空函数</code>就行了！</p>
 <p>此外avalon还对input，animationend事件进行修复，大家也可以直接用avalon.bind, avalon.fn.bind来绑定这些事件。但建议都用ms-on绑定来处理。</p>
 
@@ -352,11 +354,13 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-<script src="../../assets/highlight/shCore.js"></script>
+<script src="//avalon-doc-bdda3.coding.io/assets/highlight/shCore.js"></script>
 
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
-<script src="../../assets/js/iframe.js"></script>
+<script src="//avalon-doc-bdda3.coding.io/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+<!-- frame size -->
+<script src="http://avalonjs.github.io/assets/js/iframe.js"></script>
 </body>
 </html>
 

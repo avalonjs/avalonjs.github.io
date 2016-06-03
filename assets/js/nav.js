@@ -52,6 +52,7 @@
 
                 ]
             },
+
             {
                 href: "tutorial/concepts/index.html",
                 name: "核心概念",
@@ -177,6 +178,14 @@
                     {
                         href: "tutorial/directives/widget.html",
                         name: "ms-widget"
+                    },
+                     {
+                        href: "tutorial/directives/custom.html",
+                        name: "自定义标签"
+                    },
+                     {
+                        href: "tutorial/directives/i20n.html",
+                        name: "国际化"
                     }
                 ]
             },
@@ -289,9 +298,47 @@
             {
                 href: "tutorial/configuration/index.html",
                 name: "配置"
+            },
+            {
+                href: "tutorial/engineering/index.html",
+                name: "工程化",
+                sub:[
+                  {
+                      href: "tutorial/engineering/jquery.html",
+                      name: "与jquery混用"
+                  },
+                  {
+                      href: "tutorial/engineering/weixin.html",
+                      name: "在微信中使用"
+                  },
+                   {
+                      href: "tutorial/engineering/mobile.html",
+                      name: "在移动端使用"
+                  },
+                  {
+                      href: "tutorial/engineering/loader.html",
+                      name: "与requirejs混用"
+                  },
+                   {
+                      href: "tutorial/engineering/webpack.html",
+                      name: "使用webpack打包"
+                  },
+                   {
+                      href: "tutorial/engineering/project.html",
+                      name: "webpack+avalon"
+                  },
+                   {
+                      href: "tutorial/engineering/fis.html",
+                      name: "fis3+avalon"
+                  },
+                    {
+                      href: "tutorial/engineering/seo.html",
+                      name: "SEO"
+                  }
+                ]
             }
         ]
-        
+
     })
 
     avalon.scan(0, vm)
