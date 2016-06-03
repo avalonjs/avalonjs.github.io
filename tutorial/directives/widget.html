@@ -16,11 +16,11 @@
         <!-- Bootstrap core CSS -->
         <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 
-        <link href="//avalon-doc-bdda3.coding.io/assets/css/patch.css" rel="stylesheet">
+        <link href="//roscoe054.coding.me/avalon.doc/assets/css/patch.css" rel="stylesheet">
 
         <!-- Documentation extras -->
 
-        <link href="//avalon-doc-bdda3.coding.io/assets/css/docs.min.css" rel="stylesheet">
+        <link href="//roscoe054.coding.me/avalon.doc/assets/css/docs.min.css" rel="stylesheet">
         <style>
             body,html{
                overflow-y: hidden;
@@ -83,7 +83,7 @@
 <p>编写一个组件，我们非常注重它的可配置性。avalon的UI绑定拥有三处用于定义配置的地方。第一处，就是上面提到的，在一个已存的VM中定义一个对象（最好将它定义不可监听的，以$开头或放在$skipArray数组中）。
     它相当于一个父类。让一组UI共享相同的配置。第二处是位于UI绑定的构造器中，我们可以通过avalon.ui[widgetName].defaults访问到。它是让同一种组件的所有实例都共享相同的配置。第三处是在定义ms-widget所在的元素上，添加一些HTML5 data-*属性，格式为data- widgetName - optionName，比如你想为suggest组件定义一个叫toggle的配置项，那么就应该写作data-suggest-toggle，如果是一个叫currentValue,那么要将它改成"连字符风格"，即将大写变小写前面再加一横杠，data-suggest-current-value。它们是用来制定当前UI实例的。</p>
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;input ms-controller="bbb" ms-widget="datepicker" data-datepicker-date-format="yyyy-MM-dd"&gt;</pre></div>
-<p>好了，我们正式介绍如何编写组件本身。我们要记住一点，<a href="http://avalonjs.github.io/">avalon</a>所有操作都与扫描机制息息相关，就像jQuery喜欢把它的API选择器引擎绑架在一起。为什么这样说呢，因为视图与代码分定义在不同的地方，只有经过扫描后，视图中的绑定才会挟持它们所在的元素节点与VM关联在一起。框架会默认在domReady之后扫描一次。
+<p>好了，我们正式介绍如何编写组件本身。我们要记住一点，<a href="http://roscoe054.coding.me/avalon.doc/">avalon</a>所有操作都与扫描机制息息相关，就像jQuery喜欢把它的API选择器引擎绑架在一起。为什么这样说呢，因为视图与代码分定义在不同的地方，只有经过扫描后，视图中的绑定才会挟持它们所在的元素节点与VM关联在一起。框架会默认在domReady之后扫描一次。
     如果这时我们用到的组件所对应的JS文件还没有加载好，那么当加载好后我们需要自己手动扫描。</p>
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:javascript;gutter:false;toolbar:false'>require("avalon.dialog", function() {
     avalon.define("test", function(vm) {
@@ -330,13 +330,13 @@ avalon.define("test", function(vm) {
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-<script src="//avalon-doc-bdda3.coding.io/assets/highlight/shCore.js"></script>
+<script src="//roscoe054.coding.me/avalon.doc/assets/highlight/shCore.js"></script>
 
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="//avalon-doc-bdda3.coding.io/assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="//roscoe054.coding.me/avalon.doc/assets/js/ie10-viewport-bug-workaround.js"></script>
 
 <!-- frame size -->
-<script src="http://avalonjs.github.io/assets/js/iframe.js"></script>
+<script src="http://roscoe054.coding.me/avalon.doc/assets/js/iframe.js"></script>
 </body>
 </html>
 
