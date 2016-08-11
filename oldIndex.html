@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="avalonjs - 迷你简单易用的前端MVVM框架，让你的网站更快更炫更好用">
+        <meta name="keywords" content="MVVM, CSS, JavaScript, framework, avalon, web development">
+        <meta name="author" content="RubyLouvre,司徒正美">
+
+        <title>avalon中文官网</title>
+
+        <!-- Site CSS -->
+        <link href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+        <link href="//cdn.bootcss.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="http://avalonjs.coding.me/styles/avalon1/site.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="/assets/js/html5shiv.min.js?v=f3008b4099"></script>
+          <script src="/assets/js/respond.min.js?v=f3008b4099"></script>
+        <![endif]-->
+
+        <!-- Favicons -->
+        <link rel="apple-touch-icon-precomposed" href="//roscoe054.coding.me/avalon.doc/favicon2.png">
+        <link rel="shortcut icon" href="//roscoe054.coding.me/avalon.doc/favicon2.png">
+        <link href="//roscoe054.coding.me/avalon.doc/assets/css/docs.min.css" rel="stylesheet">
+
+
+
+        <script>
+        </script>
+    </head>
+    <body class="home-template">
+
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand hidden-sm" data-toggle="iframe" href="#home.html" >avalon</a>
+                </div>
+                <div class="navbar-collapse collapse" role="navigation">
+                    <ul class="nav navbar-nav">
+                        <li><a href="#tutorial/home/index.html" data-toggle="iframe">教程</a></li>
+                        <li><a href="#api.html" data-toggle="iframe" >API</a></li>
+                        <li><a href="http://edu.51cto.com/course/course_id-2533-page-1.html" target="_blank" >视频</a></li>
+                        <li><a href="http://www.avalon.org.cn/" target="_blank" >论坛</a></li>
+                        <li><a href="http://www.cnblogs.com/rubylouvre/" target="_blank" >博客</a></li>
+                        <li><a href="https://github.com/RubyLouvre/avalon" target="_blank" >Github</a></li>
+                        <li><a href="https://github.com/RubyLouvre/avalon/issues" target="_blank" >提问 </a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right hidden-sm">
+                        <li><a href="#about">关于</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+       <iframe src="home.html" frameborder=0 style="width:100%;height:100%;border:0 none" seamless="seamless"></iframe>
+
+        <!-- /.container -->
+        <div class="bs-docs-sidebar" ms-controller="nav">
+            <ul class="nav bs-docs-sidenav">
+                <li ms-repeat="array" ms-class="active: aname === el.href">
+                    <a ms-attr-href="#{{el.href}}" ms-text="el.name" ms-click="aclick(el.href,$event)"></a>
+                    <ul class="nav">
+                        <li ms-repeat-elem="el.sub" ms-class="active: bname == elem.href">
+                            <a ms-attr-href="'#'+elem.href" ms-text="elem.name" ms-click="bclick(elem.href,$event)"></a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <a class="back-to-top" href="#top">
+                返回顶部
+            </a>
+        </div>
+        <style>
+            .bs-docs-sidebar{
+                display: none;
+                position: fixed;
+                right: 40px;
+                top: 43px;
+                width: 200px;
+                padding-bottom: 10px;
+                background-color: #fff;
+            }
+        </style>
+
+
+        <script src="//cdn.bootcss.com/avalon.js/1.5.6/avalon.js"></script>
+        <script src="//cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+
+        <script>
+            $(function () {
+                parent.array = []
+                function hashChange() {
+                    var hash = location.hash.replace(/^#/, "")
+                    if (!hash || hash == "home.html") {
+                        $(".bs-docs-sidebar").hide()
+                        $("iframe").prop("src", "home.html")
+                    } else if (hash == "api.html") {
+                        $(".bs-docs-sidebar").hide()
+                        $("iframe").prop("src", "api.html")
+                    } else {
+                        $(".bs-docs-sidebar").show()
+                        if (/\.html/.test(hash)) {
+                            $("iframe").prop("src", hash)
+                        }
+                    }
+                }
+                $(window).on("hashchange", hashChange)
+                if(location.hash){
+                   hashChange()
+                }
+                $("a[data-toggle='iframe']").click(function (e) {
+                    $('html,body').animate({scrollTop: 0}, 500)
+                })
+                function setLeft() {
+                    var iframe = $("iframe")[0]
+                    var idoc = iframe.contentDocument || idoc.contentWindow.document
+                    var main = $(".col-md-9", idoc)
+                    if (main.length) {
+                        var left = main.width() + main.offset().left
+                        $(".bs-docs-sidebar").css("left", left)
+                    }
+                }
+                setLeft()
+                $(window).on("resize", setLeft)
+            })
+        </script>
+
+        <!-- 以下是 www.bootcss.com 网站所使用的统计代码，如果你使用本页面作为自己的模板，请将下面的统计代码删掉！！！ -->
+
+
+        <script src="./assets/js/nav.js"></script>
+
+        <!-- 上面是 www.bootcss.com 网站所使用的统计代码，如果你使用本页面作为自己的模板，请将上面面的统计代码删掉！！！ -->  </body>
+</html>
