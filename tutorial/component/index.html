@@ -134,10 +134,12 @@
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;div ms-repeat=array&gt;
     &lt;ms:button ms-attr-config="opts{{$index}}"&gt;
 &lt;/div&gt;</pre></div>
-<p>如果你嫌这样麻烦，不想在VM上加这配置属性，还可以使用ms-attr-button-a来生成这个值。</p>
+<p>如果你嫌这样麻烦，不想在VM上加这配置属性，还可以使用ms-attr-a来生成这个值。</p>
 <div ms-skip style='background:rgb(237,237,237);padding:4px;'><pre class='brush:html;gutter:false;toolbar:false'>&lt;div ms-repeat=array&gt;
-    &lt;ms:button ms-attr-button-a="$index+ 10"&gt;
+    &lt;ms:button ms-attr-a="$index+ 10"&gt;
 &lt;/div&gt;</pre></div>
+<p>ms-attr-b 这是动态生成b属性， b就是静态的b属性。</p>
+<p><a href="https://github.com/RubyLouvre/avalon/issues/1729">可以看一下 个ISSUE</a></p>
 <p>如果你连这个也不想，那么框架就会在已有的VM链上寻找<b>默认配置对象</b>。比如你的自定义签标的tagName为&lt;ms:dropdown&gt;，
     那你在已有VM上定义一个叫ms:dropdown的对象就行了。如果你的自定义标签存在横线，比如ms:color-picker,那么它的默认配置对象
     应为ms:colorPicker。
